@@ -44,8 +44,7 @@ def download_audio(video_id):
     ydl_opts = {
         'format': 'bestaudio/best',
         'extractaudio': True,
-        'audioformat': "mp3",
-        'outtmpl': f'{audio_folder}/%(id)s.%(ext)s',
+        'outtmpl': f'{audio_folder}/%(id)s.mp3',
     }
 
     filename = f'{audio_folder}/{video_id}.mp3'
