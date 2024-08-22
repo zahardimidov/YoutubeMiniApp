@@ -10,7 +10,7 @@ function Checking() {
     let navigate = useNavigate();
 
     React.useEffect(() => {
-        interval = setInterval(function () {
+        setInterval(function () {
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
