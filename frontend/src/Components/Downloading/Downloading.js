@@ -23,9 +23,6 @@ function Downloading() {
             fetch(process.env.REACT_APP_API_URL + '/check_video', requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status == 'audio ready') {
-                        setText('Video is preparing');
-                    }
                     if (data.status == 'ready') {
                         clearInterval(interval);
 

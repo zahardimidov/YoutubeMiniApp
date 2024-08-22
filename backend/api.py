@@ -79,8 +79,6 @@ async def check_video(request: Request):
     data: dict = await request.json()
     video_id = data.get('video_id')
 
-    if os.path.exists(video_folder.joinpath(f'{video_id}.mp4')):
+    if os.path.exists(video_folder.joinpath(f'{video_id}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.mp3')):
         return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
-    if os.path.exists(audio_folder.joinpath(f'{video_id}.mp3')):
-        return JSONResponse(content=jsonable_encoder({'status': 'audio ready'}))
     return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))
