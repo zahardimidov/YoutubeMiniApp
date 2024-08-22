@@ -6,9 +6,10 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from youtube import (youtube_get_channel_videos, youtube_get_video,
                      youtube_search)
+from config import REDIS_HOST
 
 router = APIRouter(prefix='', tags=['API сервиса'])
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 # @router.post('/search')
 # @webapp_user_middleware

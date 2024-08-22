@@ -27,6 +27,7 @@ services:
       - DB_USER=youtube
       - DB_PASSWORD=youtube
       - DB_PORT=5432
+      - REDIS_HOST=redis
     ports:
       - "4500:4500"
     links:
