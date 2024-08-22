@@ -18,4 +18,4 @@ class User(Base):
 
     id = mapped_column(BigInteger, nullable=False, primary_key=True)
     username = mapped_column(String(50), nullable=False, primary_key=True)
-    subscription_until = mapped_column(Date, nullable=True, default=True)
+    subscription_until = mapped_column(Date, nullable=True, default=None)
