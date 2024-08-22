@@ -17,6 +17,6 @@ async def video_receive(message: Message):
 
     msg = f'\U0001F37F <b><a href="https://www.youtube.com/watch?v={video["id"]}">{video["title"]}</a></b>\n\n\U0001F5E3 Автор: #{video["channel_title"]}\n\U0001F4C5 Дата: {video["publishedAt"]}\n \u23F1 Продолжительность: {duration}'
     markup = InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text='Download', url=WEBAPP_URL)]
+        [InlineKeyboardButton(text='Download', url=WEBAPP_URL+f'/check/{video["id"]}')]
     ])
-    await message.answer_photo(photo=data['photo'], caption=msg)
+    await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)
