@@ -1,13 +1,13 @@
 import React from 'react';
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import Loading from '../Loading/Loading';
 import './Downloading.css';
 //import { data } from './data';
 
 
 function Downloading() {
+    const downloadURL = '/api/download_video/' + video_id;
     let { video_id } = useParams();
-    let navigate = useNavigate();
 
     React.useEffect(() => {
         const requestOptions = {
@@ -24,7 +24,10 @@ function Downloading() {
                 .then(data => {
                     if (data.status == 'ready') {
                         clearInterval(interval);
-                        navigate('/api/download_video/' + video_id, {replace: true});
+                        
+                        setTimeout(function (){
+                            document.getElementById('download').click();
+                        }, 5000)
                     }
                 });
         }, 1000)
@@ -36,6 +39,7 @@ function Downloading() {
         <>
             <h1 style={{ color: 'white', textAlign: 'center', paddingBlock: '20vh 5vh' }}> Video is preparing </h1>
             <Loading></Loading>
+            <a id='download' href={downloadURL} download={true}></a>
         </>
     );
 }

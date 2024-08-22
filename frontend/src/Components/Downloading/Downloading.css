@@ -1,6 +1,10 @@
 .loading-container {
     background-color: transparent !important;
+    width: 100 !important;
 }
 .lds-ring {
     color: white !important;
+}
+#download {
+    display: none;
 }
