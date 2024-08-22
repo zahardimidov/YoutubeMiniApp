@@ -12,7 +12,7 @@ function Element({ data, children, ...props }) {
         window.Telegram.WebApp.close();
     }
 
-    function clickChannel(data) {
+    function clickChannel() {
         navigate('/channel', {state: data});
     }
 
