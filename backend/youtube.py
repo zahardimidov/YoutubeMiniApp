@@ -96,7 +96,7 @@ class YoutubeObject:
                            channel_title=data['snippet']['channelTitle'], type='video')
             try:
                 details.update(
-                    publishedAt=data['snippet']['publishedAt'], duation=data['contentDetails']['duration'])
+                    publishedAt=data['snippet']['publishedAt'], duration=data['contentDetails']['duration'])
             except:
                 pass
             return details

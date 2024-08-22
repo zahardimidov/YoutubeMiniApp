@@ -12,6 +12,6 @@ router = Router()
 async def video_receive(message: Message):
     data = json.loads(message.web_app_data.data)
     video = await youtube_get_video(data['id'])
+    print(json.dumps(video, indent=4, ensure_ascii=False))
     msg = f'\U0001F37F {data["title"]}\n\U0001F4CE https://www.youtube.com/watch?v={video["id"]}\n\n\uFE0FАвтор: #{video["channel_title"]}\n\U0001F4C5 Дата: {video["publishedAt"]}\n\uFE0F Продолжительность: {video["duration"]}'
-    print(video)
     await message.answer_photo(photo=data['photo'], caption=msg)
