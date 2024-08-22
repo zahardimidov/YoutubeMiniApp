@@ -77,7 +77,10 @@ services:
     depends_on:
       - redis
     restart: always
-
+    volumes:
+      - ./downloader:/downloader  # Монтируем директорию app с хоста в контейнер
+      - ./video:/video  # Монтируем директорию videos с хоста в контейнер
+    working_dir: /downloader
 
 volumes:
   youtube-data:

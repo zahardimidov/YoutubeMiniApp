@@ -2,7 +2,7 @@ FROM python:3.10-alpine
 
 RUN apk add --no-cache ffmpeg
 
-WORKDIR /
+WORKDIR /downloader
 
 COPY requirements.txt requirements.txt
 RUN pip install -r requirements.txt
