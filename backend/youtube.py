@@ -67,7 +67,15 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     print(json.dumps(data, indent=4, ensure_ascii=False))
 
-    return YoutubeObject.from_data(data['items'][0]) if data.get('items', []) else None
+
+    video = YoutubeObject.from_data(data['items'][0]) if data.get('items', []) else None
+
+    if video:
+        for i in ['default', 'medium', 'high', 'standart', 'maxres']:
+            if i in data['snippet']['thumbnails']:
+                video['photo'] = data['snippet']['thumbnails'][i]['url']
+    return video
+
 
 
 async def youtube_get_channel(channel_id='UCw3vK8lNe5SZzL--rMgq-CQ'):
