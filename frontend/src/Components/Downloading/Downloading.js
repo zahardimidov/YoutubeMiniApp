@@ -7,8 +7,8 @@ import './Downloading.css';
 
 function Downloading() {
     const [text, setText] = React.useState('Video is preparing');
-    const downloadURL = '/api/download_video/' + video_id;
     let { video_id } = useParams();
+    const downloadURL = '/api/download_video/' + video_id;
 
     React.useEffect(() => {
         const requestOptions = {
