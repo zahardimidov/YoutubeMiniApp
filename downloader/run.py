@@ -25,7 +25,7 @@ r = redis.Redis(host=HOST, port=6379, db=0)
 
 def download_video(video_id):
     ydl_opts = {
-        'format': "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+        'format': "bestvideo[ext=mp4]/best[ext=mp4]/best",
         "outtmpl": f'{video_folder}/%(id)s.%(ext)s',
     }
 
@@ -42,12 +42,12 @@ def download_video(video_id):
 
 def download_audio(video_id):
     ydl_opts = {
-        'format': 'bestaudio/best',
+        'format': 'bestaudio[ext=m4a]/best',
         'extractaudio': True,
-        'outtmpl': f'{audio_folder}/%(id)s.mp3',
+        'outtmpl': f'{audio_folder}/%(id)s.%(ext)s',
     }
 
-    filename = f'{audio_folder}/{video_id}.mp3'
+    filename = f'{audio_folder}/{video_id}.m4a'
 
     if not os.path.exists(filename):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
