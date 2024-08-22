@@ -72,7 +72,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     if video:
         for i in ['default', 'medium', 'high', 'standart', 'maxres']:
-            if i in data['snippet']['thumbnails']:
+            if i in data['items'][0]['snippet']['thumbnails']:
                 video['photo'] = data['snippet']['thumbnails'][i]['url']
     return video
 
