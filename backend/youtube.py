@@ -93,7 +93,7 @@ class YoutubeObject:
 
         if 'video' in kind:
             details.update(channel_id=data['snippet']['channelId'],
-                           channel_title=data['snippet']['channelTitle'], publishedAt=data['snippet']['publishedAt'], duation = data['contendDetails']['duration'], type='video')
+                           channel_title=data['snippet']['channelTitle'], publishedAt=data['snippet']['publishedAt'], duation = data['contentDetails']['duration'], type='video')
             return details
         elif 'channel' in kind:
             try:
