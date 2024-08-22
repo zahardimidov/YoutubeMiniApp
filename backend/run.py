@@ -42,6 +42,10 @@ async def home(request: WebAppRequest):
 async def download_video(video_id: str):
     return StreamingResponse(open(video_folder.joinpath(f'{video_id}.mp4'), "rb"), media_type="video/m4a", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
+@app.get('/download_audio/{video_id}', response_class=StreamingResponse)
+async def download_video(video_id: str):
+    return StreamingResponse(open(audio_folder.joinpath(f'{video_id}.webm'), "rb"), media_type="audio/webm", headers={"Content-Disposition": f"attachment; filename={video_id}.webm"})
+
 
 if __name__ == "__main__":
     import uvicorn

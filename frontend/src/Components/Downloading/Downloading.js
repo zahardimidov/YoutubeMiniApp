@@ -5,10 +5,10 @@ import './Downloading.css';
 //import { data } from './data';
 
 
-function Downloading() {
+function Downloading(type = video) {
     const [text, setText] = React.useState('File is preparing');
     let { video_id } = useParams();
-    const downloadURL = '/api/download_video/' + video_id;
+    const downloadURL = `/api/download_${type}/` + video_id;
 
     React.useEffect(() => {
         const requestOptions = {
@@ -17,10 +17,10 @@ function Downloading() {
             body: JSON.stringify({ video_id: video_id })
         };
 
-        fetch(process.env.REACT_APP_API_URL + '/upload_video', requestOptions);
+        fetch(process.env.REACT_APP_API_URL + `/upload_${type}`, requestOptions);
 
         const interval = setInterval(function () {
-            fetch(process.env.REACT_APP_API_URL + '/check_video', requestOptions)
+            fetch(process.env.REACT_APP_API_URL + `/check_${type}`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status == 'ready') {

@@ -73,6 +73,15 @@ async def upload_video(request: Request):
 
     return Response(status_code=200)
 
+@router.post('/upload_audio')
+async def upload_video(request: Request):
+    data: dict = await request.json()
+    video_id = data.get('video_id')
+
+    r.rpush('download_audio', video_id)
+
+    return Response(status_code=200)
+
 
 @router.post('/check_video')
 async def check_video(request: Request):
@@ -80,5 +89,14 @@ async def check_video(request: Request):
     video_id = data.get('video_id')
 
     if os.path.exists(video_folder.joinpath(f'{video_id}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
+        return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
+    return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))
+
+@router.post('/check_audio')
+async def check_audio(request: Request):
+    data: dict = await request.json()
+    video_id = data.get('video_id')
+
+    if os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
         return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
     return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))
