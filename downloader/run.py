@@ -25,13 +25,13 @@ r = redis.Redis(host=HOST, port=6379, db=0)
 
 def download_video(video_id):
     ydl_opts = {
-        'format': "bestvideo[ext=mp4]/best[ext=mp4]/best",
+        'format': "bestvideo[ext=m4a]",
         "outtmpl": f'{video_folder}/%(id)s.%(ext)s',
     }
 
-    filename = f'{video_folder}/{video_id}.mp4'
+    filename = f'{video_folder}/{video_id}.m4a'
 
-    if not os.path.exists(f'{audio_folder}/{video_id}.mp3'):
+    if not os.path.exists(f'{audio_folder}/{video_id}.m4a'):
         download_audio(video_id)
 
     if not os.path.exists(filename):
@@ -42,7 +42,7 @@ def download_video(video_id):
 
 def download_audio(video_id):
     ydl_opts = {
-        'format': 'bestaudio[ext=m4a]/best',
+        'format': 'bestaudio[ext=m4a]',
         'extractaudio': True,
         'outtmpl': f'{audio_folder}/%(id)s.%(ext)s',
     }
