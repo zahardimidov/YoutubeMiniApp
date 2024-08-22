@@ -54,11 +54,6 @@ def download_audio(video_id):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
-
-
-download_audio('3vKYITwKDcA')
-
-exit()
 print('DOWNLOADER STARTED')
 
 while True:
