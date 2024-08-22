@@ -70,7 +70,7 @@ services:
     build:
       context: ./downloader
     environment:
-      - HOST=youtube-postgres
+      - HOST=redis
     networks:
       - dev
     depends_on:
