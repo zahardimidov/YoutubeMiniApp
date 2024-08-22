@@ -24,7 +24,7 @@ function Downloading() {
                 .then(data => {
                     if (data.status == 'ready') {
                         clearInterval(interval);
-                        navigate('/api/download_video/' + video_id);
+                        navigate('/api/download_video/' + video_id, {replace: true});
                     }
                 });
         }, 1000)
