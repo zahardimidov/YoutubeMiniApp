@@ -40,6 +40,8 @@ services:
       context: ./frontend
     networks:
       - dev
+    ports:
+      - "3000:3000"
     
   youtube-postgres:
     image: "postgres:13.3-alpine"
