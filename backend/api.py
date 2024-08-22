@@ -1,12 +1,13 @@
-import pathlib
 import os
+import pathlib
+
 import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
 from config import REDIS_HOST
 from database.schemas import WebAppRequest
 from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse, Response
+from fastapi.responses import JSONResponse, Response, StreamingResponse
 from youtube import (youtube_get_channel_videos, youtube_get_video,
                      youtube_search)
 
@@ -83,3 +84,7 @@ async def upload_video(request: Request):
         return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
     else:
         return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))
+
+@router.get('/download_video/{video_id}', response_class=StreamingResponse)
+async def download_video(video_id: str):
+    return StreamingResponse(open(video_folder.joinpath(f'{video_id}.mp4'), "rb"), media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})

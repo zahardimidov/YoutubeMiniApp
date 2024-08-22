@@ -5,22 +5,26 @@ import Loading from '../Loading/Loading';
 //import { data } from './data';
 
 
-function Checking() {
+function Downloading() {
     let { video_id } = useParams();
     let navigate = useNavigate();
 
     React.useEffect(() => {
-        setInterval(function () {
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ video_id: video_id })
-            };
+        const requestOptions = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ video_id: video_id })
+        };
+
+        fetch(process.env.REACT_APP_API_URL + '/upload_video');
+
+        const interval = setInterval(function () {
             fetch(process.env.REACT_APP_API_URL + '/check_video', requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status == 'ready'){
-                        navigate('/download/'+video_id);
+                        clearInterval(interval);
+                        navigate('/download_video/'+video_id);
                     }
                 });
         }, 1000)
@@ -36,4 +40,4 @@ function Checking() {
     );
 }
 
-export default Checking;
+export default Downloading;
