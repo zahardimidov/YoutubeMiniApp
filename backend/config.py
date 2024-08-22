@@ -1,7 +1,10 @@
 import os
 from dotenv import load_dotenv
+import pathlib
 
 load_dotenv()
+
+BASE_DIR = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 
 DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')

@@ -1,5 +1,5 @@
 import os
-import pathlib
+from config import BASE_DIR
 
 import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
@@ -14,8 +14,8 @@ from youtube import (youtube_get_channel_videos, youtube_get_video,
 router = APIRouter(prefix='', tags=['API сервиса'])
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
-video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
-audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
+video_folder = BASE_DIR.joinpath('video')
+audio_folder = BASE_DIR.joinpath('audio')
 
 # @router.post('/search')
 # @webapp_user_middleware
