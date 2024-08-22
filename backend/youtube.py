@@ -30,6 +30,9 @@ API_KEYS = [
     'AIzaSyDH_I7B2wP891lRfCwguh7bs1EhfYvOUYM'
 ]
 
+API_KEYS = [
+    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY'
+]
 
 async def youtube_get(method, maxResults=1, **kwargs):
     CHROME = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
