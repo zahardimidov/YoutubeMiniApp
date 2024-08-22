@@ -24,6 +24,8 @@ def download(video_id):
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
             print('Complete loading')
 
+print('DOWNLOADER STARTED')
+
 while True:
     # Get a task from the queue
     task = r.lpop('tasks')
