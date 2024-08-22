@@ -80,6 +80,8 @@ async def upload_video(request: Request):
     data: dict = await request.json()
     video_id = data.get('video_id')
 
+    print(video_folder, os.listdir(video_folder))
+
     if os.path.exists(video_folder.joinpath(f'{video_id}.mp4')):
         return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
     else:
