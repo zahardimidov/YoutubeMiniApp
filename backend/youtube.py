@@ -32,7 +32,7 @@ async def youtube_get(method, maxResults=1, **kwargs):
 
     params = {
         'key': random.choice(API_KEYS),
-        'part': 'id,snippet' if method == 'search' else 'statistics,snippet',
+        'part': 'id,snippet' if method == 'search' else 'statistics,snippet,contentDetails',
         'maxResults': maxResults
     }
     params.update(**kwargs)
@@ -53,7 +53,7 @@ async def youtube_search(query, maxResults):
 async def youtube_get_video(video_id='9GeW5T-c1Yw'):
     data: dict = await youtube_get('videos', id=video_id)
 
-    print(json.dumps(data['items'][0], indent=4, ensure_ascii=False))
+    print(json.dumps(data, indent=4, ensure_ascii=False))
 
     return YoutubeObject.from_data(data['items'][0]) if data.get('items', []) else None
 
@@ -93,7 +93,7 @@ class YoutubeObject:
 
         if 'video' in kind:
             details.update(channel_id=data['snippet']['channelId'],
-                           channel_title=data['snippet']['channelTitle'], type='video')
+                           channel_title=data['snippet']['channelTitle'], publishedAt=data['snippet']['publishedAt'], duation = data['contendDetails']['duration'], type='video')
             return details
         elif 'channel' in kind:
             try:
@@ -103,8 +103,10 @@ class YoutubeObject:
                 pass
             return details
 
+
 uploading = {}
 video_folder = 'video'
+
 
 def get_video_status(video_id):
     filename = f'{video_folder}/{video_id}.mp4'
@@ -114,11 +116,12 @@ def get_video_status(video_id):
     if video_id in uploading:
         return 'uploading', uploading.get(video_id)
     return None,
-    
+
 
 def hook(*args, **kwargs):
     process_video_id = args[0]['info_dict']['id']
     uploading[process_video_id] = args[0]['_percent_str']
+
 
 def wrap(func):
     @wraps(func)
@@ -129,6 +132,8 @@ def wrap(func):
         return await loop.run_in_executor(executor, pfunc)
     return run
 
+
+'''
 def upload_video_(video_id):
     filename = f'{video_folder}/{video_id}.mp4'
 
@@ -156,9 +161,9 @@ def upload_video(video_id):
 
     if not os.path.exists(filename):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
+            ydl.download([f'https://www.youtube.com/watch?v={video_id}'])'''
 
-    '''
+'''
     cmd = f'yt-dlp -f bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best -outtmpl '
     proc = await asyncio.create_subprocess_shell(
         cmd,
@@ -170,6 +175,4 @@ def upload_video(video_id):
     await upload_video_(video_id)'''
 
 if __name__ == '__main__':
-    upload_video('kTDAoR3E9oY')
-
-    
+    asyncio.run(youtube_get_video())
