@@ -25,8 +25,8 @@ function Downloading() {
                 .then(data => {
                     if (data.status == 'ready') {
                         clearInterval(interval);
-                        
-                        setTimeout(function (){
+
+                        setTimeout(function () {
                             setText('Video is downloading');
                             document.getElementById('download').click();
                         }, 5000)
