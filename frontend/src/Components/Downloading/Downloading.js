@@ -24,7 +24,7 @@ function Downloading() {
                 .then(data => {
                     if (data.status == 'ready'){
                         clearInterval(interval);
-                        navigate('/download_video/'+video_id);
+                        navigate('api/download_video/'+video_id);
                     }
                 });
         }, 1000)
@@ -33,10 +33,10 @@ function Downloading() {
 
 
     return (
-        <Layout poster={false}>
-            <h1 style={{color: '#8fc3d3', textAlign: 'center', paddingBlock: '20vh 5vh'}}> Video is preparing </h1>
+        <>
+            <h1 style={{color: 'white', textAlign: 'center', paddingBlock: '20vh 5vh'}}> Video is preparing </h1>
             <Loading></Loading>
-        </Layout>
+        </>
     );
 }
 
