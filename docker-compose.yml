@@ -22,7 +22,7 @@ services:
     networks:
       - dev
     environment:
-      - DB_HOST=youtube-postgres
+      - DB_HOST=0.0.0.0
       - DB_NAME=youtube
       - DB_USER=youtube
       - DB_PASSWORD=youtube
