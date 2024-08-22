@@ -87,7 +87,7 @@ class YoutubeObject:
             'id': id,
             'title': data['snippet']['title'],
             'description': data['snippet']['description'],
-            'photo': data['snippet']['thumbnails']['high']['url'],
+            'photo': data['snippet']['thumbnails']['default']['url'],
             'type': 'channel'  # by default, but can be changed to 'video'
         }
 
@@ -107,35 +107,6 @@ class YoutubeObject:
             except:
                 pass
             return details
-
-
-uploading = {}
-video_folder = 'video'
-
-
-def get_video_status(video_id):
-    filename = f'{video_folder}/{video_id}.mp4'
-
-    if os.path.exists(filename):
-        return 'uploaded',
-    if video_id in uploading:
-        return 'uploading', uploading.get(video_id)
-    return None,
-
-
-def hook(*args, **kwargs):
-    process_video_id = args[0]['info_dict']['id']
-    uploading[process_video_id] = args[0]['_percent_str']
-
-
-def wrap(func):
-    @wraps(func)
-    async def run(*args, loop=None, executor=None, **kwargs):
-        if loop is None:
-            loop = asyncio.get_event_loop()
-        pfunc = partial(func, *args, **kwargs)
-        return await loop.run_in_executor(executor, pfunc)
-    return run
 
 
 '''

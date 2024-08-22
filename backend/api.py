@@ -1,17 +1,14 @@
-from threading import Thread
-
+import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
 from database.schemas import WebAppRequest
 from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from youtube import (get_video_status,
-                     youtube_get_channel_videos, youtube_get_video,
+from youtube import (youtube_get_channel_videos, youtube_get_video,
                      youtube_search)
 
 router = APIRouter(prefix='', tags=['API сервиса'])
-
-tasks_state = {}
+r = redis.Redis(host='localhost', port=6379, db=0)
 
 # @router.post('/search')
 # @webapp_user_middleware
@@ -59,21 +56,12 @@ async def channel_videos(request: WebAppRequest):
 
     return JSONResponse(content=video)
 
-'''
+
 @router.post('/upload_video')
-async def upload_video_(request: Request, background_tasks: BackgroundTasks):
+async def upload_video(request: Request):
     data: dict = await request.json()
     video_id = data.get('video_id')
 
-    background_tasks.add_task(upload_video, video_id)
+    r.rpush('tasks', [video_id])
 
     return Response(status_code=200)
-
-@router.get('/get_video_status/{video_id}')
-async def get_video_status_(video_id: str):
-    status = get_video_status(video_id=video_id)
-    
-    print(status)
-
-    return Response(status_code=200)
-'''
