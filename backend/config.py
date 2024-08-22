@@ -4,7 +4,7 @@ import pathlib
 
 load_dotenv()
 
-BASE_DIR = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
+BASE_DIR = pathlib.Path(__file__).parent.parent.resolve()
 
 DB_HOST = os.environ.get('DB_HOST')
 DB_NAME = os.environ.get('DB_NAME')
