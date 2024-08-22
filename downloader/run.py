@@ -2,9 +2,14 @@ import redis
 import threading
 import yt_dlp
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
+HOST = os.environ.get('HOST', 'localhost')
 
 # Connect to Redis server
-r = redis.Redis(host='localhost', port=6379, db=0)
+r = redis.Redis(host=HOST, port=6379, db=0)
 
 def download(video_id):
     ydl_opts = {
