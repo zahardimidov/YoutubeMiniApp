@@ -14,9 +14,9 @@ if DB_HOST and DB_USER and DB_PASSWORD and DB_PORT and DB_NAME:
 else:
     ENGINE = "sqlite+aiosqlite:///./database/database.db"
 
-WEBAPP_URL = 'https://49fb-91-236-14-136.ngrok-free.app'
+WEBAPP_URL = 'https://yrugi.spac'
 BOT_TOKEN = '7091456940:AAH_E9UxyThodpMBXSgtJ0crq_wOPZsUaV0'
-WEBHOOK_HOST = 'https://49fb-91-236-14-136.ngrok-free.app'
+WEBHOOK_HOST = 'https://yrugi.spac'
 WEBHOOK_PATH = '/webhook'
 ADMIN_USERNAME = 'admin'
 ADMIN_PASSWORD = 'h56xW32'
