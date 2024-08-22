@@ -33,7 +33,6 @@ app.add_middleware(
 
 
 @app.get('/', response_class=HTMLResponse)
-@webapp_user_middleware
 async def home(request: WebAppRequest):
     return f'<div style="display: flex; width: 100vw; height: 100vh; justify-content: center; background-color: #F9F9F9; color: #03527E;"> <b style="margin-top:35vh">Welcome!</b> </div>'
 
