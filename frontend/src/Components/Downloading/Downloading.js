@@ -16,7 +16,7 @@ function Downloading() {
             body: JSON.stringify({ video_id: video_id })
         };
 
-        fetch(process.env.REACT_APP_API_URL + '/upload_video');
+        fetch(process.env.REACT_APP_API_URL + '/upload_video', requestOptions);
 
         const interval = setInterval(function () {
             fetch(process.env.REACT_APP_API_URL + '/check_video', requestOptions)
