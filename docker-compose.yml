@@ -33,6 +33,7 @@ services:
       - youtube-postgres
     depends_on:
       - youtube-postgres
+    restart: always
 
   frontend:
     build:

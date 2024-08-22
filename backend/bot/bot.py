@@ -5,7 +5,7 @@ from aiogram.types import Update
 from fastapi import Request
 
 from bot.middlewares.register_user import RegisterUserMiddleware
-from bot.routers import base_router
+from bot.routers import base_router, youtube_router
 from config import BOT_TOKEN, WEBHOOK_HOST, WEBHOOK_PATH
 
 
@@ -20,6 +20,7 @@ bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(
 dp = Dispatcher()
 
 dp.include_router(base_router)
+dp.include_router(youtube_router)
 dp.message.middleware(RegisterUserMiddleware())
 
 

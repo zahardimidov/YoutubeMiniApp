@@ -4,6 +4,10 @@ import './Element.css';
 
 function clickVideo(video) {
     console.log(video)
+
+    window.Telegram.WebApp.sendData(video);
+
+    window.Telegram.WebApp.close()
 }
 
 function Element({ data, children, ...props }) {
