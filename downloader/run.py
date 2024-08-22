@@ -45,7 +45,7 @@ def download_audio(video_id):
         'format': 'bestaudio/best',
         'extractaudio': True,
         'audioformat': "mp3",
-        'outtmpl': '%(id)s.%(ext)s',
+        'outtmpl': f'{audio_folder}/%(id)s.%(ext)s',
     }
 
     filename = f'{audio_folder}/{video_id}.mp3'
@@ -55,6 +55,10 @@ def download_audio(video_id):
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
 
+
+download_audio('3vKYITwKDcA')
+
+exit()
 print('DOWNLOADER STARTED')
 
 while True:

@@ -6,7 +6,7 @@ import './Downloading.css';
 
 
 function Downloading() {
-    const [text, setText] = React.useState('Audio is preparing');
+    const [text, setText] = React.useState('File is preparing');
     let { video_id } = useParams();
     const downloadURL = '/api/download_video/' + video_id;
 
@@ -27,7 +27,7 @@ function Downloading() {
                         clearInterval(interval);
 
                         setTimeout(function () {
-                            setText('Video is downloading');
+                            setText('File is downloading');
                             document.getElementById('download').click();
                         }, 5000)
                     }
