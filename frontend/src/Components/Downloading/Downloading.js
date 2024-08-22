@@ -5,7 +5,7 @@ import './Downloading.css';
 //import { data } from './data';
 
 
-function Downloading({type = video}) {
+function Downloading({type = 'video'}) {
     const [text, setText] = React.useState('File is preparing');
     let { video_id } = useParams();
     const downloadURL = `/api/download_${type}/` + video_id;
