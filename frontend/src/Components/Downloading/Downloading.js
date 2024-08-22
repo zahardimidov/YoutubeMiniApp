@@ -6,7 +6,7 @@ import './Downloading.css';
 
 
 function Downloading() {
-    const [text, setText] = React.useState('Video is preparing');
+    const [text, setText] = React.useState('Audio is preparing');
     let { video_id } = useParams();
     const downloadURL = '/api/download_video/' + video_id;
 
@@ -23,6 +23,9 @@ function Downloading() {
             fetch(process.env.REACT_APP_API_URL + '/check_video', requestOptions)
                 .then(response => response.json())
                 .then(data => {
+                    if (data.status == 'audio ready') {
+                        setText('Video is preparing');
+                    }
                     if (data.status == 'ready') {
                         clearInterval(interval);
 

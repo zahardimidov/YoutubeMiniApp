@@ -40,7 +40,6 @@ async def home(request: WebAppRequest):
 
 @app.get('/download_video/{video_id}', response_class=StreamingResponse)
 async def download_video(video_id: str):
-    print(video_id)
     return StreamingResponse(open(video_folder.joinpath(f'{video_id}.mp4'), "rb"), media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
 
