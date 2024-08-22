@@ -9,7 +9,7 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: Message):
-    markup = ReplyKeyboardMarkup(resize_keyboard=False, keyboard=[[
+    markup = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=[[
         KeyboardButton(text='Open 👀', web_app=WebAppInfo(url=WEBAPP_URL))
     ]])
 
