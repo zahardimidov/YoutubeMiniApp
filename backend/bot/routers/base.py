@@ -10,7 +10,7 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: Message):
-    builder = KeyboardBuilder()
+    builder = KeyboardBuilder(button_type=KeyboardButton)
     builder.row(
         KeyboardButton(text='Open 👀', web_app=WebAppInfo(url=WEBAPP_URL))
     )
