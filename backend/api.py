@@ -5,7 +5,7 @@ from database.schemas import WebAppRequest
 from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from youtube import (get_video_status, upload_video,
+from youtube import (get_video_status,
                      youtube_get_channel_videos, youtube_get_video,
                      youtube_search)
 
@@ -59,7 +59,7 @@ async def channel_videos(request: WebAppRequest):
 
     return JSONResponse(content=video)
 
-
+'''
 @router.post('/upload_video')
 async def upload_video_(request: Request, background_tasks: BackgroundTasks):
     data: dict = await request.json()
@@ -76,3 +76,4 @@ async def get_video_status_(video_id: str):
     print(status)
 
     return Response(status_code=200)
+'''
