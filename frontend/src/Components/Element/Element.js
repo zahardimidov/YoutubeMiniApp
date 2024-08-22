@@ -2,25 +2,25 @@ import { Link, useNavigate } from 'react-router-dom';
 import playSVG from '../../Assets/image/play.svg';
 import './Element.css';
 
-function clickVideo(video) {
-    console.log(video)
-
-    window.Telegram.WebApp.sendData(video);
-
-    window.Telegram.WebApp.close()
-}
-
-function clickChannel(channel) {
-    let navigate = useNavigate();
-    navigate('/channel', state = channel);
-}
 
 function Element({ data, children, ...props }) {
+    let navigate = useNavigate();
+
+    function clickVideo() {
+        console.log(data);
+        window.Telegram.WebApp.sendData(data);
+        window.Telegram.WebApp.close();
+    }
+
+    function clickChannel(data) {
+        navigate('/channel', state = data);
+    }
+
     const posterStyle = {
         backgroundImage: `url(${data.photo})`,
     }
     return (
-        <div className={data.type + ' element'} {...props} onClick={data.type === 'video' ? () => clickVideo(data) : () => clickChannel(data)} >
+        <div className={data.type + ' element'} {...props} onClick={data.type === 'video' ? () => clickVideo() : () => clickChannel()} >
             <div className={data.type + '-poster center'} style={posterStyle}>
                 {data.type === 'video' ? <img src={playSVG} alt="Video" /> : ''}
             </div>
