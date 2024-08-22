@@ -18,7 +18,16 @@ password = 'yapi3340@gmail.com'
 
 API_URL = "https://www.googleapis.com/youtube/v3/"
 API_KEYS = [
-    'AIzaSyAG78TY-KZFgN9Qc5UYlMsdPHGBUppGkSo'
+    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY',
+    'AIzaSyCUtlCbrNx6Ry7nVrkWwzX5LZkSGBW5xIc',
+    'AIzaSyB-5jTkm33_jBu25vVL8le-WjgBHTYGE4I',
+    'AIzaSyBzs1qEB3LKCG0BpoxPMRPwowpWP6yLb5U',
+    'AIzaSyD-EVLPThTu2sNzEXAvtTRtf-CfW6dNJVo',
+    'AIzaSyBA9opIk9vpA3Kd_2CoViSvuWFw8zeRgHY',
+    'AIzaSyAqYOJeuA063rlohiOIEy0taTxtsfGSqG8',
+    'AIzaSyAMbW-0w9b8RhMU28skdsuQQ55QfiilLbw',
+    'AIzaSyCIPTRgn02GTvHdz-OScImStte_cKOeOew',
+    'AIzaSyDH_I7B2wP891lRfCwguh7bs1EhfYvOUYM'
 ]
 
 
