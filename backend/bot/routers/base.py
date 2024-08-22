@@ -9,8 +9,8 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: Message):
-    markup = ReplyKeyboardMarkup(keyboard=[
+    markup = ReplyKeyboardMarkup(keyboard=[[
         KeyboardButton(text='Open 👀', web_app=WebAppInfo(url=WEBAPP_URL))
-    ])
+    ]])
 
     await message.answer('🤖 Hello from telegram bot\nYou can test mini app by clicking the button', reply_markup=markup)
