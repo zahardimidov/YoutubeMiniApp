@@ -32,7 +32,8 @@ while True:
     
     # Process the task
     if task is not None:
-        target = threading.Thread(target=download, name=f'download_video_{task}', args=[task])
+        video_id = task.encode()
+        target = threading.Thread(target=download, name=f'download_video_{video_id}', args=[video_id])
         target.start()
 
         print('Task started: %s' % task)
