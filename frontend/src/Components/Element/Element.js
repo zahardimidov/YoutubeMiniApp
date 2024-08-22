@@ -13,7 +13,7 @@ function Element({ data, children, ...props }) {
     }
 
     function clickChannel(data) {
-        navigate('/channel', state = data);
+        navigate('/channel', {state: data});
     }
 
     const posterStyle = {
