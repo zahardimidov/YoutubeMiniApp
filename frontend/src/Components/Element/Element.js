@@ -8,7 +8,7 @@ function Element({ data, children, ...props }) {
 
     function clickVideo() {
         console.log(data);
-        window.Telegram.WebApp.sendData(data);
+        window.Telegram.WebApp.sendData(JSON.stringify(data));
         window.Telegram.WebApp.close();
     }
 
