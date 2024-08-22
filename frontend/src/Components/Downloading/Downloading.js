@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate, useParams } from "react-router-dom";
-import Layout from '../Layout/Layout';
 import Loading from '../Loading/Loading';
+import './Downloading.css';
 //import { data } from './data';
 
 
@@ -22,9 +22,9 @@ function Downloading() {
             fetch(process.env.REACT_APP_API_URL + '/check_video', requestOptions)
                 .then(response => response.json())
                 .then(data => {
-                    if (data.status == 'ready'){
+                    if (data.status == 'ready') {
                         clearInterval(interval);
-                        navigate('api/download_video/'+video_id);
+                        navigate('/api/download_video/' + video_id);
                     }
                 });
         }, 1000)
@@ -34,7 +34,7 @@ function Downloading() {
 
     return (
         <>
-            <h1 style={{color: 'white', textAlign: 'center', paddingBlock: '20vh 5vh'}}> Video is preparing </h1>
+            <h1 style={{ color: 'white', textAlign: 'center', paddingBlock: '20vh 5vh' }}> Video is preparing </h1>
             <Loading></Loading>
         </>
     );
