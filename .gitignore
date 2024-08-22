@@ -7,3 +7,4 @@ download.py
 node_modules/
 data.json
 video/
+audio/
