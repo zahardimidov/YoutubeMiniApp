@@ -1,0 +1,23 @@
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    background-color: #ebecf0;
+    border-radius: 20px;
+    align-items: center;
+}
+
+.search-input {
+    outline: none;
+    border: none;
+    background-color: transparent;
+
+    width: 100%;
+    height: 40px;
+}
+
+.search-input-img {
+    padding-left: 16px;
+    padding-right: 4px;
+    padding-top: 2px;
+}

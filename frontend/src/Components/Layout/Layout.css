@@ -1,0 +1,24 @@
+
+.layout {
+    max-width: 100%;
+    height: 100vh;
+
+    width: 600px;
+    margin-inline: auto;
+
+    background-color: var(--bg-color);
+
+    color: var(--text-color);
+}
+
+.content {
+    position: relative;
+    padding: 16px;
+}
+
+.poster {
+    background-image: url(https://react.dev/images/home/conf2021/cover.svg);
+    background-position: center center;
+    width: 100%;
+    height: 120px;
+}

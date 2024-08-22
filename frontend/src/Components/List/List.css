@@ -1,0 +1,20 @@
+
+.element-list {
+    margin-top: 16px;
+}
+
+.element-list h2 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-left: 5px;
+}
+
+.elements {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 5px;
+    overflow: scroll;
+    height: 70vh;
+}

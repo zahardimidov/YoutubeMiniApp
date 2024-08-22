@@ -1,0 +1,60 @@
+version: "3.9"
+
+networks:
+  dev:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    ports:
+      - "80:80"
+    volumes:
+      - './nginx.conf:/etc/nginx/nginx.conf'
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - dev
+
+  backend:
+    build:
+      context: ./backend
+    networks:
+      - dev
+    environment:
+      - DB_HOST=youtube-postgres
+      - DB_NAME=youtube
+      - DB_USER=youtube
+      - DB_PASSWORD=youtube
+      - DB_PORT=5432
+    ports:
+      - "4500:4500"
+    links:
+      - youtube-postgres
+    depends_on:
+      - youtube-postgres
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    networks:
+      - dev
+    
+  youtube-postgres:
+    image: "postgres:13.3-alpine"
+    container_name: youtube-postgres
+    volumes:
+      - youtube-data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: youtube
+
+      POSTGRES_USER: youtube
+      POSTGRES_PASSWORD: youtube
+    networks:
+      - dev
+
+volumes:
+  youtube-data:

@@ -1,0 +1,8 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+venv/
+database.db
+test.py
+download.py
+node_modules/
+data.json
