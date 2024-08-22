@@ -63,6 +63,6 @@ async def upload_video(request: Request):
     data: dict = await request.json()
     video_id = data.get('video_id')
 
-    r.rpush('tasks', video_id)
+    r.rpush('download_video', video_id)
 
     return Response(status_code=200)
