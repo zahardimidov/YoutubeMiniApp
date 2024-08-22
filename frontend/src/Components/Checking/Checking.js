@@ -10,9 +10,9 @@ function Checking() {
     let navigate = useNavigate();
 
     React.useEffect(() => {
-        const interval = setInterval(function () {
+        interval = setInterval(function () {
             const requestOptions = {
-                method: 'GET',
+                method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ video_id: video_id })
             };
@@ -30,7 +30,7 @@ function Checking() {
 
     return (
         <Layout poster={false}>
-            <h1> Video is preparing </h1>
+            <h1 style={{color: '#b4d1da', textAlign: 'center', paddingBlock: '20vh'}}> Video is preparing </h1>
             <Loading></Loading>
         </Layout>
     );

@@ -1,18 +1,24 @@
+import pathlib
+import os
 import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
+from config import REDIS_HOST
 from database.schemas import WebAppRequest
 from fastapi import APIRouter, BackgroundTasks, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from youtube import (youtube_get_channel_videos, youtube_get_video,
                      youtube_search)
-from config import REDIS_HOST
 
 router = APIRouter(prefix='', tags=['API сервиса'])
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
+video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
+audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
+
 # @router.post('/search')
 # @webapp_user_middleware
+
 
 @router.post('/search')
 async def search(request: WebAppRequest):
@@ -66,3 +72,14 @@ async def upload_video(request: Request):
     r.rpush('download_video', video_id)
 
     return Response(status_code=200)
+
+
+@router.post('/check_video')
+async def upload_video(request: Request):
+    data: dict = await request.json()
+    video_id = data.get('video_id')
+
+    if os.path.exists(video_folder.joinpath(f'{video_id}.mp4')):
+        return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
+    else:
+        return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))
