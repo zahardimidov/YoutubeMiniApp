@@ -28,11 +28,11 @@ print('DOWNLOADER STARTED')
 
 while True:
     # Get a task from the queue
-    task = r.lpop('tasks')
+    task: bytes = r.lpop('tasks')
     
     # Process the task
     if task is not None:
-        video_id = task.encode()
+        video_id = task.decode()
         target = threading.Thread(target=download, name=f'download_video_{video_id}', args=[video_id])
         target.start()
 
