@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import BigInteger, String
+from sqlalchemy import BigInteger, Date, String
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
@@ -18,3 +18,4 @@ class User(Base):
 
     id = mapped_column(BigInteger, nullable=False, primary_key=True)
     username = mapped_column(String(50), nullable=False, primary_key=True)
+    subscription_until = mapped_column(Date, nullable=True, default=True)

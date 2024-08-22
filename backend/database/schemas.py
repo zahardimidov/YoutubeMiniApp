@@ -1,10 +1,12 @@
 from fastapi import Request
 from pydantic import BaseModel
+from datetime import datetime
 
 
 class User(BaseModel):
     id: int
     username: str
+    subscription_until: datetime
 
 
 class WebAppRequest(Request):
