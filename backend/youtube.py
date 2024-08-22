@@ -65,7 +65,7 @@ async def youtube_search(query, maxResults):
 async def youtube_get_video(video_id='9GeW5T-c1Yw'):
     data: dict = await youtube_get('videos', id=video_id)
 
-    print(json.dumps(data, indent=4, ensure_ascii=False))
+    #print(json.dumps(data, indent=4, ensure_ascii=False))
 
 
     video = YoutubeObject.from_data(data['items'][0]) if data.get('items', []) else None
@@ -74,6 +74,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
         for i in ['default', 'medium', 'high', 'standart', 'maxres']:
             if i in list(data['items'][0]['snippet']['thumbnails'].keys()):
                 video['photo'] = data['items'][0]['snippet']['thumbnails'][i]['url']
+                print(i, video['photo'])
     return video
 
 
