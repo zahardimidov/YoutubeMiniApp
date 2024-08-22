@@ -37,6 +37,12 @@ services:
       - redis
     restart: always
 
+    volumes:
+      - ./backend:/backend  # Монтируем директорию app с хоста в контейнер
+      - ./video:/video  # Монтируем директорию videos с хоста в контейнер
+
+    working_dir: /backend
+
   frontend:
     build:
       context: ./frontend

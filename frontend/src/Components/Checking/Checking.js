@@ -30,7 +30,7 @@ function Checking() {
 
     return (
         <Layout poster={false}>
-            <h1 style={{color: '#b4d1da', textAlign: 'center', paddingBlock: '20vh'}}> Video is preparing </h1>
+            <h1 style={{color: '#8fc3d3', textAlign: 'center', paddingBlock: '20vh 5vh'}}> Video is preparing </h1>
             <Loading></Loading>
         </Layout>
     );
