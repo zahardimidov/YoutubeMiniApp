@@ -1,9 +1,9 @@
 import './Layout.css';
 
-function Layout({ children }) {
+function Layout({ children, poster = true }) {
     return (
         <div className='layout'>
-            <div className="poster"></div>
+            { poster && <div className="poster"></div> } 
             <div className='content'>
                 {children}
             </div>
