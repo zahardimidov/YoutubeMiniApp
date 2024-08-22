@@ -38,11 +38,11 @@ function Downloading({type = 'video'}) {
 
 
     return (
-        <>
+        <div className='downloading'>
             <h1 style={{ color: 'white', textAlign: 'center', paddingBlock: '20vh 5vh' }}>{text}</h1>
             <Loading></Loading>
             <a id='download' href={downloadURL} download={true}></a>
-        </>
+        </div>
     );
 }
 

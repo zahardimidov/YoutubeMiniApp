@@ -1,9 +1,9 @@
-.loading-container {
+.downloading .loading-container {
     background-color: transparent !important;
     width: 100% !important;
     font-size: 48px;
 }
-.lds-ring {
+.downloading .lds-ring {
     color: white !important;
 }
 #download {
