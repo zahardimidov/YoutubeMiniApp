@@ -63,11 +63,11 @@ while True:
     if task is not None:
         data = json.loads(task.decode())
 
-        if data['video_format']:
+        if data.get('video_format'):
             target = threading.Thread(
                 target=download_video, args=[data])
             target.start()
-        elif data['audio_format']:
+        elif data.get('audio_format'):
             target = threading.Thread(
                 target=download_audio, args=[data])
             target.start()

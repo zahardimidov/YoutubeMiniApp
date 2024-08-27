@@ -70,12 +70,6 @@ async def download(video_id: str, audio_format: str = None, video_format: str = 
 
     return StreamingResponse(imgio, media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
-
-@app.get('/download_audio/{video_id}/{format_id}', response_class=StreamingResponse)
-async def download_audio(video_id: str, format_id: str):
-    return StreamingResponse(open(audio_folder.joinpath(f'{video_id}.webm'), "rb"), media_type="audio/webm", headers={"Content-Disposition": f"attachment; filename={video_id}.webm"})
-
-
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=4500, forwarded_allow_ips='*')
