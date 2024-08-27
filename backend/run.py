@@ -44,31 +44,29 @@ async def home(request: WebAppRequest):
 
 @app.get('/download_video/{video_id}', response_class=StreamingResponse)
 async def download_video(video_id: str):
-    async def iterfile():
-        command = [
-            'ffmpeg',
-            '-i', video_folder.joinpath(f'{video_id}.mp4'),
-            '-i', audio_folder.joinpath(f'{video_id}.webm'),
-            '-c:v', 'copy',
-            '-c:a', 'aac',
-            '-f', 'mp4',
-            '-movflags', 'frag_keyframe+empty_moov',
-            'pipe:1'
-        ]
+    command = [
+        'ffmpeg',
+        '-i', video_folder.joinpath(f'{video_id}.mp4'),
+        '-i', audio_folder.joinpath(f'{video_id}.webm'),
+        '-c:v', 'copy',
+        '-c:a', 'aac',
+        '-f', 'mp4',
+        '-movflags', 'frag_keyframe+empty_moov',
+        'pipe:1'
+    ]
 
-        process = await asyncio.create_subprocess_exec(
-            *command,
-            stdout=asyncio.subprocess.PIPE,
-            stderr=asyncio.subprocess.PIPE
-        )
+    process = await asyncio.create_subprocess_exec(
+        *command,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
 
-        stdout, stderr = await process.communicate()
+    stdout, stderr = await process.communicate()
 
-        print(len(stdout))
-        
-        return stdout
+    print(len(stdout))
 
-    return StreamingResponse(iterfile(), media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
+
+    return StreamingResponse(stdout, media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
 
 @app.get('/download_audio/{video_id}', response_class=StreamingResponse)
