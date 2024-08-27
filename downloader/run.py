@@ -43,6 +43,7 @@ def download_video(video):
 
 
 def download_audio(video):
+    print(video, type(video))
     video_id = video['video_id']
     format_id = video['format_id']
 
