@@ -70,10 +70,11 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
         '--flat-playlist',
         f'https://www.youtube.com/watch?v={video_id}'
     ]
-    process = await asyncio.subprocess.create_subprocess_exec(
+
+    process = await asyncio.create_subprocess_exec(
         *command,
-        capture_output=True,
-        check=True
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
     )
 
     stdout, stderr = await process.communicate()
