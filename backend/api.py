@@ -81,6 +81,8 @@ async def upload_video(request: Request):
     video_id = data.get('video_id')
     format_id = data.get('format_id')
 
+    print(json.dumps(dict(video_id=video_id, format_id=format_id)))
+
     r.rpush('download_audio', json.dumps(dict(video_id=video_id, format_id=format_id)))
 
     return Response(status_code=200)
