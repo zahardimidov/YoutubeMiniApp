@@ -26,7 +26,7 @@ async def video_receive(message: Message):
 
     for v in video['video_formats']:
         video_size = v['filesize'] / 1048576
-        url = WEBAPP_URL + f'/check_audio/{v["id"]}/{v["format_id"]}'
+        url = WEBAPP_URL + f'/check_audio/{video["id"]}/{v["format_id"]}'
         keyboard.append([InlineKeyboardButton(text=f'{v["resolution"]} / ~{video_size} MB', url=url)])
 
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
