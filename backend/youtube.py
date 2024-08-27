@@ -95,7 +95,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
     audio_format = None
     for fmt in formats:
         if fmt['audio_ext'] != 'none' and fmt['video_ext'] == 'none' and fmt.get('filesize'):
-            if audio_format == None or audio_format['filesize'] < fmt['filesize']:
+            if audio_format == None or audio_format['filesize'] < fmt['filesize'] or (fmt['ext'] == 'webm' and audio_format['ext'] != 'webm'):
                 audio_format = dict(filesize=fmt['filesize'], format_id=fmt['format_id'], ext=fmt['ext'],
                                     format_note=fmt['format_note'], resolution=fmt['resolution'], url=fmt['url'])
         if fmt['video_ext'] != 'none' and fmt['audio_ext'] == 'none' and fmt.get('filesize') and not fmt['format_note'] in video_resolutions:
