@@ -73,7 +73,6 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
     process = await asyncio.subprocess.create_subprocess_exec(
         *command,
         capture_output=True,
-        text=True,
         check=True
     )
 
