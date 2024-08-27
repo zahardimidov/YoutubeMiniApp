@@ -63,10 +63,10 @@ async def download_video(video_id: str):
         )
 
         stdout, stderr = await process.communicate()
-        chunk = await process.stdout.read(1024)
 
-        while chunk:
-            yield chunk
+        print(len(stdout))
+        
+        return stdout
 
     return StreamingResponse(iterfile(), media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
