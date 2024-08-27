@@ -1,5 +1,5 @@
 import os
-
+import json
 import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
 from config import BASE_DIR, REDIS_HOST
@@ -70,7 +70,7 @@ async def upload_video(request: Request):
     video_id = data.get('video_id')
     format_id = data.get('format_id')
 
-    r.rpush('download_video', dict(video_id=video_id, format_id=format_id))
+    r.rpush('download_video', json.dumps(dict(video_id=video_id, format_id=format_id)))
 
     return Response(status_code=200)
 
@@ -81,7 +81,7 @@ async def upload_video(request: Request):
     video_id = data.get('video_id')
     format_id = data.get('format_id')
 
-    r.rpush('download_audio', dict(video_id=video_id, format_id=format_id))
+    r.rpush('download_audio', json.dumps(dict(video_id=video_id, format_id=format_id)))
 
     return Response(status_code=200)
 

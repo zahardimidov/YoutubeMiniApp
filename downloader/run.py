@@ -2,7 +2,7 @@ import asyncio
 import os
 import pathlib
 import threading
-
+import json
 import redis
 import yt_dlp
 from dotenv import load_dotenv
@@ -62,7 +62,7 @@ print('DOWNLOADER STARTED')
 while True:
     task: bytes = r.lpop('download_video')
     if task is not None:
-        video = task.decode()
+        video = json.loads(task.decode())
         target = threading.Thread(
             target=download_video, args=[video])
         target.start()
@@ -71,7 +71,7 @@ while True:
 
     task: bytes = r.lpop('download_audio')
     if task is not None:
-        video_id = task.decode()
+        video = json.loads(task.decode())
         target = threading.Thread(
             target=download_video, args=[video])
         target.start()
