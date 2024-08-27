@@ -24,10 +24,10 @@ async def video_receive(message: Message):
         url = WEBAPP_URL + f'/check_audio/{video["id"]}/{video["format_id"]}'
         keyboard.append([InlineKeyboardButton(text=f'audio / {audio_size} MB', url=url)])
 
-    for video in video['video_formats']:
-        video_size = video['filesize'] / 1048576
-        url = WEBAPP_URL + f'/check_audio/{video["id"]}/{video["format_id"]}'
-        keyboard.append([InlineKeyboardButton(text=f'{video["resolution"]} / ~{video_size} MB', url=url)])
+    for v in video['video_formats']:
+        video_size = v['filesize'] / 1048576
+        url = WEBAPP_URL + f'/check_audio/{v["id"]}/{v["format_id"]}'
+        keyboard.append([InlineKeyboardButton(text=f'{v["resolution"]} / ~{video_size} MB', url=url)])
 
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
