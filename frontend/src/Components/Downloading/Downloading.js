@@ -28,14 +28,14 @@ function Downloading() {
                     if (data.status == 'ready') {
                         clearInterval(interval);
 
-                        setTimeout(function () {
-                            setText('Downloading will be started soon');
-                            setLoading(false);
-                            document.getElementById('download').click();
-                        }, 5000)
+                        setLoading(false);
+                        setText('Downloading will be started soon');
+                        document.getElementById('download').click();
+
+                            
                     }
                 });
-        }, 5000)
+        }, 3000)
     }, [])
 
 
