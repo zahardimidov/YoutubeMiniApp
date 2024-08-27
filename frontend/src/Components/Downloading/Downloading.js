@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useSearchParams } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import Loading from '../Loading/Loading';
 import './Downloading.css';
 //import { data } from './data';
@@ -16,13 +16,13 @@ function Downloading() {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: searchParams
+            body: JSON.stringify(Object.fromEntries(new URLSearchParams(searchParams)))
         };
 
-        fetch(process.env.REACT_APP_API_URL + `/upload`, requestOptions);
+        fetch(process.env.REACT_APP_API_URL + `/upload_${type}`, requestOptions);
 
         const interval = setInterval(function () {
-            fetch(process.env.REACT_APP_API_URL + `/check`, requestOptions)
+            fetch(process.env.REACT_APP_API_URL + `/check_${type}`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status == 'ready') {
