@@ -7,6 +7,7 @@ import './Downloading.css';
 
 function Downloading({type = 'video'}) {
     const [text, setText] = React.useState('File is preparing');
+    const [loading, setLoading] = React.useState(true);
     let { video_id } = useParams();
     const downloadURL = `/api/download_${type}/` + video_id;
 
@@ -27,7 +28,8 @@ function Downloading({type = 'video'}) {
                         clearInterval(interval);
 
                         setTimeout(function () {
-                            setText('File is downloading');
+                            setText('Downloading has started');
+                            setLoading(false);
                             document.getElementById('download').click();
                         }, 5000)
                     }
@@ -40,7 +42,7 @@ function Downloading({type = 'video'}) {
     return (
         <div className='downloading'>
             <h1 style={{ color: 'white', textAlign: 'center', paddingBlock: '20vh 5vh' }}>{text}</h1>
-            <Loading></Loading>
+             {loading && <Loading></Loading>}
             <a id='download' href={downloadURL} download={true}></a>
         </div>
     );

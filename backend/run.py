@@ -1,7 +1,9 @@
+import asyncio
+
 from api import router as api_router
 from bot import process_update, run_bot
 from bot.middlewares.webapp_user import webapp_user_middleware
-from config import WEBHOOK_PATH, BASE_DIR
+from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
 from database.schemas import WebAppRequest
 from database.session import engine, run_database
@@ -11,6 +13,7 @@ from fastapi.responses import HTMLResponse, StreamingResponse
 
 video_folder = BASE_DIR.joinpath('video')
 audio_folder = BASE_DIR.joinpath('audio')
+
 
 async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
@@ -38,12 +41,38 @@ app.add_middleware(
 async def home(request: WebAppRequest):
     return f'<div style="display: flex; width: 100vw; height: 100vh; justify-content: center; background-color: #F9F9F9; color: #03527E;"> <b style="margin-top:35vh">Welcome!</b> </div>'
 
+
 @app.get('/download_video/{video_id}', response_class=StreamingResponse)
 async def download_video(video_id: str):
-    return StreamingResponse(open(video_folder.joinpath(f'{video_id}.mp4'), "rb"), media_type="video/m4a", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
+    async def iterfile():
+        command = [
+            'ffmpeg',
+            '-i', video_folder.joinpath(f'{video_id}.mp4'),
+            '-i', audio_folder.joinpath(f'{video_id}.webm'),
+            '-c:v', 'copy',
+            '-c:a', 'aac',
+            '-f', 'mp4',
+            '-movflags', 'frag_keyframe+empty_moov',
+            'pipe:1'
+        ]
+
+        process = await asyncio.create_subprocess_exec(
+            *command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
+
+        stdout, stderr = await process.communicate()
+        chunk = await process.stdout.read(1024)
+
+        while chunk:
+            yield chunk
+
+    return StreamingResponse(iterfile(), media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
+
 
 @app.get('/download_audio/{video_id}', response_class=StreamingResponse)
-async def download_video(video_id: str):
+async def download_audio(video_id: str):
     return StreamingResponse(open(audio_folder.joinpath(f'{video_id}.webm'), "rb"), media_type="audio/webm", headers={"Content-Disposition": f"attachment; filename={video_id}.webm"})
 
 
