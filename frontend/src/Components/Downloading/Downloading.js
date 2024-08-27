@@ -22,7 +22,7 @@ function Downloading() {
         fetch(process.env.REACT_APP_API_URL + `/upload`, requestOptions);
 
         const interval = setInterval(function () {
-            fetch(process.env.REACT_APP_API_URL + `/api/download`, requestOptions)
+            fetch(process.env.REACT_APP_API_URL + `/download`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status == 'ready') {
