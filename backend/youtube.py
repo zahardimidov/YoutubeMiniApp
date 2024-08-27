@@ -64,9 +64,14 @@ async def youtube_search(query, maxResults):
 
 
 async def youtube_get_video(video_id='9GeW5T-c1Yw'):
+    command = [
+        'yt-dlp',
+        '-j',
+        '--flat-playlist',
+        f'https://www.youtube.com/watch?v={video_id}'
+    ]
     process = await asyncio.subprocess.create_subprocess_exec(
-        ['yt-dlp', '-j', '--flat-playlist',
-            f'https://www.youtube.com/watch?v={video_id}'],
+        *command,
         capture_output=True,
         text=True,
         check=True
@@ -102,9 +107,10 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     video_formats.sort(key=lambda x: -x['filesize'])
 
-    publishDate = info_dict['upload_date'][-2:]+"."+info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
+    publishDate = info_dict['upload_date'][-2:]+"." + \
+        info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
 
-    return dict(id = info_dict['id'], title = info_dict['title'], publishDate = publishDate, channel = info_dict['channel'], duration = info_dict['duration_string'], photo=p['url'], audio_format=audio_format, video_formats=video_formats)
+    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=p['url'], audio_format=audio_format, video_formats=video_formats)
 
 
 async def youtube_get_video_legacy(video_id='9GeW5T-c1Yw'):
