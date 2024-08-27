@@ -10,7 +10,7 @@ function Downloading() {
     const [loading, setLoading] = React.useState(true);
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const downloadURL = `/api/download/` + searchParams;
+    const downloadURL = `/api/download/?` + searchParams;
 
     React.useEffect(() => {
         const requestOptions = {
