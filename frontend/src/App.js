@@ -11,7 +11,7 @@ function App() {
         <Route path="/" exact={true} element={<Home />} />
         <Route path="/channel" element={<Channel />} />
         <Route path="/download" element={<Downloading />} />
-        <Route path="/check_audio/:video_id/:format_id" element={<Downloading type='audio'/>} />
+        <Route path="/check_audio/:video_id/:format_id" element={<Downloading/>} />
       </Routes>
     </BrowserRouter>
   );
