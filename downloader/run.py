@@ -24,32 +24,30 @@ HOST = os.environ.get('HOST', 'localhost')
 r = redis.Redis(host=HOST, port=6379, db=0)
 
 
-def download_video(video):
-    video_id = video['video_id']
-    format_id = video['format_id']
+def download_video(data):
+    video_id = data['video_id']
+    video_format = data['video_format']
 
     ydl_opts = {
-        'format': format_id,
+        'format': video_format,
         "outtmpl": f'{video_folder}/%(id)s_%(format_id)s.%(ext)s',
     }
 
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
-        download_audio(video)
+        download_audio(data)
 
-    if not os.path.exists(f'{video_folder}/{video_id}_{format_id}.mp4'):
+    if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
             print('Complete loading')
 
 
-def download_audio(video):
-    raise Exception(video)
-    video_id = video['video_id']
-    format_id = video['format_id']
+def download_audio(data):
+    video_id = data['video_id']
+    format_id = data['audio_format']
 
     ydl_opts = {
         'format': format_id,
-        'extractaudio': True,
         'outtmpl': f'{audio_folder}/%(id)s.%(ext)s',
     }
 
@@ -61,20 +59,17 @@ def download_audio(video):
 print('DOWNLOADER STARTED')
 
 while True:
-    task: bytes = r.lpop('download_video')
+    task: bytes = r.lpop('download')
     if task is not None:
-        video = json.loads(task.decode())
-        target = threading.Thread(
-            target=download_video, args=[video])
-        target.start()
+        data = json.loads(task.decode())
+
+        if data['video_format']:
+            target = threading.Thread(
+                target=download_video, args=[data])
+            target.start()
+        elif data['audio_format']:
+            target = threading.Thread(
+                target=download_audio, args=[data])
+            target.start()
 
         print('Video downloading started: %s' % task)
-
-    task: bytes = r.lpop('download_audio')
-    if task is not None:
-        video = json.loads(task.decode())
-        target = threading.Thread(
-            target=download_video, args=[video])
-        target.start()
-
-        print('Audio downloading started: %s' % task)
