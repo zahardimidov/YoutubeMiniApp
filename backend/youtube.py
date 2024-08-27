@@ -105,7 +105,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
             )
             video_resolutions.append(fmt['format_note'])
 
-    video_formats.sort(key=lambda x: -x['filesize'])
+    video_formats.sort(key=lambda x: x['filesize'])
 
     publishDate = info_dict['upload_date'][-2:]+"." + \
         info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]

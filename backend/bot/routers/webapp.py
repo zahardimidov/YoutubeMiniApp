@@ -8,6 +8,15 @@ from youtube import youtube_get_video
 
 router = Router()
 
+def pretty_size(bytes):
+    bytes = bytes / 1024
+
+    if bytes / 1024 > 0:
+        return f'{round(bytes / 1024, 2)} MB'
+    else:
+        return f'{round(bytes, 2)} KB'
+    
+
 
 @router.message(F.content_type == ContentType.WEB_APP_DATA)
 async def video_receive(message: Message):
@@ -20,15 +29,15 @@ async def video_receive(message: Message):
 
     audio_size = 0
     if video['audio_format']:
-        audio_size = int(video['audio_format']['filesize']) / 1000 / 1000
+        audio_size = int(video['audio_format']['filesize'])
 
         url = WEBAPP_URL + f'/download?video_id={video["id"]}&audio_format={video["audio_format"]["format_id"]}'
-        keyboard.append([InlineKeyboardButton(text=f'audio / {audio_size} MB', url=url)])
+        keyboard.append([InlineKeyboardButton(text=f'audio / {pretty_size(audio_size)}', url=url)])
 
     for v in video['video_formats']:
-        video_size = int(v['filesize']) / 1000 / 1000 + audio_size
+        video_size = int(v['filesize']) + audio_size
         url = WEBAPP_URL + f'/download?video_id={video["id"]}&video_format={v["format_id"]}&audio_format={video["audio_format"]["format_id"]}'
-        keyboard.append([InlineKeyboardButton(text=f'{v["resolution"]} / ~{video_size} MB', url=url)])
+        keyboard.append([InlineKeyboardButton(text=f'{v["resolution"]} / ~{pretty_size(video_size)}', url=url)])
 
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
