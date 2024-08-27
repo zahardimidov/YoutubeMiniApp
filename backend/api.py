@@ -1,5 +1,6 @@
-import os
 import json
+import os
+
 import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
 from config import BASE_DIR, REDIS_HOST
@@ -64,44 +65,26 @@ async def channel_videos(request: WebAppRequest):
     return JSONResponse(content=video)
 
 
-@router.post('/upload_video')
-async def upload_video(request: Request):
+@router.post('/upload')
+async def upload(request: Request):
     data: dict = await request.json()
-    video_id = data.get('video_id')
-    format_id = data.get('format_id')
 
-    r.rpush('download_video', json.dumps(dict(video_id=video_id, format_id=format_id)))
+    r.rpush('download', json.dumps(data))
 
     return Response(status_code=200)
 
 
-@router.post('/upload_audio')
-async def upload_video(request: Request):
+@router.post('/download')
+async def download(request: Request):
     data: dict = await request.json()
     video_id = data.get('video_id')
-    format_id = data.get('format_id')
+    video_format = data.get('video_format')
+    audio_format = data.get('audio_format')
 
-    r.rpush('download_audio', json.dumps(dict(video_id=video_id, format_id=format_id)))
-
-    return Response(status_code=200)
-
-
-@router.post('/check_video')
-async def check_video(request: Request):
-    data: dict = await request.json()
-    video_id = data.get('video_id')
-    format_id = data.get('format_id')
-
-    if os.path.exists(video_folder.joinpath(f'{video_id}_{format_id}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
-        return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
-    return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))
-
-
-@router.post('/check_audio')
-async def check_audio(request: Request):
-    data: dict = await request.json()
-    video_id = data.get('video_id')
-
-    if os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
-        return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
+    if video_format:
+        if os.path.exists(video_folder.joinpath(f'{video_id}_{video_format}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
+            return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
+    elif audio_format:
+        if os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
+            return JSONResponse(content=jsonable_encoder({'status': 'ready'}))
     return JSONResponse(content=jsonable_encoder({'status': 'not ready'}))

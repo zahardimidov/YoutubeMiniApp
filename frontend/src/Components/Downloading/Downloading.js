@@ -19,10 +19,10 @@ function Downloading() {
             body: JSON.stringify(Object.fromEntries(new URLSearchParams(searchParams)))
         };
 
-        fetch(process.env.REACT_APP_API_URL + `/upload_${type}`, requestOptions);
+        fetch(process.env.REACT_APP_API_URL + `/upload`, requestOptions);
 
         const interval = setInterval(function () {
-            fetch(process.env.REACT_APP_API_URL + `/check_${type}`, requestOptions)
+            fetch(process.env.REACT_APP_API_URL + `/api/download`, requestOptions)
                 .then(response => response.json())
                 .then(data => {
                     if (data.status == 'ready') {
