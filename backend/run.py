@@ -43,11 +43,11 @@ async def home(request: WebAppRequest):
     return f'<div style="display: flex; width: 100vw; height: 100vh; justify-content: center; background-color: #F9F9F9; color: #03527E;"> <b style="margin-top:35vh">Welcome!</b> </div>'
 
 
-@app.get('/download_video/{video_id}', response_class=StreamingResponse)
-async def download_video(video_id: str):
+@app.get('/download_video/{video_id}/{format_id}', response_class=StreamingResponse)
+async def download_video(video_id: str, format_id: str):
     command = [
         'ffmpeg',
-        '-i', video_folder.joinpath(f'{video_id}.mp4'),
+        '-i', video_folder.joinpath(f'{video_id}_{format_id}.mp4'),
         '-i', audio_folder.joinpath(f'{video_id}.webm'),
         '-c:v', 'copy',
         '-c:a', 'aac',
@@ -64,16 +64,13 @@ async def download_video(video_id: str):
 
     stdout, stderr = await process.communicate()
 
-    print(len(stdout))
-
     imgio = BytesIO(stdout)
-
 
     return StreamingResponse(imgio, media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
 
-@app.get('/download_audio/{video_id}', response_class=StreamingResponse)
-async def download_audio(video_id: str):
+@app.get('/download_audio/{video_id}/{format_id}', response_class=StreamingResponse)
+async def download_audio(video_id: str, format_id: str):
     return StreamingResponse(open(audio_folder.joinpath(f'{video_id}.webm'), "rb"), media_type="audio/webm", headers={"Content-Disposition": f"attachment; filename={video_id}.webm"})
 
 
