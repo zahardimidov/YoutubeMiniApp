@@ -10,6 +10,7 @@ from database.session import engine, run_database
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse
+from io import BytesIO
 
 video_folder = BASE_DIR.joinpath('video')
 audio_folder = BASE_DIR.joinpath('audio')
@@ -65,8 +66,10 @@ async def download_video(video_id: str):
 
     print(len(stdout))
 
+    imgio = BytesIO(stdout)
 
-    return StreamingResponse(stdout, media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
+
+    return StreamingResponse(imgio, media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
 
 @app.get('/download_audio/{video_id}', response_class=StreamingResponse)
