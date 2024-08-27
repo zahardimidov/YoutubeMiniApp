@@ -28,7 +28,7 @@ function Downloading({type = 'video'}) {
                         clearInterval(interval);
 
                         setTimeout(function () {
-                            setText('Downloading has started');
+                            setText('Downloading will be started soon');
                             setLoading(false);
                             document.getElementById('download').click();
                         }, 5000)

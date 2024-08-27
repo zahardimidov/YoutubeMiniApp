@@ -13,11 +13,7 @@ async def video_receive(message: Message):
     data = json.loads(message.web_app_data.data)
     video = await youtube_get_video(data['id'])
 
-    duration = ''.join([i if i.isdigit() else ':' for i in video['duration'][2:-1]]) if video.get('duration') else None
-
-    msg = f'\U0001F37F <b><a href="https://www.youtube.com/watch?v={video["id"]}">{video["title"]}</a></b>\n\n\U0001F5E3 Автор: #{video["channel_title"]}\n\U0001F4C5 Дата: {video["publishedAt"]}'
-    if duration:
-        msg += f'\n \u23F1 Продолжительность: {duration}'
+    msg = f'\U0001F37F <b><a href="https://www.youtube.com/watch?v={video["id"]}">{video["title"]}</a></b>\n\n\U0001F5E3 Автор: #{video["channel"]}\n\U0001F4C5 Дата: {video["publishDate"]}\n \u23F1 Продолжительность: {video["duration"]}'
     markup = InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text='Download Audio', url=WEBAPP_URL+f'/check_audio/{video["id"]}')],
         [InlineKeyboardButton(text='Download Video', url=WEBAPP_URL+f'/check/{video["id"]}')]

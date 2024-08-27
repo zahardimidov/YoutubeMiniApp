@@ -34,6 +34,7 @@ API_KEYS = [
     'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY'
 ]
 
+
 async def youtube_get(method, maxResults=1, **kwargs):
     CHROME = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
               'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
@@ -63,20 +64,63 @@ async def youtube_search(query, maxResults):
 
 
 async def youtube_get_video(video_id='9GeW5T-c1Yw'):
+    process = await asyncio.subprocess.create_subprocess_exec(
+        ['yt-dlp', '-j', '--flat-playlist',
+            f'https://www.youtube.com/watch?v={video_id}'],
+        capture_output=True,
+        text=True,
+        check=True
+    )
+
+    stdout, stderr = await process.communicate()
+
+    # Parse the JSON output
+    info_dict: dict = json.loads(stdout)
+
+    formats = info_dict.get('formats', [])
+
+    photo = {'width': 0}
+    for p in info_dict['thumbnails']:
+        if p.get('width', 0) > photo['width']:
+            photo = p
+
+    # Print available formats
+    video_formats = []
+    video_resolutions = []
+    audio_format = None
+    for fmt in formats:
+        if fmt['audio_ext'] != 'none' and fmt['video_ext'] == 'none' and fmt.get('filesize'):
+            if audio_format == None or audio_format['filesize'] < fmt['filesize']:
+                audio_format = dict(filesize=fmt['filesize'], format=fmt['format_id'], ext=fmt['ext'],
+                                    format_note=fmt['format_note'], resolution=fmt['resolution'], url=fmt['url'])
+        if fmt['video_ext'] != 'none' and fmt['audio_ext'] == 'none' and fmt.get('filesize') and not fmt['format_note'] in video_resolutions:
+            video_formats.append(
+                dict(filesize=fmt['filesize'], format=fmt['format_id'], ext=fmt['ext'],
+                     format_note=fmt['format_note'], resolution=fmt['resolution'], url=fmt['url'])
+            )
+            video_resolutions.append(fmt['format_note'])
+
+    video_formats.sort(key=lambda x: -x['filesize'])
+
+    publishDate = info_dict['upload_date'][-2:]+"."+info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
+
+    return dict(id = info_dict['id'], title = info_dict['title'], publishDate = publishDate, channel = info_dict['channel'], duration = info_dict['duration_string'], photo=p['url'], audio_format=audio_format, video_formats=video_formats)
+
+
+async def youtube_get_video_legacy(video_id='9GeW5T-c1Yw'):
     data: dict = await youtube_get('videos', id=video_id)
 
-    #print(json.dumps(data, indent=4, ensure_ascii=False))
-
-
-    video = YoutubeObject.from_data(data['items'][0]) if data.get('items', []) else None
+    video = YoutubeObject.from_data(
+        data['items'][0]) if data.get('items', []) else None
 
     if video:
         for i in ['default', 'medium', 'high', 'standart', 'maxres']:
             if i in list(data['items'][0]['snippet']['thumbnails'].keys()):
                 video['photo'] = data['items'][0]['snippet']['thumbnails'][i]['url']
-                print(i, video['photo'])
-    return video
 
+        print(json.dumps(data, indent=4, ensure_ascii=False))
+
+    return video
 
 
 async def youtube_get_channel(channel_id='UCw3vK8lNe5SZzL--rMgq-CQ'):
