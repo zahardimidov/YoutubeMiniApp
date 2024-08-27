@@ -179,47 +179,5 @@ class YoutubeObject:
                 pass
             return details
 
-
-'''
-def upload_video_(video_id):
-    filename = f'{video_folder}/{video_id}.mp4'
-
-    ydl_opts = {
-        'format': "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
-        "outtmpl": 'videos/%(id)s.%(ext)s',
-        "progress_hooks": [hook],
-        'proxy': 'http://nMee0T:wfqXV3@186.179.61.101:9743'
-    }
-
-    if not os.path.exists(filename):
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
-
-def upload_video(video_id):
-
-    filename = f'{video_folder}/{video_id}.mp4'
-
-    ydl_opts = {
-        'format': "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
-        "outtmpl": 'videos/%(id)s.%(ext)s',
-        "progress_hooks": [hook],
-        'proxy': 'http://nMee0T:wfqXV3@186.179.61.101:9743'
-    }
-
-    if not os.path.exists(filename):
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([f'https://www.youtube.com/watch?v={video_id}'])'''
-
-'''
-    cmd = f'yt-dlp -f bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best -outtmpl '
-    proc = await asyncio.create_subprocess_shell(
-        cmd,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE)
-
-    stdout, stderr = await proc.communicate()
-
-    await upload_video_(video_id)'''
-
 if __name__ == '__main__':
     asyncio.run(youtube_get_video())

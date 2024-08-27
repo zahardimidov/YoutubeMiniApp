@@ -34,7 +34,7 @@ def download_video(video):
     }
 
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
-        download_audio(video_id)
+        download_audio(video)
 
     if not os.path.exists(f'{video_folder}/{video_id}_{format_id}.mp4'):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:

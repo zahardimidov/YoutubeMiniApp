@@ -1,24 +1,25 @@
 import React from 'react';
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
 import Loading from '../Loading/Loading';
 import './Downloading.css';
 //import { data } from './data';
 
 
-function Downloading({ type = 'video' }) {
+function Downloading() {
     const [text, setText] = React.useState('File is preparing');
     const [loading, setLoading] = React.useState(true);
-    let { video_id, format_id } = useParams();
-    const downloadURL = `/api/download_${type}/` + video_id + '/' + format_id;
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const downloadURL = `/api/download/` + searchParams;
 
     React.useEffect(() => {
         const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ video_id: video_id, format_id: format_id })
+            body: searchParams
         };
 
-        fetch(process.env.REACT_APP_API_URL + `/upload_${type}`, requestOptions);
+        fetch(process.env.REACT_APP_API_URL + `/upload`, requestOptions);
 
         const interval = setInterval(function () {
             fetch(process.env.REACT_APP_API_URL + `/check_${type}`, requestOptions)
