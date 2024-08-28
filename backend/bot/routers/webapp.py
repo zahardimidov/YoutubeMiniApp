@@ -5,6 +5,8 @@ from aiogram.types import (ContentType, InlineKeyboardButton,
                            InlineKeyboardMarkup, Message)
 from config import WEBAPP_URL
 from youtube import youtube_get_video
+from database.requests import get_user, get_quota
+from datetime import datetime
 
 router = Router()
 
@@ -28,16 +30,23 @@ async def video_receive(message: Message):
     keyboard = []
 
     audio_size = 0
-    if video['audio_format']:
-        audio_size = int(video['audio_format']['filesize'])
 
-        url = WEBAPP_URL + f'/download?video_id={video["id"]}&audio_format={video["audio_format"]["format_id"]}'
-        keyboard.append([InlineKeyboardButton(text=f'audio / {pretty_size(audio_size)}', url=url)])
+    user = await get_user(user_id=message.from_user.id)
+    quota = await get_quota()
 
-    for v in video['video_formats']:
-        video_size = int(v['filesize']) + audio_size
-        url = WEBAPP_URL + f'/download?video_id={video["id"]}&video_format={v["format_id"]}&audio_format={video["audio_format"]["format_id"]}'
-        keyboard.append([InlineKeyboardButton(text=f'{v["resolution"]} / ~{pretty_size(video_size)}', url=url)])
+    if user.subscription_until < datetime.now().date() or user.downloadings >= quota:
+        keyboard = [[InlineKeyboardButton(text='Pay', url='https://google.com')]]
+    else:
+        if video['audio_format']:
+            audio_size = int(video['audio_format']['filesize'])
+
+            url = WEBAPP_URL + f'/download?video_id={video["id"]}&audio_format={video["audio_format"]["format_id"]}'
+            keyboard.append([InlineKeyboardButton(text=f'🎧 audio / {pretty_size(audio_size)}', url=url)])
+
+        for v in video['video_formats']:
+            video_size = int(v['filesize']) + audio_size
+            url = WEBAPP_URL + f'/download?video_id={video["id"]}&video_format={v["format_id"]}&audio_format={video["audio_format"]["format_id"]}'
+            keyboard.append([InlineKeyboardButton(text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}', url=url)])
 
     markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
