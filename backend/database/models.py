@@ -30,13 +30,15 @@ class Plan(Base):
     price = mapped_column(Integer, nullable=False)
 
 
-class API_KEY(Base):
-    __tablename__ = 'api_keys'
+class Api(Base):
+    __tablename__ = 'api'
 
-    key = mapped_column(String, primary_key=True, nullable=False)
+    id = mapped_column(String, primary_key=True, default=generate_uuid)
+    key = mapped_column(String, nullable=False)
 
 
 class Quota(Base):
     __tablename__ = 'quota'
 
-    quota = mapped_column(Integer, primary_key=True, nullable=False)
+    id = mapped_column(String, primary_key=True, default=generate_uuid)
+    quota = mapped_column(Integer, default=0)

@@ -1,5 +1,5 @@
 from config import ADMIN_PASSWORD, ADMIN_USERNAME
-from database.models import User, Plan, Quota, API_KEY
+from database.models import User, Plan, Quota, Api
 from fastapi import Request
 from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
@@ -53,8 +53,8 @@ class QuotaAdmin(ModelView, model=Quota):
     can_create = True
     can_edit = True
 
-class ApiKeyAdmin(ModelView, model=API_KEY):
-    column_list = [API_KEY.key]
+class ApiAdmin(ModelView, model=Api):
+    column_list = [Api.key]
 
     can_create = True
     can_edit = True
@@ -66,4 +66,4 @@ def init_admin(app, engine):
     admin.add_view(UserAdmin)
     admin.add_view(PlanAdmin)
     admin.add_view(QuotaAdmin)
-    admin.add_view(ApiKeyAdmin)
+    admin.add_view(ApiAdmin)
