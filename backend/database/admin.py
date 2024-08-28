@@ -1,5 +1,5 @@
 from config import ADMIN_PASSWORD, ADMIN_USERNAME
-from database.models import User
+from database.models import User, Plan, Quota, API_KEY
 from fastapi import Request
 from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
@@ -40,9 +40,30 @@ class UserAdmin(ModelView, model=User):
     can_edit = True
     form_widget_args_update = dict(
         id=dict(readonly=True), username=dict(readonly=True))
+    
+class PlanAdmin(ModelView, model=Plan):
+    column_list = [Plan.id, Plan.days, Plan.price]
+
+    can_create = True
+    can_edit = True
+
+class QuotaAdmin(ModelView, model=Quota):
+    column_list = [Quota.quota]
+
+    can_create = True
+    can_edit = True
+
+class ApiKeyAdmin(ModelView, model=API_KEY):
+    column_list = [API_KEY.key]
+
+    can_create = True
+    can_edit = True
 
 
 def init_admin(app, engine):
     admin = Admin(app, engine=engine,
                   authentication_backend=authentication_backend)
     admin.add_view(UserAdmin)
+    admin.add_view(PlanAdmin)
+    admin.add_view(QuotaAdmin)
+    admin.add_view(ApiKeyAdmin)
