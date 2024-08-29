@@ -1,6 +1,6 @@
 import uuid
 
-from sqlalchemy import BigInteger, Date, Integer, String
+from sqlalchemy import BigInteger, Date, Integer, String, DateTime
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, mapped_column
 
@@ -21,6 +21,11 @@ class User(Base):
     subscription_until = mapped_column(Date, nullable=True, default=None)
     downloadings = mapped_column(Integer, default=0)
 
+class Downloading(Base):
+    __tablename__ = 'downloadings'
+
+    user_id = mapped_column(BigInteger, nullable=False, primary_key=True)
+    date = mapped_column(DateTime, nullable=False, primary_key=True)
 
 class Plan(Base):
     __tablename__ = 'plans'

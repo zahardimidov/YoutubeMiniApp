@@ -5,7 +5,7 @@ from aiogram.types import (ContentType, InlineKeyboardButton,
                            InlineKeyboardMarkup, Message)
 from config import WEBAPP_URL
 from youtube import youtube_get_video
-from database.requests import get_user, get_quota
+from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
 
 router = Router()
@@ -33,8 +33,9 @@ async def video_receive(message: Message):
 
     user = await get_user(user_id=message.from_user.id)
     quota = await get_quota()
+    downloadings = await get_todays_downloadings(user_id = message.from_user.id)
 
-    if user.subscription_until < datetime.now().date() or user.downloadings >= quota:
+    if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         keyboard = [[InlineKeyboardButton(text='Pay', url='https://google.com')]]
     else:
         if video['audio_format']:

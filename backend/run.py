@@ -8,7 +8,7 @@ from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
 from database.schemas import WebAppRequest, User
 from database.session import engine, run_database
-from database.requests import get_user, get_quota, set_user
+from database.requests import get_user, get_quota, set_user, get_todays_downloadings, add_downloading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
@@ -51,11 +51,12 @@ async def home(request: WebAppRequest):
 async def download(user: int, video_id: str, audio_format: str = None, video_format: str = None):
     user: User = await get_user(user_id=user)
     quota = await get_quota()
+    downloadings = await get_todays_downloadings(user_id = user.id)
 
-    if user.subscription_until < datetime.now().date() or user.downloadings >= quota:
+    if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         return JSONResponse(status_code=403, content=jsonable_encoder({'message': 'subscription is not active'}))
     else:
-        await set_user(user_id=user.id, downloadings = user.downloadings + 1)
+        await add_downloading(user_id=user.id)
 
 
     if audio_format and not video_format:

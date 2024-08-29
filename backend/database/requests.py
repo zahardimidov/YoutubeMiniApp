@@ -1,7 +1,8 @@
 from sqlalchemy import select
 
-from database.models import User, Quota, Plan
+from database.models import User, Quota, Plan, Downloading
 from database.session import async_session
+from datetime import datetime, timedelta
 
 
 async def get_user(user_id) -> User:
@@ -39,3 +40,16 @@ async def set_user(user_id, **kwargs) -> User:
         await session.refresh(user)
 
         return user
+
+async def add_downloading(user_id):
+    async with async_session() as session:
+        downloading = Downloading(user_id=user_id, date = datetime.now())
+        session.add(downloading)
+        
+        await session.commit()
+
+async def get_todays_downloadings(user_id):
+    async with async_session() as session:
+        downloadings = await session.scalars(select(Downloading).where(Downloading.user_id == user_id, Downloading.date > datetime.now() - timedelta(days=1)))
+
+        return downloadings
