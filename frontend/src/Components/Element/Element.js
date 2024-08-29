@@ -19,10 +19,12 @@ function Element({ data, children, ...props }) {
     const posterStyle = {
         backgroundImage: `url(${data.photo})`,
     }
+    const firstLetter = data.title[0];
+
     return (
         <div className={data.type + ' element'} {...props} onClick={data.type === 'video' ? () => clickVideo() : () => clickChannel()} >
             <div className={data.type + '-poster center'} style={posterStyle}>
-                {data.type === 'video' ? <img src={playSVG} alt="Video" /> : ''}
+                {data.type === 'video' ? <img src={playSVG} alt="Video" /> : <p>{firstLetter}</p>}
             </div>
             <div className={data.type + '-info'}>
                 <h3 className={data.type + '-title line2'}>{data.title}</h3>
