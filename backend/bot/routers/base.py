@@ -25,12 +25,12 @@ async def profile(message: Message):
         t = 'Подписка не активна'
         markup = await get_plans_kb(user_id=user.id)
     else:
-        e = f'Подписка активна до {datetime.strftime(user.subscription_until, "%d.%m.%Y")}'
+        t = f'Подписка активна до {datetime.strftime(user.subscription_until, "%d.%m.%Y")}'
         markup = None
 
     downloadings = await get_todays_downloadings(user_id=message.from_user.id)
 
-    await message.answer(f'👤 {message.from_user.username}\n\U0001F4E5 Скачивания за день: {len(downloadings)}\n\u2728 Подписка {e}активна', reply_markup=markup)
+    await message.answer(f'👤 {message.from_user.username}\n\U0001F4E5 Скачивания за день: {len(downloadings)}\n\u2728 {t}', reply_markup=markup)
 
 
 async def get_plans_kb(user_id):
