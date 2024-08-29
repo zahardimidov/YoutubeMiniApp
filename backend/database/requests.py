@@ -14,7 +14,7 @@ async def get_user(user_id) -> User:
 
 async def get_plan(plan_id) -> Plan:
     async with async_session() as session:
-        plan = await session.scalar(select(Plan).where(Plan.id == int(plan_id)))
+        plan = await session.scalar(select(Plan).where(Plan.id == plan_id))
 
         return plan
     

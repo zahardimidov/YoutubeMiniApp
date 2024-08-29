@@ -31,7 +31,7 @@ class Plan(Base):
 
     id = mapped_column(String, primary_key=True, default=generate_uuid)
     days = mapped_column(Integer, nullable=False)
-    price = mapped_column(Integer, nullable=False)
+    price = mapped_column(Integer, nullable=False, name='Цена')
 
 
 class Api(Base):
