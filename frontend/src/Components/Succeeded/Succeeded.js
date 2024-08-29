@@ -1,10 +1,13 @@
 import React from 'react';
+import coolGIF from '../../Assets/gif/cool.gif'
 
 function Succeeded() {
     return (
-        <div className='succeeded'>
-            <h1 style={{ color: 'white', textAlign: 'center', paddingBlock: '40vh 3vh' }}>Платеж выполнен успешно</h1>
-            <h3>Теперь вы можете наслаждаться возможностью подписки в боте</h3>
+        <div className='succeeded' style={{ color: 'white', textAlign: 'center', paddingBlock: '35vh' }}>
+            <h1>Платеж выполнен успешно</h1>
+            <h3 style={{ marginTop: '15px' }}>Теперь вы можете наслаждаться возможностью подписки в боте</h3>
+
+            <img src={coolGIF} alt="succeeded"></img>
         </div>
     );
 }
