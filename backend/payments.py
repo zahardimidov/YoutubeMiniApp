@@ -11,10 +11,10 @@ def create_payment(plan, user_id):
             "value": str(plan.price)+'.00',
             "currency": "RUB"
         },
-        #"confirmation": {
-        #    "type": "redirect",
-        #    "return_url": WEBAPP_URL
-        #},
+        "confirmation": {
+            "type": "redirect",
+            "return_url": WEBAPP_URL
+        },
         "capture": True,
         "description": "Оплата",
         'metadata': {

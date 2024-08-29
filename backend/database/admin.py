@@ -39,6 +39,7 @@ class UserAdmin(ModelView, model=User):
 
     column_list = [User.id, User.username, User.subscription_until]
     column_searchable_list = [User.username]
+    column_labels = dict(username='Имя пользователя', subscription_until = 'Подписка до')
 
     can_create = False
     can_edit = True
@@ -49,7 +50,8 @@ class PlanAdmin(ModelView, model=Plan):
     name = 'Тариф'
     name_plural = 'Тарифы'
 
-    column_list = [Plan.id, Plan.days, Plan.price]
+    column_list = [Plan.id, Plan.price, Plan.days]
+    column_labels = dict(days='Продолжительность подписки в днях', price = 'Цена')
 
     can_create = True
     can_edit = True
@@ -59,6 +61,7 @@ class QuotaAdmin(ModelView, model=Quota):
     name_plural =  'Дневная квота'
 
     column_list = [Quota.quota]
+    column_labels = dict(quota = 'Квота')
 
     can_create = True
     can_edit = True
@@ -68,6 +71,7 @@ class ApiAdmin(ModelView, model=Api):
     name_plural = 'Youtube API ключ'
     
     column_list = [Api.key]
+    column_labels = dict(key = 'Ключ')
 
     can_create = True
     can_edit = True
