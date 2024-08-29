@@ -7,6 +7,7 @@ from config import WEBAPP_URL
 from youtube import youtube_get_video
 from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
+from bot.routers.base import get_plans_kb
 
 router = Router()
 
@@ -36,19 +37,22 @@ async def video_receive(message: Message):
     downloadings = await get_todays_downloadings(user_id = message.from_user.id)
 
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
-        keyboard = [[InlineKeyboardButton(text='Pay', url='https://google.com')]]
+        keyboard = [[InlineKeyboardButton(text='Оплатить подписку', url='https://google.com')]]
+        msg += '\n\n\U0000203C превышен лимит скачиваний за день, оплати подписку, чтобы продолжить прямо сейчас'
+
+        markup = await get_plans_kb()
     else:
         if video['audio_format']:
             audio_size = int(video['audio_format']['filesize'])
 
             url = WEBAPP_URL + f'/download?video_id={video["id"]}&audio_format={video["audio_format"]["format_id"]}&user={user.id}'
-            keyboard.append([InlineKeyboardButton(text=f'🎧 audio / {pretty_size(audio_size)}', url=url)])
+            keyboard.append([InlineKeyboardButton(text=f'🎧 Аудио / {pretty_size(audio_size)}', url=url)])
 
         for v in video['video_formats']:
             video_size = int(v['filesize']) + audio_size
             url = WEBAPP_URL + f'/download?video_id={video["id"]}&video_format={v["format_id"]}&audio_format={video["audio_format"]["format_id"]}&user={user.id}'
             keyboard.append([InlineKeyboardButton(text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}', url=url)])
 
-    markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+        markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
     await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)

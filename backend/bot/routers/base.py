@@ -1,8 +1,9 @@
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.filters import CommandStart
-from aiogram.types import ReplyKeyboardMarkup, Message, WebAppInfo, KeyboardButton
-
+from aiogram.types import ReplyKeyboardMarkup, Message, WebAppInfo, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
+from database.requests import get_todays_downloadings, get_user, get_plans
 from config import WEBAPP_URL
+from datetime import datetime
 
 router = Router()
 
@@ -10,7 +11,26 @@ router = Router()
 @router.message(CommandStart())
 async def start(message: Message):
     markup = ReplyKeyboardMarkup(resize_keyboard=True, keyboard=[[
-        KeyboardButton(text='Open 👀', web_app=WebAppInfo(url=WEBAPP_URL))
+        KeyboardButton(text='Искать  🚀', web_app=WebAppInfo(url=WEBAPP_URL)),
+        KeyboardButton(text='Мой профиль 👤')
     ]])
 
-    await message.answer('🤖 Hello from telegram bot\nYou can test mini app by clicking the button', reply_markup=markup)
+    await message.answer('Привет! 👋 Я твой помощник в мире видео на YouTube!\n🎥✨ С помощью меня ты сможешь легко находить интересующие тебя видео и скачивать их в удобном формате. Просто открой страницу, нажав на кнопку ниже, и воспользуйся поиском, чтобы найти видео.\nГотов начать? Давай искать! 🚀', reply_markup=markup)
+
+@router.message(F.text == 'Мой профиль 👤')
+async def profile(message: Message):
+    markup = await get_plans_kb()
+            
+    downloadings = await get_todays_downloadings(user_id=message.from_user.id)
+
+    await message.answer(f'👤 {message.from_user.username}\n\U0001F4E5 Скачивания за день: {downloadings}\n\u2728 Подписка {e}активка', reply_markup=markup)
+
+
+async def get_plans_kb():
+    plans = await get_plans()
+    kb = []
+
+    for plan in plans:
+        kb.append([InlineKeyboardButton(text = f'{plan.price} руб. / {plan.days} дней')])
+
+    return InlineKeyboardMarkup(inline_keyboard=kb)

@@ -53,3 +53,10 @@ async def get_todays_downloadings(user_id):
         downloadings = await session.scalars(select(Downloading).where(Downloading.user_id == user_id, Downloading.date > datetime.now() - timedelta(days=1)))
 
         return downloadings.all()
+    
+
+async def get_plans():
+    async with async_session() as session:
+        plans = await session.scalars(select(Plan).order_by(Plan.price))
+
+        return plans.all()

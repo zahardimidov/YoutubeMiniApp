@@ -6,7 +6,7 @@ import './Downloading.css';
 
 
 function Downloading() {
-    const [text, setText] = React.useState('File is preparing');
+    const [text, setText] = React.useState('Файл подготавливается');
     const [loading, setLoading] = React.useState(true);
     const [searchParams, setSearchParams] = useSearchParams();
 
@@ -29,13 +29,13 @@ function Downloading() {
                         clearInterval(interval);
 
                         setLoading(false);
-                        setText('Downloading will be started soon');
+                        setText('Скачивание скоро начнется');
                         document.getElementById('download').click();
                     }
                     if (data.status == 'subscribe') {
                         clearInterval(interval);
                         setLoading(false);
-                        setText('Subscription is not active !!!');
+                        setText('Подписка не активна, вернитесь в бот и оплатите подписку !!!');
                     }
                 });
         }, 3000)
