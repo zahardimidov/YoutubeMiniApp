@@ -22,10 +22,10 @@ async def profile(message: Message):
     user = await get_user(user_id=message.from_user.id)
 
     if user.subscription_until == None or user.subscription_until < datetime.now().date():
-        e = 'не '
+        t = 'Подписка не активна'
         markup = await get_plans_kb(user_id=user.id)
     else:
-        e = ''
+        e = f'Подписка активна до {datetime.strftime(user.subscription_until, "%d.%m.%Y")}'
         markup = None
 
     downloadings = await get_todays_downloadings(user_id=message.from_user.id)

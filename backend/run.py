@@ -58,10 +58,9 @@ async def pay(plan: str, user: str):
 @app.post('/payment')
 async def payment(request: Request):
     data = await request.json()
-    print(data)
 
     if data['object']['status'] == 'succeeded':
-        data = data['metadata']
+        data = data['object']['metadata']
 
         user = await get_user(user_id=data['user_id'])
         plan = await get_plan(plan_id=data['plan'])
