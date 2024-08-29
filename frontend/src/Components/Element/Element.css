@@ -17,7 +17,7 @@
     margin-inline: 30px;
     border-radius: 100%;
 
-    background-color: #2481cc;
+    background-color:  #119fcd;
 
     
 }
@@ -84,7 +84,8 @@
 }
 
 .channel-poster p {
-    font-size: 48px;
+    font-size: 44px;
     font-weight: 600;
-    color: white;
+    font-family: monospace;
+    color: rgb(209, 225, 235);
 }
