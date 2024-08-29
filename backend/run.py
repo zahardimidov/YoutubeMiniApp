@@ -11,7 +11,7 @@ from database.session import engine, run_database
 from database.requests import get_user, get_quota, set_user, get_todays_downloadings, add_downloading
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, Response
 from datetime import datetime
 from fastapi.encoders import jsonable_encoder
 
@@ -54,7 +54,7 @@ async def download(user: int, video_id: str, audio_format: str = None, video_for
     downloadings = await get_todays_downloadings(user_id = user.id)
 
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
-        return JSONResponse(status_code=403, content=jsonable_encoder({'message': 'subscription is not active'}))
+        return Response(status_code=403)
     else:
         await add_downloading(user_id=user.id)
 

@@ -31,8 +31,11 @@ function Downloading() {
                         setLoading(false);
                         setText('Downloading will be started soon');
                         document.getElementById('download').click();
-
-                            
+                    }
+                    if (data.status == 'subscribe') {
+                        clearInterval(interval);
+                        setLoading(false);
+                        setText('Subscription is not active !!!');
                     }
                 });
         }, 3000)

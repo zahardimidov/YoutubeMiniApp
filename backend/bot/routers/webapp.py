@@ -10,13 +10,13 @@ from datetime import datetime
 
 router = Router()
 
-def pretty_size(bytes):
-    bytes = bytes / 1024
+def pretty_size(b: int):
+    b = b / 1024
 
-    if bytes / 1024 > 0:
-        return f'{round(bytes / 1024, 2)} MB'
+    if b > 1024:
+        return f'{round(b / 1024, 2)} MB'
     else:
-        return f'{round(bytes, 2)} KB'
+        return f'{round(b, 2)} KB'
     
 
 

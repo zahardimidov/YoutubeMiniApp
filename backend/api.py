@@ -4,7 +4,9 @@ import os
 import redis
 from bot.middlewares.webapp_user import webapp_user_middleware
 from config import BASE_DIR, REDIS_HOST
-from database.schemas import WebAppRequest
+from database.schemas import WebAppRequest, User
+from database.requests import get_user, get_quota, get_todays_downloadings
+from datetime import datetime
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
@@ -80,6 +82,13 @@ async def download(request: Request):
     video_id = data.get('video_id')
     video_format = data.get('video_format')
     audio_format = data.get('audio_format')
+
+    user: User = await get_user(user_id=data.get('user'))
+    quota = await get_quota()
+    downloadings = await get_todays_downloadings(user_id = user.id)
+
+    if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
+        return JSONResponse(content=jsonable_encoder({'status': 'subscribe'}))
 
     if video_format:
         if os.path.exists(video_folder.joinpath(f'{video_id}_{video_format}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
