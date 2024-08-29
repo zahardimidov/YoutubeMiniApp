@@ -83,4 +83,4 @@ def init_admin(app, engine):
     admin.add_view(UserAdmin)
     admin.add_view(PlanAdmin)
     admin.add_view(QuotaAdmin)
-    admin.add_view(ApiAdmin)
+    #admin.add_view(ApiAdmin)
