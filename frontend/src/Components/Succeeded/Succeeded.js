@@ -7,7 +7,7 @@ function Succeeded() {
             <h1>Платеж выполнен успешно</h1>
             <h3 style={{ marginTop: '15px' }}>Теперь вы можете наслаждаться возможностью подписки в боте</h3>
 
-            <div className='gif-container'>
+            <div className='center'>
                 <img src={coolGIF} alt="succeeded"></img>
             </div>
         </div>
