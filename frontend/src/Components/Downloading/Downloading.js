@@ -55,7 +55,9 @@ function Downloading() {
             {loading && <Loading></Loading>}
             <a id='download' href={downloadURL} download={true}></a>
 
+            <div className='gif-container'>
             <img src={gif} alt="state"></img>
+            </div>
         </div>
     );
 }

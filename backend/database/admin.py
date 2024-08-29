@@ -65,7 +65,7 @@ class QuotaAdmin(ModelView, model=Quota):
 
     can_create = True
     can_edit = True
-    #can_delete = False
+    can_delete = False
 
 class ApiAdmin(ModelView, model=Api):
     name = 'Youtube API ключ'
