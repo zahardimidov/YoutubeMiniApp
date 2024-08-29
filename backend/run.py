@@ -8,12 +8,12 @@ from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
 from database.schemas import WebAppRequest, User
 from database.session import engine, run_database
-from database.requests import get_user, get_quota, set_user, get_todays_downloadings, add_downloading
-from fastapi import FastAPI
+from database.requests import get_user, get_quota, set_user, get_todays_downloadings, add_downloading, get_plan
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, StreamingResponse, Response
+from fastapi.responses import HTMLResponse, StreamingResponse, Response, RedirectResponse
 from datetime import datetime
-from fastapi.encoders import jsonable_encoder
+from payments import create_payment
 
 
 video_folder = BASE_DIR.joinpath('video')
@@ -46,6 +46,20 @@ app.add_middleware(
 async def home(request: WebAppRequest):
     return f'<div style="display: flex; width: 100vw; height: 100vh; justify-content: center; background-color: #F9F9F9; color: #03527E;"> <b style="margin-top:35vh">Welcome!</b> </div>'
 
+
+@app.get('/pay')
+async def pay(plan: str, user: str):
+    plan = await get_plan(plan_id=plan)
+
+    url = create_payment(plan=plan, user_id=user)
+
+    return RedirectResponse(url)
+
+@app.post('/payment')
+async def home(request: Request):
+    data = await request.json()
+    print(data)
+    return Response(status_code=200)
 
 @app.get('/download', response_class=StreamingResponse)
 async def download(user: int, video_id: str, audio_format: str = None, video_format: str = None):

@@ -179,5 +179,6 @@ class YoutubeObject:
                 pass
             return details
 
+
 if __name__ == '__main__':
     asyncio.run(youtube_get_video())

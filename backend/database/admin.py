@@ -34,7 +34,11 @@ authentication_backend = AdminAuth(secret_key="secret")
 
 
 class UserAdmin(ModelView, model=User):
+    name = 'Пользователь'
+    name_plural = 'Пользователи'
+
     column_list = [User.id, User.username, User.subscription_until]
+    column_searchable_list = [User.username]
 
     can_create = False
     can_edit = True
@@ -42,18 +46,27 @@ class UserAdmin(ModelView, model=User):
         id=dict(readonly=True), username=dict(readonly=True))
     
 class PlanAdmin(ModelView, model=Plan):
+    name = 'Тариф'
+    name_plural = 'Тарифы'
+
     column_list = [Plan.id, Plan.days, Plan.price]
 
     can_create = True
     can_edit = True
 
-class QuotaAdmin(ModelView, model=Quota):
+class QuotaAdmin(ModelView, model=Quota): 
+    name = 'Дневная квота'
+    name_plural =  'Дневная квота'
+
     column_list = [Quota.quota]
 
     can_create = True
     can_edit = True
 
 class ApiAdmin(ModelView, model=Api):
+    name = 'Youtube API ключ'
+    name_plural = 'Youtube API ключ'
+    
     column_list = [Api.key]
 
     can_create = True

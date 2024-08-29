@@ -23,21 +23,21 @@ async def profile(message: Message):
 
     if user.subscription_until == None or user.subscription_until < datetime.now().date():
         e = 'не '
-        markup = None
+        markup = await get_plans_kb(user_id=user.id)
     else:
         e = ''
-        markup = await get_plans_kb()
+        markup = None
 
     downloadings = await get_todays_downloadings(user_id=message.from_user.id)
 
     await message.answer(f'👤 {message.from_user.username}\n\U0001F4E5 Скачивания за день: {len(downloadings)}\n\u2728 Подписка {e}активна', reply_markup=markup)
 
 
-async def get_plans_kb():
+async def get_plans_kb(user_id):
     plans = await get_plans()
     kb = []
 
     for plan in plans:
-        kb.append([InlineKeyboardButton(text = f'{plan.price} руб. / {plan.days} дней')])
+        kb.append([InlineKeyboardButton(text = f'{plan.price} руб. / {plan.days} дней', url=WEBAPP_URL+f'/api/pay?plan={plan.id}&user={user_id}')])
 
     return InlineKeyboardMarkup(inline_keyboard=kb)

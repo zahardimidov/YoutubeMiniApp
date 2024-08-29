@@ -40,7 +40,7 @@ async def video_receive(message: Message):
         keyboard = [[InlineKeyboardButton(text='Оплатить подписку', url='https://google.com')]]
         msg += '\n\n\U0000203C превышен лимит скачиваний за день, оплати подписку, чтобы продолжить прямо сейчас'
 
-        markup = await get_plans_kb()
+        markup = await get_plans_kb(user_id=user.id)
     else:
         if video['audio_format']:
             audio_size = int(video['audio_format']['filesize'])

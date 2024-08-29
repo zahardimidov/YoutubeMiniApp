@@ -11,6 +11,14 @@ async def get_user(user_id) -> User:
 
         return user
     
+
+async def get_plan(plan_id) -> Plan:
+    async with async_session() as session:
+        plan = await session.scalar(select(Plan).where(Plan.id == int(plan_id)))
+
+        return plan
+    
+    
 async def get_quota() -> int:
     async with async_session() as session:
         quota = await session.scalar(select(Quota))
