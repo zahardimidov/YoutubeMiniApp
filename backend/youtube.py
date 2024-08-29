@@ -8,7 +8,6 @@ from functools import partial, wraps
 import aiohttp
 import certifi
 import requests
-import yt_dlp
 
 email = 'yapi4198@gmail.com'
 password = 'yapi3340@gmail.com'
@@ -18,7 +17,7 @@ password = 'yapi3340@gmail.com'
 
 API_URL = "https://www.googleapis.com/youtube/v3/"
 API_KEYS = [
-    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY',
+    #'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY',
     'AIzaSyCUtlCbrNx6Ry7nVrkWwzX5LZkSGBW5xIc',
     'AIzaSyB-5jTkm33_jBu25vVL8le-WjgBHTYGE4I',
     'AIzaSyBzs1qEB3LKCG0BpoxPMRPwowpWP6yLb5U',
@@ -30,9 +29,9 @@ API_KEYS = [
     'AIzaSyDH_I7B2wP891lRfCwguh7bs1EhfYvOUYM'
 ]
 
-API_KEYS = [
-    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY'
-]
+#API_KEYS = [
+#    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY'
+#]
 
 
 async def youtube_get(method, maxResults=1, **kwargs):

@@ -19,7 +19,7 @@ else:
     ENGINE = "sqlite+aiosqlite:///./database/database.db"
 
 WEBAPP_URL = 'https://yrugi.space'
-BOT_TOKEN = '7091456940:AAH_E9UxyThodpMBXSgtJ0crq_wOPZsUaV0'
+BOT_TOKEN = '6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc'
 WEBHOOK_HOST = 'https://yrugi.space'
 WEBHOOK_PATH = '/webhook'
 ADMIN_USERNAME = 'admin'
