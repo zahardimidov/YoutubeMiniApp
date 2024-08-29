@@ -17,7 +17,9 @@
     margin-inline: 30px;
     border-radius: 100%;
 
-    background-color: #000101;
+    background-color: #2481cc;
+
+    
 }
 
 .video-poster {
@@ -79,4 +81,10 @@
 .element:hover img {
     opacity: 0.85;
     transition: all 0.3s linear;
+}
+
+.channel-poster p {
+    font-size: 48px;
+    font-weight: 600;
+    color: white;
 }
