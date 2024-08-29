@@ -69,6 +69,9 @@ a {
   -webkit-box-orient: vertical;
 }
 
+.gif {
+  margin-top: 30px;
+}
 .gif > img {
   width: 250px;
 }
