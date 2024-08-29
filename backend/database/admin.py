@@ -51,7 +51,7 @@ class PlanAdmin(ModelView, model=Plan):
     name_plural = 'Тарифы'
 
     column_list = [Plan.id, Plan.price, Plan.days]
-    column_labels = dict(days='Продолжительность подписки в днях', price = 'Цена')
+    column_labels = dict(days='Продолжительность подписки в днях', price = 'Цена в рублях')
 
     can_create = True
     can_edit = True

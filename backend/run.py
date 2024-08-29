@@ -12,7 +12,7 @@ from database.requests import get_user, get_quota, set_user, get_todays_download
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, StreamingResponse, Response, RedirectResponse
-from datetime import datetime
+from datetime import datetime, timedelta
 from payments import create_payment
 
 
@@ -56,9 +56,21 @@ async def pay(plan: str, user: str):
     return RedirectResponse(url)
 
 @app.post('/payment')
-async def home(request: Request):
+async def payment(request: Request):
     data = await request.json()
     print(data)
+
+    if data['object']['status'] == 'succeeded':
+        data = data['metadata']
+
+        user = await get_user(user_id=data['user_id'])
+        plan = await get_plan(plan_id=data['plan'])
+
+        if not user:
+            return Response(status_code=400)
+
+        await set_user(user.id, subscription_until = datetime.now()+timedelta(days=plan.days))
+
     return Response(status_code=200)
 
 @app.get('/download', response_class=StreamingResponse)
