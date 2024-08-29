@@ -63,7 +63,7 @@ class QuotaAdmin(ModelView, model=Quota):
     column_list = [Quota.quota]
     column_labels = dict(quota = 'Квота')
 
-    can_create = True
+    can_create = False
     can_edit = True
     can_delete = False
 

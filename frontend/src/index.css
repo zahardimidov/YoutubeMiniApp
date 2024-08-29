@@ -69,6 +69,6 @@ a {
   -webkit-box-orient: vertical;
 }
 
-.gif {
+.gif > img {
   width: 40vw;
 }
