@@ -7,6 +7,7 @@ class User(BaseModel):
     id: int
     username: str
     subscription_until: datetime
+    downloadings: int
 
 
 class WebAppRequest(Request):

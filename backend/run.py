@@ -6,11 +6,15 @@ from bot import process_update, run_bot
 from bot.middlewares.webapp_user import webapp_user_middleware
 from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
-from database.schemas import WebAppRequest
+from database.schemas import WebAppRequest, User
 from database.session import engine, run_database
+from database.requests import get_user, get_quota, set_user
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, StreamingResponse
+from fastapi.responses import HTMLResponse, StreamingResponse, JSONResponse
+from datetime import datetime
+from fastapi.encoders import jsonable_encoder
+
 
 video_folder = BASE_DIR.joinpath('video')
 audio_folder = BASE_DIR.joinpath('audio')
@@ -44,7 +48,16 @@ async def home(request: WebAppRequest):
 
 
 @app.get('/download', response_class=StreamingResponse)
-async def download(video_id: str, audio_format: str = None, video_format: str = None):
+async def download(user: int, video_id: str, audio_format: str = None, video_format: str = None):
+    user: User = await get_user(user_id=user)
+    quota = await get_quota()
+
+    if user.subscription_until < datetime.now().date() or user.downloadings >= quota:
+        return JSONResponse(status_code=403, content=jsonable_encoder({'message': 'subscription is not active'}))
+    else:
+        await set_user(user_id=user.id, downloadings = user.downloadings + 1)
+
+
     if audio_format and not video_format:
         return StreamingResponse(open(audio_folder.joinpath(f'{video_id}.webm'), "rb"), media_type="audio/webm", headers={"Content-Disposition": f"attachment; filename={video_id}.webm"})
     command = [

@@ -34,7 +34,7 @@ authentication_backend = AdminAuth(secret_key="secret")
 
 
 class UserAdmin(ModelView, model=User):
-    column_list = [User.id, User.username, User.subscription_until]
+    column_list = [User.id, User.username, User.subscription_until, User.downloadings]
 
     can_create = False
     can_edit = True
