@@ -52,4 +52,4 @@ async def get_todays_downloadings(user_id):
     async with async_session() as session:
         downloadings = await session.scalars(select(Downloading).where(Downloading.user_id == user_id, Downloading.date > datetime.now() - timedelta(days=1)))
 
-        return downloadings
+        return downloadings.all()
