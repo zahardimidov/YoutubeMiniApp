@@ -20,6 +20,9 @@ async def start(message: Message):
 @router.message(F.text == 'Мой профиль 👤')
 async def profile(message: Message):
     markup = await get_plans_kb()
+
+    user = await get_user(user_id=message.from_user.id)
+    e = 'не ' if user.subscription_until == None or user.subscription_until < datetime.now().date() else ''
             
     downloadings = await get_todays_downloadings(user_id=message.from_user.id)
 
