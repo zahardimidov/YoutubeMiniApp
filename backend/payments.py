@@ -12,8 +12,8 @@ def create_payment(plan, user_id):
             "currency": "RUB"
         },
         "confirmation": {
-            "type": "redirect"
-            #"return_url": WEBAPP_URL
+            "type": "redirect",
+            "return_url": WEBAPP_URL + '/succeeded'
         },
         "capture": True,
         "description": "Оплата",
