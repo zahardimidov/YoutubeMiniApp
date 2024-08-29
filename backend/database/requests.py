@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 
 async def get_user(user_id) -> User:
     async with async_session() as session:
-        user = await session.scalar(select(User).where(User.id == user_id))
+        user = await session.scalar(select(User).where(User.id == int(user_id)))
 
         return user
     

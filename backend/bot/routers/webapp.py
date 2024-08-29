@@ -13,7 +13,7 @@ router = Router()
 def pretty_size(b: int):
     b = b / 1024
 
-    if b > 1024:
+    if b > 512:
         return f'{round(b / 1024, 2)} MB'
     else:
         return f'{round(b, 2)} KB'
