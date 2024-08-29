@@ -19,11 +19,8 @@ r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 video_folder = BASE_DIR.joinpath('video')
 audio_folder = BASE_DIR.joinpath('audio')
 
-# @router.post('/search')
-# @webapp_user_middleware
-
-
 @router.post('/search')
+@webapp_user_middleware
 async def search(request: WebAppRequest):
     data: dict = await request.json()
     q = data.get('query')
@@ -37,10 +34,8 @@ async def search(request: WebAppRequest):
     return JSONResponse(content=data)
 
 
-# @router.post('/channel_videos')
-# @webapp_user_middleware
-
 @router.post('/channel_videos')
+@webapp_user_middleware
 async def channel_videos(request: WebAppRequest):
     data: dict = await request.json()
     channel_id = data.get('channel_id')
@@ -55,7 +50,7 @@ async def channel_videos(request: WebAppRequest):
 
 
 @router.post('/get_video')
-async def channel_videos(request: WebAppRequest):
+async def get_video(request: WebAppRequest):
     data: dict = await request.json()
     video_id = data.get('video_id')
 
