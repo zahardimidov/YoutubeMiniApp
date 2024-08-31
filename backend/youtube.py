@@ -29,9 +29,9 @@ API_KEYS = [
     'AIzaSyDH_I7B2wP891lRfCwguh7bs1EhfYvOUYM'
 ]
 
-#API_KEYS = [
-#    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY'
-#]
+API_KEYS = [
+    'AIzaSyAG78TY-KZFgN9Qc5UYlMsdPHGBUppGkSo'
+]
 
 
 async def youtube_get(method, maxResults=1, **kwargs):
