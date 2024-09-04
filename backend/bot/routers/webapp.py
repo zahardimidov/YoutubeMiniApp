@@ -101,8 +101,7 @@ async def callback(callback: CallbackQuery):
     
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-        await callback.message.edit_reply_markup(reply_markup=empty_markup)
-        await callback.message.edit_text(text=callback.message.text + downloading_text)
+        await callback.message.edit_text(text=callback.message.text + downloading_text, reply_markup=empty_markup)
 
         r.rpush('download', json.dumps(dict(
             video_id=video_id,
