@@ -49,7 +49,7 @@ async def video_receive(message: Message):
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         keyboard = [[InlineKeyboardButton(
             text='Оплатить подписку', url='https://google.com')]]
-        msg += '\n\n\U0000203C превышен лимит скачиваний за день, оплати подписку, чтобы продолжить прямо сейчас'
+        msg += '⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку и продолжу скачивать видео'
 
         markup = await get_plans_kb(user_id=user.id)
     else:
