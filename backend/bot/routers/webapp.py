@@ -68,6 +68,8 @@ async def video_receive(message: Message):
             else:
                 callback = 'error'
 
+            print(callback)
+
             url = WEBAPP_URL + \
                 f'/download?video_id={video["id"]}&video_format={v["format_id"]}&audio_format={video["audio_format"]["format_id"]}&user={user.id}'
             keyboard.append([InlineKeyboardButton(
@@ -84,6 +86,7 @@ async def answer(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith('o_'))
 async def callback(callback: CallbackQuery):
+    print(callback)
     video_id, audio_format, video_format = callback.data[2:].split('_')
 
     user = await get_user(user_id=callback.from_user.id)
