@@ -132,11 +132,13 @@ async def callback_download(callback_query: CallbackQuery):
             if video_format:
                 if os.path.exists(video_path) and os.path.exists(audio_path):
                     await callback_query.message.answer_video(video=FSInputFile(path=video_path), caption=caption)
+                    await callback_query.message.delete()
                     break
 
                 await asyncio.sleep(5)
             elif audio_format:
                 if os.path.exists(audio_path):
                     await callback_query.message.answer_audio(audio=FSInputFile(path=audio_path), caption=caption)
+                    await callback_query.message.delete()
                     break
                 await asyncio.sleep(5)

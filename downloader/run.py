@@ -48,7 +48,7 @@ def download_video(data):
             '-c:a', 'aac',
             '-f', 'mp4',
             '-movflags', 'frag_keyframe+empty_moov',
-            f'{video_folder}/{video_id}_{video_format}.mp4'
+            f'{video_folder}/{video_id}_{video_format}_combine.mp4'
         ]
 
         subprocess.run(
@@ -56,6 +56,8 @@ def download_video(data):
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE
         )
+
+        os.replace(f'{video_folder}/{video_id}_{video_format}_combine.mp4', f'{video_folder}/{video_id}_{video_format}.mp4')
 
         print('Complete loading')
 
