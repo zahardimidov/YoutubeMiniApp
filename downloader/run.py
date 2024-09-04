@@ -31,7 +31,7 @@ def download_video(data):
 
     ydl_opts = {
         'format': video_format,
-        "outtmpl": f'{video_folder}/%(id)s_%(format_id)s.%(ext)s',
+        "outtmpl": f'{video_folder}/%(id)s_%(format_id)s_temp.%(ext)s',
     }
 
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
@@ -52,16 +52,14 @@ def download_video(data):
             '-strict', 'experimental',
             '-f', 'mp4',
             '-movflags', 'frag_keyframe+empty_moov',
-            f'{video_folder}/{video_id}_{video_format}_combine.mp4'
+            f'{video_folder}/{video_id}_{video_format}.mp4'
         ]
 
         subprocess.run(command)
 
         time.sleep(3)
         
-        subprocess.run(['mv', f'{video_folder}/{video_id}_{video_format}_combine.mp4', f'{video_folder}/{video_id}_{video_format}.mp4'])
-
-        time.sleep(3)
+        os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete loading')
 
