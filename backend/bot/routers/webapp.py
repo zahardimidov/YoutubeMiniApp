@@ -18,6 +18,7 @@ r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 video_folder = BASE_DIR.joinpath('video')
 audio_folder = BASE_DIR.joinpath('audio')
 
+empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
 
 def pretty_size(b: int):
     b = b / 1024
@@ -95,12 +96,12 @@ async def callback(callback: CallbackQuery):
 
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         plans = await get_plans_kb(callback.from_user.id)
-        await callback.message.delete_reply_markup()
+        await callback.message.edit_reply_markup(reply_markup=empty_markup)
         return await callback.message.answer('Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
     
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-        await callback.message.delete_reply_markup()
+        await callback.message.edit_reply_markup(reply_markup=empty_markup)
         await callback.message.edit_text(text=callback.message.text + downloading_text)
 
         r.rpush('download', json.dumps(dict(
