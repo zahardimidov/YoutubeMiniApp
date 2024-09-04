@@ -1,7 +1,8 @@
+import asyncio
 import json
 import os
 from datetime import datetime
-import asyncio
+
 import redis
 from aiogram import F, Router
 from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
@@ -87,7 +88,6 @@ async def answer(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith('o_'))
 async def callback_download(callback_query: CallbackQuery):
-    print(callback_query.data[2:].split(','), callback_query.data)
     video_id, audio_format, video_format = callback_query.data[2:].split(',')
 
     user = await get_user(user_id=callback_query.from_user.id)
@@ -114,15 +114,20 @@ async def callback_download(callback_query: CallbackQuery):
 
         caption = callback_query.message.caption.replace(downloading_text, '')
 
+        video_path = video_folder.joinpath(f'{video_id}_{video_format}.mp4')
+        audio_path = audio_folder.joinpath(f'{video_id}.webm')
+
         while True:
             if video_format:
-                if os.path.exists(video_folder.joinpath(f'{video_id}_{video_format}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
-                    await callback_query.message.answer_video(video=video_folder.joinpath(f'{video_id}_{video_format}.mp4'), caption=caption)
+                if os.path.exists(video_path) and os.path.exists(audio_path):
+                    video = open(video_path, "rb") 
+                    await callback_query.message.answer_video(video=video, caption=caption)
                     break
 
                 asyncio.sleep(5)
             elif audio_format:
-                if os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
-                    await callback_query.message.answer_audio(audio_folder.joinpath(f'{video_id}.webm'), caption=caption)
+                if os.path.exists(audio_path):
+                    audio = open(audio_path, 'rb')
+                    await callback_query.message.answer_audio(audio=audio, caption=caption)
                     break
                 asyncio.sleep(5)
