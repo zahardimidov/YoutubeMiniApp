@@ -51,11 +51,7 @@ def download_video(data):
             f'{video_folder}/{video_id}_{video_format}_combine.mp4'
         ]
 
-        subprocess.run(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
+        subprocess.run(command)
 
         os.replace(f'{video_folder}/{video_id}_{video_format}_combine.mp4', f'{video_folder}/{video_id}_{video_format}.mp4')
 
