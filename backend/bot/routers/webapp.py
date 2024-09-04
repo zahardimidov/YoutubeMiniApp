@@ -91,7 +91,7 @@ async def video_receive(message: Message):
 
 @router.callback_query(F.data == "error")
 async def answer(callback: CallbackQuery):
-    await callback.answer('Слишком большой файл')
+    await callback.answer('😕 Telegram не позволяет отправлять файлы таких размеров, выберите другой формат')
 
 
 @router.callback_query(F.data.startswith('o_'))
@@ -105,7 +105,7 @@ async def callback_download(callback_query: CallbackQuery):
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         plans = await get_plans_kb(callback_query.from_user.id)
         await callback_query.message.edit_reply_markup(reply_markup=empty_markup)
-        return await callback_query.message.answer('Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
+        return await callback_query.message.answer('⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
 
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
