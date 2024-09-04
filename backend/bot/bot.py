@@ -30,4 +30,4 @@ async def process_update(request: Request):
     #print(update)
     #await dp.feed_update(bot, update)
     update = await request.json()
-    await dp.feed_webhook_update(bot=Bot, update=update)
+    await dp.feed_webhook_update(bot=bot, update=update)
