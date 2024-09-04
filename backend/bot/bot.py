@@ -13,7 +13,7 @@ async def run_bot():
     me = await bot.get_me()
     print(me.username)
 
-    await bot.set_webhook(WEBHOOK_HOST+WEBHOOK_PATH, drop_pending_updates=True)
+    await bot.set_webhook(WEBHOOK_HOST+WEBHOOK_PATH, drop_pending_updates=True, allowed_updates=['message', 'callback_query'])
 
 bot = Bot(token=BOT_TOKEN, default=DefaultBotProperties(
     parse_mode=ParseMode.HTML))
@@ -25,9 +25,5 @@ dp.message.middleware(RegisterUserMiddleware())
 
 
 async def process_update(request: Request):
-    #update = Update.model_validate(await request.json(), context={"bot": bot})
-
-    #print(update)
-    #await dp.feed_update(bot, update)
-    update = await request.json()
-    await dp.feed_webhook_update(bot=bot, update=update)
+    update = Update.model_validate(await request.json(), context={"bot": bot})
+    await dp.feed_update(bot, update)
