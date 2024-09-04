@@ -5,7 +5,7 @@ import asyncio
 import redis
 from aiogram import F, Router
 from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
-                           InlineKeyboardMarkup, Message, ReplyKeyboardRemove)
+                           InlineKeyboardMarkup, Message)
 from bot.routers.base import get_plans_kb
 from config import BASE_DIR, REDIS_HOST, WEBAPP_URL
 from database.requests import (add_downloading, get_quota,
@@ -95,12 +95,12 @@ async def callback(callback: CallbackQuery):
 
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         plans = await get_plans_kb(callback.from_user.id)
-        await callback.message.edit_reply_markup(reply_markup=ReplyKeyboardRemove())
+        await callback.message.delete_reply_markup()
         return await callback.message.answer('Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
     
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-        await callback.message.edit_reply_markup(reply_markup=ReplyKeyboardRemove())
+        await callback.message.delete_reply_markup()
         await callback.message.edit_text(text=callback.message.text + downloading_text)
 
         r.rpush('download', json.dumps(dict(
