@@ -5,8 +5,8 @@ from datetime import datetime
 
 import redis
 from aiogram import F, Router
-from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
-                           InlineKeyboardMarkup, Message, InputFile)
+from aiogram.types import (CallbackQuery, ContentType, FSInputFile,
+                           InlineKeyboardButton, InlineKeyboardMarkup, Message)
 from bot.routers.base import get_plans_kb
 from config import BASE_DIR, REDIS_HOST, WEBAPP_URL
 from database.requests import (add_downloading, get_quota,
@@ -20,6 +20,7 @@ video_folder = BASE_DIR.joinpath('video')
 audio_folder = BASE_DIR.joinpath('audio')
 
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
+
 
 def pretty_size(b: int):
     b = b / 1024
@@ -57,10 +58,13 @@ async def video_receive(message: Message):
 
             callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},'
 
+            text = f'🎧 Аудио / {pretty_size(audio_size)}' + (' ⚡️ мгновенно' if os.path.exists(
+                audio_folder.joinpath(f'{video["id"]}.webm')) else '')
+
             url = WEBAPP_URL + \
                 f'/download?video_id={video["id"]}&audio_format={video["audio_format"]["format_id"]}&user={user.id}'
             keyboard.append([InlineKeyboardButton(
-                text=f'🎧 Аудио / {pretty_size(audio_size)}', callback_data=callback)])
+                text=text, callback_data=callback)])
 
         for v in video['video_formats']:
             video_size = int(v['filesize']) + audio_size
@@ -72,14 +76,18 @@ async def video_receive(message: Message):
 
             print(callback)
 
+            text = f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}' + (' ⚡️ мгновенно' if os.path.exists(
+                video_folder.joinpath(f'{video["id"]}_{v["format_id"]}.mp4')) else '')
+
             url = WEBAPP_URL + \
                 f'/download?video_id={video["id"]}&video_format={v["format_id"]}&audio_format={video["audio_format"]["format_id"]}&user={user.id}'
             keyboard.append([InlineKeyboardButton(
-                text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}', callback_data=callback)])
+                text=text, callback_data=callback)])
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
     await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)
+
 
 @router.callback_query(F.data == "error")
 async def answer(callback: CallbackQuery):
@@ -98,7 +106,7 @@ async def callback_download(callback_query: CallbackQuery):
         plans = await get_plans_kb(callback_query.from_user.id)
         await callback_query.message.edit_reply_markup(reply_markup=empty_markup)
         return await callback_query.message.answer('Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
-    
+
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
 
@@ -123,12 +131,12 @@ async def callback_download(callback_query: CallbackQuery):
         while True:
             if video_format:
                 if os.path.exists(video_path) and os.path.exists(audio_path):
-                    await callback_query.message.answer_video(video=InputFile(filename=video_path), caption=caption)
+                    await callback_query.message.answer_video(video=FSInputFile(path=video_path), caption=caption)
                     break
 
                 await asyncio.sleep(5)
             elif audio_format:
                 if os.path.exists(audio_path):
-                    await callback_query.message.answer_audio(audio=InputFile(filename=audio_path), caption=caption)
+                    await callback_query.message.answer_audio(audio=FSInputFile(path=audio_path), caption=caption)
                     break
                 await asyncio.sleep(5)
