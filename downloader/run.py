@@ -56,6 +56,9 @@ def download_video(data):
         ]
 
         subprocess.run(command)
+
+        time.sleep(3)
+        
         subprocess.run(['mv', f'{video_folder}/{video_id}_{video_format}_combine.mp4', f'{video_folder}/{video_id}_{video_format}.mp4'])
 
         time.sleep(3)
