@@ -25,8 +25,9 @@ dp.message.middleware(RegisterUserMiddleware())
 
 
 async def process_update(request: Request):
-    update = Update.model_validate(await request.json(), context={"bot": bot})
+    #update = Update.model_validate(await request.json(), context={"bot": bot})
 
-    print(update)
-    await dp.feed_update(bot, update)
+    #print(update)
+    #await dp.feed_update(bot, update)
+    update = await request.json()
     await dp.feed_webhook_update(bot=Bot, update=update)

@@ -84,7 +84,7 @@ async def answer(callback: CallbackQuery):
     await callback.answer('Слишком большой файл')
 
 
-@router.callback_query(F.data.startswith('o_'))
+@router.callback_query(lambda c: c.data.startswith('o_'))
 async def callback(callback: CallbackQuery):
     video_id, audio_format, video_format = callback.data[2:].split('_')
 
