@@ -86,22 +86,25 @@ async def answer(callback: CallbackQuery):
 
 
 @router.callback_query(F.data.startswith('o_'))
-async def callback(callback: CallbackQuery):
-    print(callback.data[2:].split(','), callback.data)
-    video_id, audio_format, video_format = callback.data[2:].split(',')
+async def callback_download(callback_query: CallbackQuery):
+    print(callback_query.data[2:].split(','), callback_query.data)
+    video_id, audio_format, video_format = callback_query.data[2:].split(',')
 
-    user = await get_user(user_id=callback.from_user.id)
+    user = await get_user(user_id=callback_query.from_user.id)
     quota = await get_quota()
     downloadings = await get_todays_downloadings(user_id=user.id)
 
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
-        plans = await get_plans_kb(callback.from_user.id)
-        await callback.message.edit_reply_markup(reply_markup=empty_markup)
-        return await callback.message.answer('Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
+        plans = await get_plans_kb(callback_query.from_user.id)
+        await callback_query.message.edit_reply_markup(reply_markup=empty_markup)
+        return await callback_query.message.answer('Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
     
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-        await callback.message.edit_text(text=callback.message.text + downloading_text, reply_markup=empty_markup)
+
+        print(callback_query.message)
+
+        await callback_query.message.edit_text(text=callback_query.message.text + downloading_text, reply_markup=empty_markup)
 
         r.rpush('download', json.dumps(dict(
             video_id=video_id,
@@ -111,17 +114,17 @@ async def callback(callback: CallbackQuery):
 
         await add_downloading(user_id=user.id)
 
-        caption = callback.message.text.replace(downloading_text, '')
+        caption = callback_query.message.text.replace(downloading_text, '')
 
         while True:
             if video_format:
                 if os.path.exists(video_folder.joinpath(f'{video_id}_{video_format}.mp4')) and os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
-                    await callback.message.answer_video(video=video_folder.joinpath(f'{video_id}_{video_format}.mp4'), caption=caption)
+                    await callback_query.message.answer_video(video=video_folder.joinpath(f'{video_id}_{video_format}.mp4'), caption=caption)
                     break
 
                 asyncio.sleep(5)
             elif audio_format:
                 if os.path.exists(audio_folder.joinpath(f'{video_id}.webm')):
-                    await callback.message.answer_audio(audio_folder.joinpath(f'{video_id}.webm'), caption=caption)
+                    await callback_query.message.answer_audio(audio_folder.joinpath(f'{video_id}.webm'), caption=caption)
                     break
                 asyncio.sleep(5)
