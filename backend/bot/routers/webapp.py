@@ -53,7 +53,7 @@ async def video_receive(message: Message):
         if video['audio_format']:
             audio_size = int(video['audio_format']['filesize'])
 
-            callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},'
+            callback = f'o_{video["id"]}__{video["audio_format"]["format_id"]}__'
 
             url = WEBAPP_URL + \
                 f'/download?video_id={video["id"]}&audio_format={video["audio_format"]["format_id"]}&user={user.id}'
@@ -64,7 +64,7 @@ async def video_receive(message: Message):
             video_size = int(v['filesize']) + audio_size
 
             if video_size / 1024 / 1024 / 1024 < 2:
-                callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},{v["format_id"]}'
+                callback = f'o_{video["id"]}__{video["audio_format"]["format_id"]}__{v["format_id"]}'
             else:
                 callback = 'error'
 
@@ -86,8 +86,8 @@ async def answer(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith('o_'))
 async def callback(callback: CallbackQuery):
-    print(callback.data[2:].split(','), callback.data)
-    video_id, audio_format, video_format = callback.data[2:].split(',')
+    print(callback.data[2:].split('__'), callback.data)
+    video_id, audio_format, video_format = callback.data[2:].split('__')
 
     user = await get_user(user_id=callback.from_user.id)
     quota = await get_quota()
