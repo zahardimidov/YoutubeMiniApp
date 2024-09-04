@@ -45,7 +45,7 @@ def download_video(data):
 
         command = [
             'ffmpeg',
-            '-i', video_folder.joinpath(f'{video_id}_{video_format}.mp4'),
+            '-i', video_folder.joinpath(f'{video_id}_{video_format}_temp.mp4'),
             '-i', audio_folder.joinpath(f'{video_id}.webm'),
             '-c:v', 'copy',
             '-c:a', 'aac',
@@ -57,9 +57,9 @@ def download_video(data):
 
         subprocess.run(command)
 
-        #time.sleep(3)
+        time.sleep(3)
         
-        #os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
+        os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete loading')
 
