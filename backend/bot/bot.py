@@ -29,3 +29,4 @@ async def process_update(request: Request):
 
     print(update)
     await dp.feed_update(bot, update)
+    await dp.feed_webhook_update(bot=Bot, update=update)
