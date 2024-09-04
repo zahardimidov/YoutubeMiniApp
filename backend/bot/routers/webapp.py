@@ -86,6 +86,7 @@ async def answer(callback: CallbackQuery):
 
 @router.callback_query(F.data.startswith('o_'))
 async def callback(callback: CallbackQuery):
+    print(callback.data[2:].split('_'), callback.data)
     video_id, audio_format, video_format = callback.data[2:].split('_')
 
     user = await get_user(user_id=callback.from_user.id)
