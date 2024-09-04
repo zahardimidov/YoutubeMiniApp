@@ -6,7 +6,7 @@ from datetime import datetime
 import redis
 from aiogram import F, Router
 from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
-                           InlineKeyboardMarkup, Message)
+                           InlineKeyboardMarkup, Message, InputFile)
 from bot.routers.base import get_plans_kb
 from config import BASE_DIR, REDIS_HOST, WEBAPP_URL
 from database.requests import (add_downloading, get_quota,
@@ -106,7 +106,7 @@ async def callback_download(callback_query: CallbackQuery):
             await callback_query.message.edit_caption(caption=callback_query.message.caption + downloading_text, reply_markup=empty_markup)
         except Exception as e:
             print(e)
-            
+
         r.rpush('download', json.dumps(dict(
             video_id=video_id,
             video_format=video_format,
@@ -123,14 +123,12 @@ async def callback_download(callback_query: CallbackQuery):
         while True:
             if video_format:
                 if os.path.exists(video_path) and os.path.exists(audio_path):
-                    video = open(video_path, "rb") 
-                    await callback_query.message.answer_video(video=video, caption=caption)
+                    await callback_query.message.answer_video(video=InputFile(filename=video_path), caption=caption)
                     break
 
-                asyncio.sleep(5)
+                await asyncio.sleep(5)
             elif audio_format:
                 if os.path.exists(audio_path):
-                    audio = open(audio_path, 'rb')
-                    await callback_query.message.answer_audio(audio=audio, caption=caption)
+                    await callback_query.message.answer_audio(audio=InputFile(filename=audio_path), caption=caption)
                     break
-                asyncio.sleep(5)
+                await asyncio.sleep(5)
