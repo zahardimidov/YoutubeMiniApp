@@ -5,6 +5,7 @@ import json
 import redis
 import yt_dlp
 from dotenv import load_dotenv
+import subprocess
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
@@ -38,7 +39,25 @@ def download_video(data):
     if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
-            print('Complete loading')
+
+        command = [
+            'ffmpeg',
+            '-i', video_folder.joinpath(f'{video_id}_{video_format}.mp4'),
+            '-i', audio_folder.joinpath(f'{video_id}.webm'),
+            '-c:v', 'copy',
+            '-c:a', 'aac',
+            '-f', 'mp4',
+            '-movflags', 'frag_keyframe+empty_moov',
+            f'{video_folder}/{video_id}_{video_format}.mp4'
+        ]
+
+        subprocess.run(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+
+        print('Complete loading')
 
 
 def download_audio(data):
