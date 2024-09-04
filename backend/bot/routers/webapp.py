@@ -102,8 +102,11 @@ async def callback_download(callback_query: CallbackQuery):
     else:
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
 
-        await callback_query.message.edit_caption(caption=callback_query.message.caption + downloading_text, reply_markup=empty_markup)
-
+        try:
+            await callback_query.message.edit_caption(caption=callback_query.message.caption + downloading_text, reply_markup=empty_markup)
+        except Exception as e:
+            print(e)
+            
         r.rpush('download', json.dumps(dict(
             video_id=video_id,
             video_format=video_format,
