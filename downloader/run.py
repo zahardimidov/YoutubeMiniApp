@@ -6,6 +6,7 @@ import redis
 import yt_dlp
 from dotenv import load_dotenv
 import subprocess
+import time
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
@@ -40,6 +41,8 @@ def download_video(data):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
+        time.sleep(3)
+
         command = [
             'ffmpeg',
             '-i', video_folder.joinpath(f'{video_id}_{video_format}.mp4'),
@@ -53,6 +56,8 @@ def download_video(data):
         ]
 
         subprocess.run(command)
+
+        time.sleep(3)
 
         os.replace(f'{video_folder}/{video_id}_{video_format}_combine.mp4', f'{video_folder}/{video_id}_{video_format}.mp4')
 
