@@ -46,6 +46,7 @@ def download_video(data):
             '-i', audio_folder.joinpath(f'{video_id}.webm'),
             '-c:v', 'copy',
             '-c:a', 'aac',
+            '-strict', 'experimental',
             '-f', 'mp4',
             '-movflags', 'frag_keyframe+empty_moov',
             f'{video_folder}/{video_id}_{video_format}_combine.mp4'
