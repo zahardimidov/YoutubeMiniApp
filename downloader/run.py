@@ -24,9 +24,10 @@ HOST = os.environ.get('HOST', 'localhost')
 
 # Connect to Redis server
 r = redis.Redis(host=HOST, port=6379, db=0)
+bot = Bot('6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc', parse_mode='html')
 
 
-def download_video(data):
+def download_video(data: dict):
     video_id = data['video_id']
     video_format = data['video_format']
 
@@ -34,6 +35,9 @@ def download_video(data):
         'format': video_format,
         "outtmpl": f'{video_folder}/%(id)s_%(format_id)s_temp.%(ext)s',
     }
+
+    chat_id = data.pop('chat_id')
+    message_id = data.pop('message_id')
 
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
         download_audio(data)
@@ -63,9 +67,11 @@ def download_video(data):
         os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete loading')
-
-        Bot('6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc', parse_mode='html').send_video(chat_id = 749234118, video = open(f'{video_folder}/{video_id}_{video_format}.mp4', 'rb'), caption=data['caption'])
         
+        bot.send_video(chat_id = chat_id, video = open(f'{video_folder}/{video_id}_{video_format}.mp4', 'rb'), caption=data['caption'])
+        try:
+            bot.delete_message(chat_id=chat_id, message_id=message_id)
+        except:pass
 
 
 def download_audio(data):
@@ -80,6 +86,12 @@ def download_audio(data):
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
+
+    if data.get('chat_id') and data.get('message_id'):
+        bot.send_video(chat_id = data['chat_id'], video = open(f'{video_folder}/{video_id}.webm', 'rb'), caption=data['caption'])
+        try:
+            bot.delete_message(chat_id=data['chat_id'], message_id=data['message_id'])
+        except:pass
 
 
 print('DOWNLOADER STARTED')
