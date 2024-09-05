@@ -24,7 +24,7 @@ HOST = os.environ.get('HOST', 'localhost')
 
 # Connect to Redis server
 r = redis.Redis(host=HOST, port=6379, db=0)
-bot = Bot('6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc', parse_mode='html')
+bot = Bot('6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc', parse_mode='HTML')
 
 
 def download_video(data: dict):
@@ -88,7 +88,7 @@ def download_audio(data):
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
     if data.get('chat_id') and data.get('message_id'):
-        bot.send_video(chat_id = data['chat_id'], video = open(f'{video_folder}/{video_id}.webm', 'rb'), caption=data['caption'])
+        bot.send_audio(chat_id = data['chat_id'], video = open(f'{audio_folder}/{video_id}.webm', 'rb'), caption=data['caption'])
         try:
             bot.delete_message(chat_id=data['chat_id'], message_id=data['message_id'])
         except:pass
