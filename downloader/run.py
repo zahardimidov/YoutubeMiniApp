@@ -7,6 +7,7 @@ import yt_dlp
 from dotenv import load_dotenv
 import subprocess
 import time
+import requests
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
@@ -62,6 +63,10 @@ def download_video(data):
         os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete loading')
+
+        requests.post('https://api.telegram.org/bot123456:ABC-DEF1234ghIkl-zyx57W2v1u123ew11/sendVideo', data=dict(chat_id = data['chat_id'], video = f'{video_folder}/{video_id}_{video_format}.mp4'))
+
+        
 
 
 def download_audio(data):

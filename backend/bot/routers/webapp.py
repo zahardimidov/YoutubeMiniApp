@@ -115,19 +115,19 @@ async def callback_download(callback_query: CallbackQuery):
         except Exception as e:
             print(e)
 
+        caption = callback_query.message.caption.replace(downloading_text, '')
+
         r.rpush('download', json.dumps(dict(
             video_id=video_id,
             video_format=video_format,
-            audio_format=audio_format
+            audio_format=audio_format,
+            message_id = callback_query.message.message_id,
+            chat_id = callback_query.message.chat.id,
+            caption = caption
         )))
 
         await add_downloading(user_id=user.id)
-
-        caption = callback_query.message.caption.replace(downloading_text, '')
-
-        video_path = video_folder.joinpath(f'{video_id}_{video_format}.mp4')
-        audio_path = audio_folder.joinpath(f'{video_id}.webm')
-
+'''
         while True:
             if video_format:
                 if os.path.exists(video_path) and os.path.exists(audio_path):
@@ -141,4 +141,4 @@ async def callback_download(callback_query: CallbackQuery):
                     await callback_query.message.answer_audio(audio=FSInputFile(path=audio_path), caption=caption)
                     await callback_query.message.delete()
                     break
-                await asyncio.sleep(5)
+                await asyncio.sleep(5)'''
