@@ -85,6 +85,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     photo = {'width': 0}
     for p in info_dict['thumbnails']:
+        print(p)
         if p.get('width', 0) > photo['width']:
             photo = p
 
