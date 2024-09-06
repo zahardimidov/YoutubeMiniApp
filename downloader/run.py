@@ -8,6 +8,9 @@ from dotenv import load_dotenv
 import subprocess
 import time
 from telebot import TeleBot as Bot
+from telebot.types import InlineKeyboardMarkup
+
+empty_markup = InlineKeyboardMarkup(keyboard=[[]])
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
@@ -27,6 +30,8 @@ r = redis.Redis(host=HOST, port=6379, db=0)
 bot = Bot('6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc', parse_mode='HTML')
 
 
+downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
+
 def download_video(data: dict):
     video_id = data['video_id']
     video_format = data['video_format']
@@ -43,6 +48,9 @@ def download_video(data: dict):
         download_audio(data)
 
     if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
+        try:
+            bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
+        except:pass
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
@@ -84,11 +92,15 @@ def download_audio(data):
     }
 
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
+        if data.get('chat_id') and data.get('message_id'):
+            try:
+                bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
+            except:pass
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
     if data.get('chat_id') and data.get('message_id'):
-        bot.send_audio(chat_id = data['chat_id'], audio = open(f'{audio_folder}/{video_id}.webm', 'rb'), caption=data['caption'])
+        bot.send_audio(chat_id = data['chat_id'], audio = open(f'{audio_folder}/{video_id}.webm', 'rb'), caption=data['caption'], title='audio')
         try:
             bot.delete_message(chat_id=data['chat_id'], message_id=data['message_id'])
         except:pass

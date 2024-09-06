@@ -46,6 +46,10 @@ async def video_receive(message: Message):
     quota = await get_quota()
     downloadings = await get_todays_downloadings(user_id=message.from_user.id)
 
+    try:
+        await message.delete()
+    except:pass
+
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
         keyboard = [[InlineKeyboardButton(
             text='Оплатить подписку', url='https://google.com')]]
@@ -108,14 +112,14 @@ async def callback_download(callback_query: CallbackQuery):
         return await callback_query.message.answer('⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
 
     else:
-        downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
+        #downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
 
-        try:
-            await callback_query.message.edit_caption(caption=callback_query.message.caption + downloading_text, reply_markup=empty_markup)
-        except Exception as e:
-            print(e)
+        #try:
+        #    await callback_query.message.edit_caption(caption=callback_query.message.caption + downloading_text, reply_markup=empty_markup)
+        #except Exception as e:
+        #    print(e)
 
-        caption = callback_query.message.caption.replace(downloading_text, '')
+        #caption = callback_query.message.caption.replace(downloading_text, '')
 
         r.rpush('download', json.dumps(dict(
             video_id=video_id,
@@ -123,22 +127,7 @@ async def callback_download(callback_query: CallbackQuery):
             audio_format=audio_format,
             message_id = callback_query.message.message_id,
             chat_id = callback_query.message.chat.id,
-            caption = caption
+            caption = callback_query.message.caption
         )))
 
         await add_downloading(user_id=user.id)
-'''
-        while True:
-            if video_format:
-                if os.path.exists(video_path) and os.path.exists(audio_path):
-                    await callback_query.message.answer_video(video=FSInputFile(path=video_path), caption=caption)
-                    await callback_query.message.delete()
-                    break
-
-                await asyncio.sleep(5)
-            elif audio_format:
-                if os.path.exists(audio_path):
-                    await callback_query.message.answer_audio(audio=FSInputFile(path=audio_path), caption=caption)
-                    await callback_query.message.delete()
-                    break
-                await asyncio.sleep(5)'''

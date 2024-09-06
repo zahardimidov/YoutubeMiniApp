@@ -36,7 +36,7 @@ function Home() {
       {loading && <Loading></Loading>}
       <List
         elements={foundElements}
-        emptyHeading={`No matches for “${searchText}”`} />
+        emptyHeading={`Ничего не найдено по запросу “${searchText}”`} />
     </Layout>
   );
 }
