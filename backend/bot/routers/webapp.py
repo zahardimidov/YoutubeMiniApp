@@ -1,4 +1,5 @@
-import asyncio
+import aiofiles
+import aiohttp
 import json
 import os
 from datetime import datetime
@@ -92,7 +93,16 @@ async def video_receive(message: Message):
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
-    await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)
+    async with aiohttp.ClientSession() as session:
+        resp = await session.request(method="GET", url = data['photo'])
+        content = await resp.read()
+
+        path = video_folder.joinpath(f'{video["id"]}.webp')
+
+        async with aiofiles.open(path, 'wb') as f:
+            await f.write(content)
+
+    await message.answer_photo(photo=FSInputFile(path=path), caption=msg, reply_markup=markup)
 
 
 @router.callback_query(F.data == "error")
