@@ -100,9 +100,9 @@ async def video_receive(message: Message):
             if response.status != 200:
                 raise Exception('Got non-200 response!')
 
-    async with aiofiles.open(path, 'wb') as file:
-        async for data, _ in response.content.iter_chunks():
-            await file.write(data)
+            async with aiofiles.open(path, 'wb') as file:
+                async for data, _ in response.content.iter_chunks():
+                    await file.write(data)
 
     await message.answer_photo(photo=FSInputFile(path=path), caption=msg, reply_markup=markup)
 
