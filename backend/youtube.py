@@ -110,6 +110,8 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
         if i in list(data['items'][0]['snippet']['thumbnails'].keys()):
             photo = data['items'][0]['snippet']['thumbnails'][i]['url']
 
+    print(photo)
+
     return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=photo, audio_format=audio_format, video_formats=video_formats)
 
 
