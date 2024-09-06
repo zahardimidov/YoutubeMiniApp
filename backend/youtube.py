@@ -80,10 +80,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     # Parse the JSON output
     info_dict: dict = json.loads(stdout)
-
     formats = info_dict.get('formats', [])
-
-    print(info_dict['filename'])
 
     # Print available formats
     video_formats = []
@@ -108,9 +105,12 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
     
 
     data: dict = await youtube_get('videos', id=video_id)
-    print(json.dumps(data['items'][0], indent=4, ensure_ascii=False))
+    photo = None
+    for i in ['default', 'medium', 'high', 'standart', 'maxres']:
+        if i in list(data['items'][0]['snippet']['thumbnails'].keys()):
+            photo = data['items'][0]['snippet']['thumbnails'][i]['url']
 
-    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=info_dict['thumbnail'], audio_format=audio_format, video_formats=video_formats)
+    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=photo, audio_format=audio_format, video_formats=video_formats)
 
 
 async def youtube_get_video_legacy(video_id='9GeW5T-c1Yw'):
