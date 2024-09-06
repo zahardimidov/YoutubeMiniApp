@@ -83,9 +83,9 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     formats = info_dict.get('formats', [])
 
-    photo = {'preference': 100}
+    photo = {'preference': -100}
     for p in info_dict['thumbnails']:
-        if p.get('preference') and p['preference'] < photo['preference']:
+        if p.get('preference') and p['preference'] > photo['preference']:
             photo = p
             print(photo)
 
