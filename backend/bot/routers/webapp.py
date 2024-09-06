@@ -92,15 +92,17 @@ async def video_receive(message: Message):
                 text=text, callback_data=callback)])
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
+            
+    path = video_folder.joinpath(f'{video["id"]}.webp')
 
     async with aiohttp.ClientSession() as session:
-        resp = await session.request(method="GET", url = data['photo'])
-        content = await resp.read()
+        async with session.get(data['photo']) as response:
+            if response.status != 200:
+                raise Exception('Got non-200 response!')
 
-        path = video_folder.joinpath(f'{video["id"]}.webp')
-
-        async with aiofiles.open(path, 'wb') as f:
-            await f.write(content)
+    async with aiofiles.open(path, 'wb') as file:
+        async for data, _ in response.content.iter_chunks():
+            await file.write(data)
 
     await message.answer_photo(photo=FSInputFile(path=path), caption=msg, reply_markup=markup)
 
