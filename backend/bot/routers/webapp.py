@@ -1,5 +1,4 @@
-import aiofiles
-import aiohttp
+import asyncio
 import json
 import os
 from datetime import datetime
@@ -36,8 +35,6 @@ def pretty_size(b: int):
 async def video_receive(message: Message):
     data = json.loads(message.web_app_data.data)
     video = await youtube_get_video(data['id'])
-
-    print(video)
 
     msg = f'\U0001F37F <b><a href="https://www.youtube.com/watch?v={video["id"]}">{video["title"]}</a></b>\n\n\U0001F5E3 Автор: #{video["channel"]}\n\U0001F4C5 Дата: {video["publishDate"]}\n \u23F1 Продолжительность: {video["duration"]}'
 
@@ -92,19 +89,8 @@ async def video_receive(message: Message):
                 text=text, callback_data=callback)])
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
-            
-    path = video_folder.joinpath(f'{video["id"]}.webp')
 
-    async with aiohttp.ClientSession() as session:
-        async with session.get(data['photo']) as response:
-            if response.status != 200:
-                raise Exception('Got non-200 response!')
-
-            async with aiofiles.open(path, 'wb') as file:
-                async for data, _ in response.content.iter_chunks():
-                    await file.write(data)
-
-    await message.answer_photo(photo=FSInputFile(path=path), caption=msg, reply_markup=markup)
+    await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)
 
 
 @router.callback_query(F.data == "error")
