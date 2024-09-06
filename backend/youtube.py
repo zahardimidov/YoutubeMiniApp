@@ -105,6 +105,11 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     publishDate = info_dict['upload_date'][-2:]+"." + \
         info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
+    
+
+    data: dict = await youtube_get('videos', id=video_id)
+    video = YoutubeObject.from_data(data['items'][0])
+    print(json.dumps(video, indent=4, ensure_ascii=False))
 
     return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=info_dict['thumbnail'], audio_format=audio_format, video_formats=video_formats)
 
