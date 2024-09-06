@@ -110,7 +110,7 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
     publishDate = info_dict['upload_date'][-2:]+"." + \
         info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
 
-    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=p['url'], audio_format=audio_format, video_formats=video_formats)
+    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=photo['url'], audio_format=audio_format, video_formats=video_formats)
 
 
 async def youtube_get_video_legacy(video_id='9GeW5T-c1Yw'):
