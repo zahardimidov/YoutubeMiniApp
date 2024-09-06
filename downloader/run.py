@@ -94,7 +94,7 @@ def download_audio(data):
         if data.get('chat_id') and data.get('message_id'):
             try:
                 bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
-            except:pass
+            except Exception as e:print(e)
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
