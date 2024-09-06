@@ -45,9 +45,7 @@ def download_video(data: dict):
     message_id = data.pop('message_id')
 
     if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
-        try:
-            bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
-        except:pass
+        bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
         if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
             download_audio(data)
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
@@ -92,9 +90,7 @@ def download_audio(data):
 
     if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
         if data.get('chat_id') and data.get('message_id'):
-            try:
-                bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
-            except Exception as e:print(e)
+            bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
