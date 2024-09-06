@@ -44,13 +44,12 @@ def download_video(data: dict):
     chat_id = data.pop('chat_id')
     message_id = data.pop('message_id')
 
-    if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
-        download_audio(data)
-
     if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
         try:
             bot.edit_message_caption(chat_id=data['chat_id'], message_id=data['message_id'], caption=data['caption'] + downloading_text, reply_markup=empty_markup)
         except:pass
+        if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
+            download_audio(data)
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
