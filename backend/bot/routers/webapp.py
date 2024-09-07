@@ -57,7 +57,7 @@ async def video_receive(message: Message):
             text = f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}'
             if check_video(video_id=video['id'], video_format=v['format_id']):
                 text += ' ⚡️ мгновенно'
-                
+
             keyboard.append([InlineKeyboardButton(text=text, callback_data=callback)])
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
@@ -99,6 +99,8 @@ async def callback_download(callback_query: CallbackQuery):
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
                 path = await download_video(data)
+
+            print(path)
                 
             await callback_query.message.answer_video(FSInputFile(path=path, filename='video.mp4'), caption=callback_query.message.caption)
         elif audio_format:

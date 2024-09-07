@@ -129,7 +129,7 @@ def _download_video(data: dict):
     }
 
     if not check_audio(video_id=video_id):
-        download_audio(data)
+        _download_audio(data)
 
     if not check_video(video_id=video_id, video_format=video_format):
         try:
