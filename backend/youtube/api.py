@@ -29,6 +29,8 @@ async def _make_request(method, maxResults=1, **kwargs):
         response = await session.get(API_URL + method, params=params)
         data: dict = await response.json()
 
+        print(data)
+
         return data
     
 async def _get_formats(info_dict: dict) -> tuple[dict, list[dict]]:
