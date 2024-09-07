@@ -4,7 +4,7 @@ password = 'yapi3340@gmail.com'
 API_URL = "https://www.googleapis.com/youtube/v3/"
 
 API_KEYS = [
-    'AIzaSyAOYqmwGIjd3_TI6MnRL_P2e1QRkaXhQcY'
+    'AIzaSyAG78TY-KZFgN9Qc5UYlMsdPHGBUppGkSo'
 ]
 
 CHROME = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
