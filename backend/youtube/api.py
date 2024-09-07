@@ -8,7 +8,7 @@ import time
 import requests
 from aiohttp import ClientSession
 from config import BASE_DIR
-from const import *
+from .const import *
 from yt_dlp import YoutubeDL
 
 video_folder = BASE_DIR.joinpath('video')
