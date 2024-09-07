@@ -102,7 +102,7 @@ async def callback_download(callback_query: CallbackQuery):
 
             print(path)
                 
-            await callback_query.message.answer_video(video=path, caption=callback_query.message.caption, supports_streaming=True)
+            await callback_query.message.answer_video(FSInputFile(path=path), caption=callback_query.message.caption, supports_streaming=True)
         elif audio_format:
             path = check_audio(video_id=video_id)
             if not path:
