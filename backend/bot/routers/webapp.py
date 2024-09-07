@@ -54,7 +54,7 @@ async def video_receive(message: Message):
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
-    await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)
+    await message.answer_photo(photo=video['photo'], caption=msg, reply_markup=markup)
 
 
 @router.callback_query(F.data == "error")
@@ -86,14 +86,14 @@ async def callback_download(callback_query: CallbackQuery):
         )
 
         if video_format:
-            path = await check_video(video_id=video_id, video_format=video_format)
+            path = check_video(video_id=video_id, video_format=video_format)
             if not path:
                 await callback_query.message.edit_caption(caption=caption + downloading_text, reply_markup=empty_markup)
                 path = await download_video(data)
                 
             await callback_query.message.answer_video(FSInputFile(path=path, filename='video.mp4'), caption=callback_query.message.caption)
         elif audio_format:
-            path = await check_audio(video_id=video_id)
+            path = check_audio(video_id=video_id)
             if not path:
                 await callback_query.message.edit_caption(caption=caption + downloading_text, reply_markup=empty_markup)
                 path = await download_audio(data)
