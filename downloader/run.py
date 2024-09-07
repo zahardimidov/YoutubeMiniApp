@@ -72,7 +72,7 @@ def download_video(data: dict):
         os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete loading')
-        
+    
     bot.send_video(chat_id = chat_id, video = open(f'{video_folder}/{video_id}_{video_format}.mp4', 'rb'), caption=data['caption'], timeout=60*5, supports_streaming=True)
     try:
         bot.delete_message(chat_id=chat_id, message_id=message_id)
@@ -95,7 +95,8 @@ def download_audio(data):
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
     if data.get('chat_id') and data.get('message_id'):
-        bot.send_audio(chat_id = data['chat_id'], audio = open(f'{audio_folder}/{video_id}.webm', 'rb'), caption=data['caption'], title='audio')
+        title = ''.join([i for i in data['caption'] if i.isalpha()][:20])
+        bot.send_audio(chat_id = data['chat_id'], audio = open(f'{audio_folder}/{video_id}.webm', 'rb'), caption=data['caption'], title=title)
         try:
             bot.delete_message(chat_id=data['chat_id'], message_id=data['message_id'])
         except:pass
