@@ -29,8 +29,6 @@ async def _make_request(method, maxResults=1, **kwargs):
         response = await session.get(API_URL + method, params=params)
         data: dict = await response.json()
 
-        print(data)
-
         return data
     
 def _get_formats(info_dict: dict) -> tuple[dict, list[dict]]:
@@ -93,7 +91,7 @@ async def get_video(video_id):
     publishDate = info_dict['upload_date'][-2:]+"." + \
         info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
 
-    return dict(id=video_id, title=title, publishDate=publishDate, channel=channel, duration=info_dict['duration_string'], photo=photo['url'], audio_format=audio_format, video_formats=video_formats)
+    return dict(id=video_id, title=title, publishDate=publishDate, channel=channel, duration=info_dict['duration_string'], photo=photo, audio_format=audio_format, video_formats=video_formats)
 
 
 async def get_channel(channel_id):
