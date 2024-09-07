@@ -33,7 +33,7 @@ async def _make_request(method, maxResults=1, **kwargs):
 
         return data
     
-async def _get_formats(info_dict: dict) -> tuple[dict, list[dict]]:
+def _get_formats(info_dict: dict) -> tuple[dict, list[dict]]:
     formats = info_dict.get('formats', [])
 
     video_formats = []
