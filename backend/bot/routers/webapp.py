@@ -95,7 +95,7 @@ async def callback_download(callback_query: CallbackQuery):
         elif audio_format:
             path = check_audio(video_id=video_id)
             if not path:
-                await callback_query.message.edit_caption(caption=caption + downloading_text, reply_markup=empty_markup)
+                await callback_query.message.edit_caption(caption=caption + downloading_text)
                 path = await download_audio(data)
                 
             await callback_query.message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=callback_query.message.caption)
