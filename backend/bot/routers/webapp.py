@@ -31,11 +31,35 @@ def pretty_size(b: int):
         return f'{round(b, 2)} KB'
 
 
+@router.message(F.text.contains('https://www.youtube.com/watch?v='))
+async def video_url(message: Message):
+    video_id = message.text.replace('https://www.youtube.com/watch?v=', '')
+
+    try:
+        video = await youtube_get_video(video_id=video_id)
+    except Exception as e:
+        print(str(e))
+        await message.answer('Не получилось найти видео по вышей ссылке')
+
+    try:
+        await send_video(message=message, video=video)
+    except Exception as e:
+        print(str(e))
+        await message.answer('Не получилось скачать видео по ссылке')
+
+
 @router.message(F.content_type == ContentType.WEB_APP_DATA)
 async def video_receive(message: Message):
     data = json.loads(message.web_app_data.data)
     video = await youtube_get_video(data['id'])
 
+    try:
+        await send_video(message=message, video=video)
+    except Exception as e:
+        print(str(e))
+        await message.answer('Не получилось скачать видео по ссылке')
+
+async def send_video(message, video):
     msg = f'\U0001F37F <b><a href="https://www.youtube.com/watch?v={video["id"]}">{video["title"]}</a></b>\n\n\U0001F5E3 Автор: #{video["channel"]}\n\U0001F4C5 Дата: {video["publishDate"]}\n \u23F1 Продолжительность: {video["duration"]}'
 
     keyboard = []
@@ -90,7 +114,7 @@ async def video_receive(message: Message):
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
-    await message.answer_photo(photo=data['photo'], caption=msg, reply_markup=markup)
+    await message.answer_photo(photo=video['photo'], caption=msg, reply_markup=markup)
 
 
 @router.callback_query(F.data == "error")

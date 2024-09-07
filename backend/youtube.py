@@ -102,17 +102,9 @@ async def youtube_get_video(video_id='9GeW5T-c1Yw'):
 
     publishDate = info_dict['upload_date'][-2:]+"." + \
         info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
-    
 
-    data: dict = await youtube_get('videos', id=video_id)
-    photo = None
-    for i in ['default', 'medium', 'high', 'standart', 'maxres']:
-        if i in list(data['items'][0]['snippet']['thumbnails'].keys()):
-            photo = data['items'][0]['snippet']['thumbnails'][i]['url']
 
-    print(photo)
-
-    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=photo, audio_format=audio_format, video_formats=video_formats)
+    return dict(id=info_dict['id'], title=info_dict['title'], publishDate=publishDate, channel=info_dict['channel'], duration=info_dict['duration_string'], photo=info_dict['thumbnail'], audio_format=audio_format, video_formats=video_formats)
 
 
 async def youtube_get_video_legacy(video_id='9GeW5T-c1Yw'):
