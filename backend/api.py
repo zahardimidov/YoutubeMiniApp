@@ -7,7 +7,7 @@ from youtube.api import get_channel_videos, get_video, search
 router = APIRouter(prefix='', tags=['API сервиса'])
 
 @router.post('/search')
-async def search(request: WebAppRequest):
+async def search_(request: WebAppRequest):
     data: dict = await request.json()
     q = data.get('query')
 
@@ -21,7 +21,7 @@ async def search(request: WebAppRequest):
 
 
 @router.post('/channel_videos')
-async def channel_videos(request: WebAppRequest):
+async def channel_videos_(request: WebAppRequest):
     data: dict = await request.json()
     channel_id = data.get('channel_id')
 
@@ -35,7 +35,7 @@ async def channel_videos(request: WebAppRequest):
 
 
 @router.post('/get_video')
-async def channel_videos(request: WebAppRequest):
+async def video_(request: WebAppRequest):
     data: dict = await request.json()
     video_id = data.get('video_id')
 
