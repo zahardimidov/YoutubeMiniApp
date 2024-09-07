@@ -67,28 +67,28 @@ services:
     networks:
       - dev
 
-  redis:
-    image: "redis:latest"
-    ports:
-    - "6379:6379"
-    networks:
-    - dev
+  #redis:
+  #  image: "redis:latest"
+  #  ports:
+  #  - "6379:6379"
+  #  networks:
+  #  - dev
 
-  downloader:
-    build:
-      context: ./downloader
-    environment:
-      - HOST=redis
-    networks:
-      - dev
-    depends_on:
-      - redis
-    restart: always
-    volumes:
-      - ./downloader:/downloader  # Монтируем директорию app с хоста в контейнер
-      - ./video:/video  # Монтируем директорию video с хоста в контейнер
-      - ./audio:/audio  # Монтируем директорию audio с хоста в контейнер
-    working_dir: /downloader
+  #downloader:
+  #  build:
+  #    context: ./downloader
+  #  environment:
+  #    - HOST=redis
+  #  networks:
+  #    - dev
+  #  depends_on:
+  #    - redis
+  #  restart: always
+  #  volumes:
+  #    - ./downloader:/downloader  # Монтируем директорию app с хоста в контейнер
+  #    - ./video:/video  # Монтируем директорию video с хоста в контейнер
+  #    - ./audio:/audio  # Монтируем директорию audio с хоста в контейнер
+  #  working_dir: /downloader
 
 volumes:
   youtube-data:
