@@ -1,23 +1,16 @@
-import asyncio
-from io import BytesIO
+from datetime import datetime, timedelta
 
 from api import router as api_router
 from bot import process_update, run_bot
-from bot.middlewares.webapp_user import webapp_user_middleware
 from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
-from database.schemas import WebAppRequest, User
+from database.requests import get_plan, get_user, set_user
+from database.schemas import WebAppRequest
 from database.session import engine, run_database
-from database.requests import get_user, get_quota, set_user, get_todays_downloadings, add_downloading, get_plan
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, StreamingResponse, Response, RedirectResponse
-from datetime import datetime, timedelta
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from payments import create_payment
-
-
-video_folder = BASE_DIR.joinpath('video')
-audio_folder = BASE_DIR.joinpath('audio')
 
 
 async def on_startup(app: FastAPI):
@@ -55,6 +48,7 @@ async def pay(plan: str, user: str):
 
     return RedirectResponse(url)
 
+
 @app.post('/payment')
 async def payment(request: Request):
     data = await request.json()
@@ -68,46 +62,9 @@ async def payment(request: Request):
         if not user:
             return Response(status_code=400)
 
-        await set_user(user.id, subscription_until = datetime.now()+timedelta(days=plan.days))
+        await set_user(user.id, subscription_until=datetime.now()+timedelta(days=plan.days))
 
     return Response(status_code=200)
-
-@app.get('/download', response_class=StreamingResponse)
-async def download(user: int, video_id: str, audio_format: str = None, video_format: str = None):
-    user: User = await get_user(user_id=user)
-    quota = await get_quota()
-    downloadings = await get_todays_downloadings(user_id = user.id)
-
-    if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
-        return Response(status_code=403)
-    else:
-        await add_downloading(user_id=user.id)
-
-
-    if audio_format and not video_format:
-        return StreamingResponse(open(audio_folder.joinpath(f'{video_id}.webm'), "rb"), media_type="audio/webm", headers={"Content-Disposition": f"attachment; filename={video_id}.webm"})
-    command = [
-        'ffmpeg',
-        '-i', video_folder.joinpath(f'{video_id}_{video_format}.mp4'),
-        '-i', audio_folder.joinpath(f'{video_id}.webm'),
-        '-c:v', 'copy',
-        '-c:a', 'aac',
-        '-f', 'mp4',
-        '-movflags', 'frag_keyframe+empty_moov',
-        'pipe:1'
-    ]
-
-    process = await asyncio.create_subprocess_exec(
-        *command,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
-
-    stdout, stderr = await process.communicate()
-
-    imgio = BytesIO(stdout)
-
-    return StreamingResponse(imgio, media_type="video/mp4", headers={"Content-Disposition": f"attachment; filename={video_id}.mp4"})
 
 if __name__ == "__main__":
     import uvicorn
