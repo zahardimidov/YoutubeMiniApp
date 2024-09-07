@@ -42,15 +42,23 @@ async def video_receive(message: Message):
     else:
         if video['audio_format']:
             audio_size = int(video['audio_format']['filesize'])
-
             callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},' if audio_size / 1024 / 1024 / 1024 < 2 else 'error'
-            keyboard.append([InlineKeyboardButton(text=f'🎧 Аудио / {pretty_size(audio_size)}', callback_data=callback)])
+
+            text = f'🎧 Аудио / {pretty_size(audio_size)}'
+            if check_audio(video_id=video['id']):
+                text += ' ⚡️ мгновенно'
+
+            keyboard.append([InlineKeyboardButton(text=text, callback_data=callback)])
 
         for v in video['video_formats']:
             video_size = int(v['filesize']) + audio_size
-
             callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},{v["format_id"]}' if video_size / 1024 / 1024 / 1024 < 2 else 'error'
-            keyboard.append([InlineKeyboardButton(text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}', callback_data=callback)])
+
+            text = f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}'
+            if check_video(video_id=video['id'], video_format=v['format_id']):
+                text += ' ⚡️ мгновенно'
+                
+            keyboard.append([InlineKeyboardButton(text=text, callback_data=callback)])
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
@@ -98,7 +106,7 @@ async def callback_download(callback_query: CallbackQuery):
             if not path:
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
-                
+
                 path = await download_audio(data)
                 
             await callback_query.message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=callback_query.message.caption)
