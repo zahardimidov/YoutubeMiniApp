@@ -88,14 +88,17 @@ async def callback_download(callback_query: CallbackQuery):
         if video_format:
             path = check_video(video_id=video_id, video_format=video_format)
             if not path:
-                await callback_query.message.edit_caption(caption=caption + downloading_text, reply_markup=empty_markup)
+                try: await callback_query.message.edit_caption(caption=caption + downloading_text)
+                except Exception as e:pass
                 path = await download_video(data)
                 
             await callback_query.message.answer_video(FSInputFile(path=path, filename='video.mp4'), caption=callback_query.message.caption)
         elif audio_format:
             path = check_audio(video_id=video_id)
             if not path:
-                await callback_query.message.edit_caption(caption=caption + downloading_text)
+                try: await callback_query.message.edit_caption(caption=caption + downloading_text)
+                except Exception as e:pass
+                
                 path = await download_audio(data)
                 
             await callback_query.message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=callback_query.message.caption)
