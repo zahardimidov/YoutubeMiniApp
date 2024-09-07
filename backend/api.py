@@ -2,7 +2,7 @@ from database.schemas import WebAppRequest
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from youtube import get_channel_videos, get_video, search
+from youtube.api import get_channel_videos, get_video, search
 
 router = APIRouter(prefix='', tags=['API сервиса'])
 
