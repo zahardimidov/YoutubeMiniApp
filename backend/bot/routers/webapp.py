@@ -3,7 +3,7 @@ import json
 from aiogram import F, Router
 from aiogram.types import (ContentType, InlineKeyboardButton, FSInputFile,
                            InlineKeyboardMarkup, Message, CallbackQuery)
-from youtube import get_video, download_audio, download_video, check_audio, check_video
+from youtube.api import get_video, download_audio, download_video, check_audio, check_video
 from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
 from bot.routers.base import get_plans_kb
