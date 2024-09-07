@@ -73,7 +73,7 @@ def download_video(data: dict):
 
         print('Complete loading')
         
-    bot.send_video(chat_id = chat_id, video = open(f'{video_folder}/{video_id}_{video_format}.mp4', 'rb'), caption=data['caption'], timeout=60*5)
+    bot.send_video(chat_id = chat_id, video = open(f'{video_folder}/{video_id}_{video_format}.mp4', 'rb'), caption=data['caption'], timeout=60*5, supports_streaming=True)
     try:
         bot.delete_message(chat_id=chat_id, message_id=message_id)
     except:pass
