@@ -113,4 +113,5 @@ async def callback_download(callback_query: CallbackQuery):
                 
             await callback_query.message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=callback_query.message.caption)
 
-        await callback_query.message.delete()
+        try:await callback_query.message.delete()
+        except Exception as e: print(e)
