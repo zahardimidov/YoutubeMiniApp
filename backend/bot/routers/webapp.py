@@ -99,12 +99,8 @@ async def callback_download(callback_query: CallbackQuery):
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
                 path = await download_video(data)
-
-            from telebot import TeleBot
-            bot = TeleBot(token='6953647393:AAGDj91ag-iUjB0Rck80HWw3KNUX1iLIHgc')
-            bot.send_video(chat_id=callback_query.from_user.id, video=open(path, 'rb'), timeout=60 * 1000)
         
-            #await callback_query.message.answer_video(FSInputFile(path=path), caption=callback_query.message.caption, supports_streaming=True)
+            await callback_query.message.answer_video(FSInputFile(path=path), caption=callback_query.message.caption, supports_streaming=True)
         elif audio_format:
             path = check_audio(video_id=video_id)
             if not path:
