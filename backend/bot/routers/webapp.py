@@ -99,6 +99,8 @@ async def callback_download(callback_query: CallbackQuery):
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
                 path = await download_video(data)
+
+                print(path)
         
             await callback_query.message.answer_video(FSInputFile(path=path), caption=callback_query.message.caption, supports_streaming=True)
         elif audio_format:
