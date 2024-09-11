@@ -1,3 +1,6 @@
+api_id = '20985389'
+api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
+
 if __name__ == '__main__':
     import asyncio
     import uvloop
@@ -27,9 +30,6 @@ from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
 from bot.routers.base import get_plans_kb
 from pyrogram import Client
-
-api_id = '20985389'
-api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
