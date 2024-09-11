@@ -102,7 +102,7 @@ async def callback_download(callback_query: CallbackQuery):
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
 
-                threading.Thread(target=download_video, args=(callback_query.message, data)).start()
+                await download_video(data)
         
         elif audio_format:
             path = check_audio(video_id=video_id)
