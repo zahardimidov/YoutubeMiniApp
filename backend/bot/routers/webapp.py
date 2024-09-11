@@ -7,7 +7,10 @@ from youtube.api import get_video, download_audio, download_video, check_audio, 
 from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
 from bot.routers.base import get_plans_kb
-import threading
+from pyrogram import Client
+
+api_id = '20985389'
+api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
@@ -97,23 +100,34 @@ async def callback_download(callback_query: CallbackQuery):
         )
 
         if video_format:
-            path = check_video(video_id=video_id, video_format=video_format)
-            if not path:
+            video_path = check_video(video_id=video_id, video_format=video_format)
+            if not video_path:
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
 
                 await download_video(data)
+
+            async with Client("TEST", api_id, api_hash) as client:
+                me = await client.get_me()
+                print(me)
+                await client.send_video(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
+
+            try:await callback_query.message.delete()
+            except Exception as e: print(e)
+
         
         elif audio_format:
-            path = check_audio(video_id=video_id)
-            if not path:
+            audio_path = check_audio(video_id=video_id)
+            if not audio_path:
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
 
-                path = await download_audio(data)
+                await download_audio(data)
 
-                
-            await callback_query.message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=callback_query.message.caption)
+            async with Client("TEST", api_id, api_hash) as client:
+                me = await client.get_me()
+                print(me)
+                await client.send_audio(chat_id=callback_query.message.from_user.id, video=audio_path, caption=callback_query.message.caption)
 
             try:await callback_query.message.delete()
             except Exception as e: print(e)

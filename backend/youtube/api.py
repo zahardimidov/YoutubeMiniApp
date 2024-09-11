@@ -4,11 +4,6 @@ import os
 import random
 import subprocess
 import time
-from aiogram.types import (ContentType, InlineKeyboardButton, FSInputFile,
-                           InlineKeyboardMarkup, Message)
-
-from pyrogram import Client
-
 import requests
 from aiohttp import ClientSession
 from config import BASE_DIR
@@ -198,21 +193,10 @@ async def download_audio(data: dict):
     res = await asyncio.to_thread(_download_audio, data)
     return res
 
-async def download_video(message: Message, data: dict):
+async def download_video(data: dict):
     video_path = await asyncio.to_thread(_download_video, data)
-
-    print(f'{video_path=}')
-
-    api_id = '20985389'
-    api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
-
-    async with Client("TEST", api_id, api_hash) as client:
-        me = await client.get_me()
-        print(me)
-        await client.send_video(chat_id=message.from_user.id, video=video_path, caption=message.caption)
-
-    await message.delete()
-
+    
+    return video_path
     
 
 
