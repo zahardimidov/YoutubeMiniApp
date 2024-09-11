@@ -198,7 +198,7 @@ def download_video(message: Message, data: dict):
     path = _download_video(data)
 
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=message.caption))
+    loop.run_until_complete(message.answer_video(FSInputFile(path=path), caption=message.caption, supports_streaming=True))
     
     try:loop.run_until_complete(message.delete())
     except Exception as e: print(e)
