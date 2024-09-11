@@ -23,6 +23,7 @@ async def on_startup(app: FastAPI):
 
 async def shutdown(*args, **kwargs):
     await userbot.stop()
+    yield
 
 
 app = FastAPI(lifespan=on_startup, on_shutdown=shutdown)
