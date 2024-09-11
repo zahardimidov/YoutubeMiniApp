@@ -201,6 +201,8 @@ async def download_audio(data: dict):
 async def download_video(message: Message, data: dict):
     video_path = await asyncio.to_thread(_download_video, data)
 
+    print(f'{video_path=}')
+
     api_id = '20985389'
     api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
