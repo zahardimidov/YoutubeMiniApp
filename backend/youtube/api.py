@@ -7,6 +7,8 @@ import time
 from aiogram.types import (ContentType, InlineKeyboardButton, FSInputFile,
                            InlineKeyboardMarkup, Message)
 
+from pyrogram import Client
+
 import requests
 from aiohttp import ClientSession
 from config import BASE_DIR
@@ -196,18 +198,18 @@ async def download_audio(data: dict):
     res = await asyncio.to_thread(_download_audio, data)
     return res
 
-def download_video(message: Message, data: dict):
-    path = _download_video(data)
+async def download_video(message: Message, data: dict):
+    video_path = await asyncio.to_thread(_download_video, data)
 
-    print(path)
+    api_id = '20985389'
+    api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
-    loop = asyncio.new_event_loop()
-    loop.run_until_complete(message.answer_video(FSInputFile(path=path), caption=message.caption, supports_streaming=True))
+    async with Client("TEST", api_id, api_hash) as client:
+        await client.send_video(chat_id=message.from_user.id, video=video_path, caption=message.caption)
+
+    await message.delete()
+
     
-    try:loop.run_until_complete(message.delete())
-    except Exception as e: print(e)
-
-    loop.close()
 
 
 class YoutubeObject:
