@@ -127,11 +127,12 @@ async def callback_download(callback_query: CallbackQuery):
 
                 await download_video(data)
 
-            async with userbot:
-                me = await userbot.get_me()
-                print(me)
+                await userbot.send_
 
-                await userbot.send_video(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
+            me = await userbot.get_me()
+            print(me)
+
+            await userbot.send_video(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
 
             try:await callback_query.message.delete()
             except Exception as e: print(e)
