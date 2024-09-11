@@ -197,6 +197,8 @@ async def download_audio(data: dict):
 def download_video(message: Message, data: dict):
     path = _download_video(data)
 
+    print(path)
+
     loop = asyncio.new_event_loop()
     loop.run_until_complete(message.answer_video(FSInputFile(path=path), caption=message.caption, supports_streaming=True))
     
