@@ -127,8 +127,6 @@ async def callback_download(callback_query: CallbackQuery):
 
                 await download_video(data)
 
-                await userbot.send_
-
             me = await userbot.get_me()
             print(me)
 
