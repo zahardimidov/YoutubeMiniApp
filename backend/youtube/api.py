@@ -130,8 +130,10 @@ def _download_video(data: dict):
         "outtmpl": f'{video_folder}/%(id)s_%(format_id)s_temp.%(ext)s',
     }
 
+    audio_path = f'{audio_folder}/{video_id}.webm'
+
     if not check_audio(video_id=video_id):
-        audio_path = _download_audio(data)
+        _download_audio(data)
 
     if not check_video(video_id=video_id, video_format=video_format):
         try:
