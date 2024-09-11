@@ -126,7 +126,7 @@ async def callback_download(callback_query: CallbackQuery):
 
                 await download_video(data)
 
-            async with Client("USERBOT", api_id, api_hash) as client:
+            async with Client("USERBOT", api_id, api_hash, phone_number = '79600471358', password='02032007') as client:
                 me = await client.get_me()
                 print(me)
                 await client.send_video(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
