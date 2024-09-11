@@ -7,6 +7,7 @@ from youtube.api import get_video, download_audio, download_video, check_audio, 
 from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
 from bot.routers.base import get_plans_kb
+import threading
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
@@ -62,6 +63,8 @@ async def video_receive(message: Message):
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
+    try: await message.delete()
+    except:pass
     await message.answer_photo(photo=video['photo'], caption=msg, reply_markup=markup)
 
 
@@ -98,11 +101,9 @@ async def callback_download(callback_query: CallbackQuery):
             if not path:
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
-                path = await download_video(data)
 
-                print(path)
+                threading.Thread(target=download_video, args=[data]).start()
         
-            await callback_query.message.answer_video(FSInputFile(path=path), caption=callback_query.message.caption, supports_streaming=True)
         elif audio_format:
             path = check_audio(video_id=video_id)
             if not path:
@@ -110,8 +111,9 @@ async def callback_download(callback_query: CallbackQuery):
                 except Exception as e:pass
 
                 path = await download_audio(data)
+
                 
             await callback_query.message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=callback_query.message.caption)
 
-        try:await callback_query.message.delete()
-        except Exception as e: print(e)
+            try:await callback_query.message.delete()
+            except Exception as e: print(e)

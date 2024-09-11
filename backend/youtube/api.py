@@ -4,6 +4,8 @@ import os
 import random
 import subprocess
 import time
+from aiogram.types import (ContentType, InlineKeyboardButton, FSInputFile,
+                           InlineKeyboardMarkup, Message)
 
 import requests
 from aiohttp import ClientSession
@@ -129,10 +131,11 @@ def _download_video(data: dict):
     }
 
     if not check_audio(video_id=video_id):
-        _download_audio(data)
+        audio_path = _download_audio(data)
 
     if not check_video(video_id=video_id, video_format=video_format):
         try:
+            print('DOWNLOAD VIDEO')
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
         except Exception as e:
@@ -144,7 +147,7 @@ def _download_video(data: dict):
         command = [
             'ffmpeg',
             '-i', f'{video_folder}/{video_id}_{video_format}_temp.mp4',
-            '-i', f'{audio_folder}/{video_id}.webm',
+            '-i', audio_path,
             '-c:v', 'copy',
             '-c:a', 'aac',
             '-strict', 'experimental',
@@ -177,6 +180,7 @@ def _download_audio(data):
 
     if not os.path.exists(path):
         try:
+            print('DOWNLOAD AUDIO')
             with YoutubeDL(ydl_opts) as ydl:
                 ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
         except Exception as e:
@@ -190,9 +194,16 @@ async def download_audio(data: dict):
     res = await asyncio.to_thread(_download_audio, data)
     return res
 
-async def download_video(data: dict):
-    res = await asyncio.to_thread(_download_video, data)
-    return res
+def download_video(message: Message, data: dict):
+    path = _download_video(data)
+
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(message.answer_audio(FSInputFile(path=path, filename='audio.webm'), caption=message.caption))
+    
+    try:loop.run_until_complete(message.delete())
+    except Exception as e: print(e)
+
+    loop.close()
 
 
 class YoutubeObject:

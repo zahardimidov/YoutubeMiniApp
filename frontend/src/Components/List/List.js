@@ -5,7 +5,7 @@ function List({ elements, emptyHeading }) {
   const count = elements.length;
   let heading = emptyHeading;
   if (count > 0) {
-    const noun = count > 1 ? 'Found' : 'Found';
+    const noun = count > 1 ? 'Найдено' : 'Найдено';
     heading = count + ' ' + noun;
   }
   return (
