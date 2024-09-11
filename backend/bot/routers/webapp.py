@@ -33,6 +33,7 @@ from pyrogram import Client
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
+client = Client("USERBOT", api_id, api_hash)
 
 def pretty_size(b: int):
     b = b / 1024
@@ -126,9 +127,10 @@ async def callback_download(callback_query: CallbackQuery):
 
                 await download_video(data)
 
-            async with Client("USERBOT", api_id, api_hash) as client:
+            async with client:
                 me = await client.get_me()
                 print(me)
+
                 await client.send_video(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
 
             try:await callback_query.message.delete()
