@@ -145,10 +145,11 @@ async def callback_download(callback_query: CallbackQuery):
 
                 await download_audio(data)
 
-            async with Client("USERBOT", api_id, api_hash) as client:
-                me = await client.get_me()
-                print(me, client.session_string)
-                await client.send_audio(chat_id=callback_query.message.from_user.id, video=audio_path, caption=callback_query.message.caption)
+            async with userbot:
+                me = await userbot.get_me()
+                print(me)
+
+                await userbot.send_audio(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
 
             try:await callback_query.message.delete()
             except Exception as e: print(e)
