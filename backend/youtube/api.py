@@ -205,6 +205,8 @@ async def download_video(message: Message, data: dict):
     api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
     async with Client("TEST", api_id, api_hash) as client:
+        me = await client.get_me()
+        print(me)
         await client.send_video(chat_id=message.from_user.id, video=video_path, caption=message.caption)
 
     await message.delete()
@@ -249,3 +251,5 @@ class YoutubeObject:
             except:
                 pass
             return details
+        
+
