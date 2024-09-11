@@ -18,15 +18,15 @@ async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
+    await userbot.start()
 
     yield
 
-async def shutdown(*args, **kwargs):
     await userbot.stop()
-    yield
+    
 
 
-app = FastAPI(lifespan=on_startup, on_shutdown=shutdown)
+app = FastAPI(lifespan=on_startup)
 app.add_api_route(WEBHOOK_PATH, endpoint=process_update, methods=['post'])
 app.include_router(api_router)
 
