@@ -1,10 +1,20 @@
 if __name__ == '__main__':
     import asyncio
-    async def test():
-        async with Client("TEST", api_id, api_hash) as client:
-            me = await client.get_me()
-            print(me)
-    asyncio.run(test())
+    import uvloop
+
+    from pyrogram import Client
+
+
+    async def main():
+        client = Client("TEST", api_id, api_hash)
+
+        async with client:
+            print(await client.get_me())
+
+
+    uvloop.install()
+    asyncio.run(main())
+
     exit()
 
 import json
