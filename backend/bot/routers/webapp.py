@@ -9,7 +9,7 @@ if __name__ == '__main__':
 
 
     async def main():
-        client = Client("TEST", api_id, api_hash)
+        client = Client("USERBOT", api_id, api_hash)
 
         async with client:
             print(await client.get_me())
