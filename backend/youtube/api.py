@@ -168,7 +168,7 @@ def _download_video(data: dict):
 
         print('Complete loading')
         
-        return f'{video_folder}/{video_id}_{video_format}.mp4'
+    return f'{video_folder}/{video_id}_{video_format}.mp4'
 
 
 def _download_audio(data):
