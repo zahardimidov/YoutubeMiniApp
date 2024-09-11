@@ -1,3 +1,12 @@
+if __name__ == '__main__':
+    import asyncio
+    async def test():
+        async with Client("TEST", api_id, api_hash) as client:
+            me = await client.get_me()
+            print(me)
+    asyncio.run(test())
+    exit()
+
 import json
 
 from aiogram import F, Router
@@ -131,12 +140,3 @@ async def callback_download(callback_query: CallbackQuery):
 
             try:await callback_query.message.delete()
             except Exception as e: print(e)
-
-
-async def test():
-     async with Client("TEST", api_id, api_hash) as client:
-        me = await client.get_me()
-        print(me)
-if __name__ == '__main__':
-    import asyncio
-    asyncio.run(test())
