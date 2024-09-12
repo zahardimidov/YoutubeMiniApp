@@ -1,16 +1,19 @@
+from typing import Annotated
+
+from config import BASE_DIR
 from database.schemas import WebAppRequest
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
-from youtube.api import get_channel_videos, get_video, search
 from pyrogram import Client
-from config import BASE_DIR
+from youtube.api import get_channel_videos, get_video, search
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = APIRouter(prefix='', tags=['API сервиса'])
 userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
+
 
 @router.post('/search')
 async def search_(request: WebAppRequest):
@@ -54,24 +57,8 @@ async def video_(request: WebAppRequest):
 
 
 @router.post('/send_video')
-async def send_video(request: Request):
-    try:
-        data: dict = await request.json()
-        print(1,data)
-    except:print('e1')
-    try:
-        data: dict = await request.body()
-        print(2,data)
-    except:print('e2')
-    try:
-        data: dict = await request.form()
-        print(3, data)
-    except:print('e3')
-    video = data.get('video')
-    chat_id = data.get('chat_id')
-
+async def send_video(video: Annotated[str, Form()], chat_id: Annotated[str, Form()]):
     video_path = BASE_DIR.joinpath('video').joinpath(video)
-    
     await userbot.send_video(chat_id=chat_id, video=video_path)
 
     return Response(status_code=200)
