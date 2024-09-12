@@ -78,8 +78,10 @@ def download_video(data: dict):
 
         print('Complete loading')
 
-        loop = asyncio.new_event_loop()
-        loop.run_until_complete(userbot.send_video(chat_id=chat_id, video=f'{video_folder}/{video_id}_{video_format}.mp4'))
+    loop = asyncio.new_event_loop()
+    loop.run_until_complete(userbot.send_video(chat_id=chat_id, video=f'{video_folder}/{video_id}_{video_format}.mp4'))
+
+    print('Video was sent')
 
 
 
