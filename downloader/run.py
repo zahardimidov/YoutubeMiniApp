@@ -23,6 +23,7 @@ if __name__ == '__main__':
         async with userbot:
             print(await userbot.get_me())
     asyncio.run(main())
+    exit()
 
 loop = asyncio.new_event_loop()
 asyncio.set_event_loop(loop)
