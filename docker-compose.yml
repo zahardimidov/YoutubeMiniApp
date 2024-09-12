@@ -34,7 +34,7 @@ services:
       - youtube-postgres
     depends_on:
       - youtube-postgres
-    #  - redis
+      - redis
     restart: always
 
     volumes:
