@@ -125,7 +125,7 @@ async def callback_download(callback_query: CallbackQuery):
                 try: await callback_query.message.edit_caption(caption=caption + downloading_text)
                 except Exception as e:pass
 
-                await download_video(data)
+                video_path = await download_video(data)
 
             me = await userbot.get_me()
             print(me)
