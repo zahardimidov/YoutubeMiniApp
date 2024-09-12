@@ -10,6 +10,7 @@ import redis
 import yt_dlp
 from dotenv import load_dotenv
 from pyrogram import Client
+import atexit
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
@@ -27,6 +28,12 @@ userbot = Client("USERBOT", api_id, api_hash)
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
+
+asyncio.run(userbot.start())
+
+def stop():
+    asyncio.run(userbot.stop())
+atexit.register(stop)
 
 load_dotenv()
 
