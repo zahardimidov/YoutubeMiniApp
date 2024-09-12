@@ -63,7 +63,7 @@ def download_video(data: dict):
 
         print('Complete loading')
 
-    requests.post('https://yrugi.space/send_video', data=dict(video_path = f'{video_folder}/{video_id}_{video_format}.mp4', chat_id = chat_id))
+    requests.post('https://yrugi.space/api/send_video', data=dict(video_path = f'{video_folder}/{video_id}_{video_format}.mp4', chat_id = chat_id))
 
     print('COMPLETE')
 
