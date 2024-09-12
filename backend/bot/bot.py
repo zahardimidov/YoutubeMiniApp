@@ -5,7 +5,7 @@ from aiogram.types import Update
 from fastapi import Request
 
 from bot.middlewares.register_user import RegisterUserMiddleware
-from bot.routers import base_router, webapp_router, userbot
+from bot.routers import base_router, webapp_router
 from config import BOT_TOKEN, WEBHOOK_HOST, WEBHOOK_PATH
 
 
