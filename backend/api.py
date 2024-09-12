@@ -4,6 +4,7 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from youtube.api import get_channel_videos, get_video, search
 from pyrogram import Client
+from config import BASE_DIR
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
@@ -55,7 +56,9 @@ async def video_(request: WebAppRequest):
 @router.post('/send_video')
 async def send_video(request: Request):
     data: dict = await request.json()
-    video_path = data.get('video_path')
+    video = data.get('video')
     chat_id = data.get('chat_id')
+
+    video_path = BASE_DIR.joinpath('video').joinpath(video)
     
     await userbot.send_video(chat_id=chat_id, video=video_path)
