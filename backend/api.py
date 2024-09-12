@@ -55,7 +55,18 @@ async def video_(request: WebAppRequest):
 
 @router.post('/send_video')
 async def send_video(request: Request):
-    data: dict = await request.json()
+    try:
+        data: dict = await request.json()
+        print(1,data)
+    except:print('e1')
+    try:
+        data: dict = await request.body()
+        print(2,data)
+    except:print('e2')
+    try:
+        data: dict = await request.form()
+        print(3, data)
+    except:print('e3')
     video = data.get('video')
     chat_id = data.get('chat_id')
 
