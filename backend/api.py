@@ -1,7 +1,7 @@
 from database.schemas import WebAppRequest
 from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
 from youtube.api import get_channel_videos, get_video, search
 from pyrogram import Client
 from config import BASE_DIR
@@ -62,3 +62,5 @@ async def send_video(request: Request):
     video_path = BASE_DIR.joinpath('video').joinpath(video)
     
     await userbot.send_video(chat_id=chat_id, video=video_path)
+
+    return Response(status_code=200)
