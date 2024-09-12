@@ -41,7 +41,7 @@ services:
       - ./backend:/backend  # Монтируем директорию app с хоста в контейнер
       - ./video:/video  # Монтируем директорию videos с хоста в контейнер
       - ./audio:/audio  # Монтируем директорию audio с хоста в контейнер
-      - ./USERBOT.session:/backend/USERBOT.session
+      - ./backend/USERBOT.session:/backend/USERBOT.session
 
     working_dir: /backend
 
