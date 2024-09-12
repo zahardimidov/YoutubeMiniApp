@@ -11,20 +11,15 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from payments import create_payment
-from bot.routers.webapp import userbot
 
 
 async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
-    await userbot.start()
 
     yield
-
-    await userbot.stop()
     
-
 
 app = FastAPI(lifespan=on_startup)
 app.add_api_route(WEBHOOK_PATH, endpoint=process_update, methods=['post'])

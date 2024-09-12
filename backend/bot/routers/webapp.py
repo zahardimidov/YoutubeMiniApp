@@ -30,10 +30,12 @@ from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
 from bot.routers.base import get_plans_kb
 from pyrogram import Client
+from redis import Redis
+from config import REDIS_HOST
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
-userbot = Client("USERBOT")
+r = Redis(host=REDIS_HOST)
 
 def pretty_size(b: int):
     b = b / 1024
@@ -114,41 +116,11 @@ async def callback_download(callback_query: CallbackQuery):
         caption = callback_query.message.caption
 
         data = dict(
+            chat_id = callback_query.message.chat.id,
+            message_id = callback_query.message.message_id,
             video_id=video_id,
             video_format=video_format,
             audio_format=audio_format
         )
 
-        if video_format:
-            video_path = check_video(video_id=video_id, video_format=video_format)
-            if not video_path:
-                try: await callback_query.message.edit_caption(caption=caption + downloading_text)
-                except Exception as e:pass
-
-                video_path = await download_video(data)
-
-            me = await userbot.get_me()
-            print(me)
-            
-            await userbot.send_video(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
-
-            try:await callback_query.message.delete()
-            except Exception as e: print(e)
-
-        
-        elif audio_format:
-            audio_path = check_audio(video_id=video_id)
-            if not audio_path:
-                try: await callback_query.message.edit_caption(caption=caption + downloading_text)
-                except Exception as e:pass
-
-                await download_audio(data)
-
-            async with userbot:
-                me = await userbot.get_me()
-                print(me)
-
-                await userbot.send_audio(chat_id=callback_query.message.from_user.id, video=video_path, caption=callback_query.message.caption)
-
-            try:await callback_query.message.delete()
-            except Exception as e: print(e)
+        r.rpush('download', json.dumps(data))
