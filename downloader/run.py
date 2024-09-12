@@ -55,7 +55,7 @@ def download_video(data: dict):
             f'{video_folder}/{video_id}_{video_format}.mp4'
         ]
 
-        subprocess.Popen(command).communicate()
+        subprocess.run(command)
 
         #time.sleep(3)
 
