@@ -110,6 +110,8 @@ while True:
     if task is not None:
         data = json.loads(task.decode())
 
+        print(data)
+
         if data.get('video_format'):
             target = threading.Thread(
                 target=download_video, args=[data])
