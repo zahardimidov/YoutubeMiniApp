@@ -1,29 +1,27 @@
+import asyncio
+import json
 import os
 import pathlib
+import subprocess
 import threading
-import json
+import time
+
 import redis
 import yt_dlp
 from dotenv import load_dotenv
-import subprocess
-import time
+from pyrogram import Client
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 
 if __name__ == '__main__':
-    import asyncio
-    import uvloop
-
-    from pyrogram import Client
-
-
     async def main():
-        client = Client("USERBOT", api_id, api_hash)
+        userbot = Client("USERBOT", api_id, api_hash)
 
-        async with client:
-            print(await client.get_me())
+        async with userbot:
+            print(await userbot.get_me())
+    asyncio.run(main())
 
 userbot = Client("USERBOT", api_id, api_hash)
 
@@ -37,6 +35,7 @@ HOST = os.environ.get('HOST', 'localhost')
 r = redis.Redis(host=HOST, port=6379, db=0)
 
 downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
+
 
 def download_video(data: dict):
     video_id = data['video_id']
@@ -73,16 +72,16 @@ def download_video(data: dict):
         subprocess.run(command)
 
         time.sleep(3)
-        
+
         os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete loading')
 
     loop = asyncio.new_event_loop()
-    loop.run_until_complete(userbot.send_video(chat_id=chat_id, video=f'{video_folder}/{video_id}_{video_format}.mp4'))
+    loop.run_until_complete(userbot.send_video(
+        chat_id=chat_id, video=f'{video_folder}/{video_id}_{video_format}.mp4'))
 
     print('Video was sent')
-
 
 
 def download_audio(data):
@@ -99,10 +98,10 @@ def download_audio(data):
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
     if data.get('chat_id') and data.get('message_id'):
-        #title = ''.join([i for i in data['caption'] if i.isalpha()][:20])
+        # title = ''.join([i for i in data['caption'] if i.isalpha()][:20])
         loop = asyncio.new_event_loop()
-        loop.run_until_complete(userbot.send_audio(chat_id=data['chat_id'], video=f'{audio_folder}/{video_id}.webm'))
-
+        loop.run_until_complete(userbot.send_audio(
+            chat_id=data['chat_id'], video=f'{audio_folder}/{video_id}.webm'))
 
 
 print('DOWNLOADER STARTED')
@@ -124,5 +123,3 @@ while True:
             target.start()
 
         print('Video downloading started: %s' % task)
-
-
