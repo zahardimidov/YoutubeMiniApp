@@ -24,6 +24,9 @@ if __name__ == '__main__':
             print(await userbot.get_me())
     asyncio.run(main())
 
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+
 userbot = Client("USERBOT", api_id, api_hash)
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
