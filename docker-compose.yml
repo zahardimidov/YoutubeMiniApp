@@ -80,7 +80,7 @@ services:
     build:
       context: ./downloader
     environment:
-      - HOST=redis
+      - REDIS_HOST=redis
     networks:
       - dev
     depends_on:

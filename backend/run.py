@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from api import router as api_router
+from api import router as api_router, userbot
 from bot import process_update, run_bot
 from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
@@ -17,8 +17,11 @@ async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
+    await userbot.start()
 
     yield
+
+    await userbot.stop()
     
 
 app = FastAPI(lifespan=on_startup)

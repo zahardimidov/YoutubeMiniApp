@@ -9,28 +9,16 @@ import time
 import redis
 import yt_dlp
 from dotenv import load_dotenv
-from pyrogram import Client
-import atexit
-
-api_id = '20985389'
-api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
-
-loop = asyncio.new_event_loop()
-asyncio.set_event_loop(loop)
-
-userbot = Client("USERBOT", api_id, api_hash)
+import requests
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
 
-userbot.start()
-atexit.register(userbot.stop)
-
 load_dotenv()
 
-HOST = os.environ.get('HOST', 'localhost')
+REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 
-r = redis.Redis(host=HOST, port=6379, db=0)
+r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
 
@@ -75,11 +63,9 @@ def download_video(data: dict):
 
         print('Complete loading')
 
-    loop = asyncio.get_event_loop()
-    loop.run_until_complete(userbot.send_video(
-        chat_id=chat_id, video=f'{video_folder}/{video_id}_{video_format}.mp4'))
+    requests.post('https://yrugi.space/send_video', data=dict(video_path = f'{video_folder}/{video_id}_{video_format}.mp4', chat_id = chat_id))
 
-    print('Video was sent')
+    print('COMPLETE')
 
 
 def download_audio(data):
@@ -97,10 +83,7 @@ def download_audio(data):
 
     if data.get('chat_id') and data.get('message_id'):
         # title = ''.join([i for i in data['caption'] if i.isalpha()][:20])
-        loop = asyncio.new_event_loop()
-        loop.run_until_complete(userbot.send_audio(
-            chat_id=data['chat_id'], video=f'{audio_folder}/{video_id}.webm'))
-
+        ...
 
 print('DOWNLOADER STARTED')
 

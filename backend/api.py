@@ -1,10 +1,15 @@
 from database.schemas import WebAppRequest
-from fastapi import APIRouter
+from fastapi import APIRouter, Request
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
 from youtube.api import get_channel_videos, get_video, search
+from pyrogram import Client
+
+api_id = '20985389'
+api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = APIRouter(prefix='', tags=['API сервиса'])
+userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
 
 @router.post('/search')
 async def search_(request: WebAppRequest):
@@ -45,3 +50,12 @@ async def video_(request: WebAppRequest):
     video = await get_video(video_id=video_id)
 
     return JSONResponse(content=video)
+
+
+@router.post('/send_video')
+async def send_video(request: Request):
+    data: dict = await request.json()
+    video_path = data.get('video_path')
+    chat_id = data.get('chat_id')
+    
+    await userbot.send_video(chat_id=chat_id, video=video_path)
