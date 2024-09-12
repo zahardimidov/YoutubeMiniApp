@@ -58,6 +58,7 @@ async def video_(request: WebAppRequest):
 
 @router.post('/send_video')
 async def send_video(video: Annotated[str, Form()], chat_id: Annotated[str, Form()]):
+    print(video, chat_id)
     video_path = BASE_DIR.joinpath('video').joinpath(video)
     await userbot.send_video(chat_id=chat_id, video=video_path)
 
