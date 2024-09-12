@@ -3,8 +3,8 @@ api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 if __name__ == '__main__':
     import asyncio
-    import uvloop
 
+    import uvloop
     from pyrogram import Client
 
 
@@ -21,21 +21,22 @@ if __name__ == '__main__':
     exit()
 
 import json
-
-from aiogram import F, Router
-from aiogram.types import (ContentType, InlineKeyboardButton, FSInputFile,
-                           InlineKeyboardMarkup, Message, CallbackQuery)
-from youtube.api import get_video, download_audio, download_video, check_audio, check_video
-from database.requests import get_user, get_quota, get_todays_downloadings
 from datetime import datetime
+
+import redis
+from aiogram import F, Router
+from aiogram.types import (CallbackQuery, ContentType, FSInputFile,
+                           InlineKeyboardButton, InlineKeyboardMarkup, Message)
 from bot.routers.base import get_plans_kb
-from pyrogram import Client
-from redis import Redis
 from config import REDIS_HOST
+from database.requests import get_quota, get_todays_downloadings, get_user
+from pyrogram import Client
+from youtube.api import (check_audio, check_video, download_audio,
+                         download_video, get_video)
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
-r = Redis(host=REDIS_HOST)
+r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 def pretty_size(b: int):
     b = b / 1024
@@ -122,5 +123,7 @@ async def callback_download(callback_query: CallbackQuery):
             video_format=video_format,
             audio_format=audio_format
         )
+
+        print(data)
 
         r.rpush('download', json.dumps(data))
