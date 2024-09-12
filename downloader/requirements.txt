@@ -30,9 +30,12 @@ multidict==6.0.5
 mutagen==1.47.0
 netaddr==1.3.0
 pathlib==1.0.1
+pyaes==1.6.1
 pycryptodomex==3.20.0
 pydantic==2.8.2
 pydantic_core==2.20.1
+Pyrogram==2.0.106
+PySocks==1.7.1
 pyTelegramBotAPI==4.22.1
 python-dotenv==1.0.1
 python-multipart==0.0.9
@@ -44,9 +47,11 @@ sqladmin==0.18.0
 SQLAlchemy==2.0.31
 starlette==0.38.2
 telebot==0.0.5
+TgCrypto==1.2.5
 typing_extensions==4.12.2
 urllib3==2.2.2
 uvicorn==0.30.6
+uvloop==0.20.0
 websockets==13.0
 wrapt==1.16.0
 WTForms==3.1.2
