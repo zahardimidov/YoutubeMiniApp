@@ -32,10 +32,10 @@ userbot = Client("USERBOT", api_id, api_hash)
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')
 
-asyncio.run(userbot.start())
+loop.run_until_complete(userbot.start())
 
 def stop():
-    asyncio.run(userbot.stop())
+    loop.run_until_complete(userbot.stop())
 atexit.register(stop)
 
 load_dotenv()
