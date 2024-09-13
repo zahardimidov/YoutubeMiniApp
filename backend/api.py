@@ -4,11 +4,9 @@ from database.schemas import WebAppRequest, Video
 from fastapi import APIRouter
 import redis
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse, Response
-from pyrogram import Client
+from fastapi.responses import JSONResponse
 from youtube.api import get_channel_videos, get_video, search
 from telethon.client import TelegramClient
-from telethon.tl.types import InputPeerUser
 
 
 api_id = '20985389'
