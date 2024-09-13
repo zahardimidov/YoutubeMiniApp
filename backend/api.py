@@ -58,7 +58,7 @@ async def video_(request: WebAppRequest):
 
 @router.post('/send_video')
 async def send_video(video: Video):
-    print(video.video_path, video.chat_id)
-    await userbot.send_video(chat_id=video.chat_id, video=video.video_path)
+    print(video.video_name, video.chat_id, BASE_DIR.joinpath('video').joinpath(video.video_name))
+    await userbot.send_video(chat_id=video.chat_id, video=BASE_DIR.joinpath('video').joinpath(video.video_name))
 
     return Response(status_code=200)
