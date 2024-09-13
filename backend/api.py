@@ -1,7 +1,7 @@
 from typing import Annotated
 
 from config import BASE_DIR
-from database.schemas import WebAppRequest
+from database.schemas import WebAppRequest, Video
 from fastapi import APIRouter, Form
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
@@ -57,9 +57,9 @@ async def video_(request: WebAppRequest):
 
 
 @router.post('/send_video')
-async def send_video(video: Annotated[str, Form()], chat_id: Annotated[str, Form()]):
-    print(video, chat_id)
-    video_path = BASE_DIR.joinpath('video').joinpath(video)
-    await userbot.send_video(chat_id=chat_id, video=video_path)
+async def send_video(video: Video):
+    print(Video.video, Video.chat_id)
+    video_path = BASE_DIR.joinpath('video').joinpath(Video.video)
+    await userbot.send_video(chat_id=Video.chat_id, video=video_path)
 
     return Response(status_code=200)
