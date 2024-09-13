@@ -15,5 +15,5 @@ class WebAppRequest(Request):
         self.webapp_user: User = webapp_user
 
 class Video(BaseModel):
-    chat_id: str
+    chat_id: str | int
     video_path: str
