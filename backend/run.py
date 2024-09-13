@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from api import router as api_router, userbot,  periodic
+from api import router as api_router,  periodic
 from bot import process_update, run_bot
 from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin

@@ -14,7 +14,6 @@ api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = APIRouter(prefix='', tags=['API сервиса'])
 #userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
-userbot = TelegramClient('USERBOT', api_id=api_id, api_hash=api_hash)
 
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
@@ -31,8 +30,8 @@ async def periodic():
 
         print(data, video_path, '\n')
         
-        
-        await userbot.send_message('me', file=video_path)
+        async with TelegramClient('USERBOT', api_id=api_id, api_hash=api_hash) as userbot:
+            await userbot.send_message('me', file=video_path)
             
 
 @router.post('/search')
