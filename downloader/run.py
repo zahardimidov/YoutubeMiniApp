@@ -66,8 +66,6 @@ def download_video(data: dict):
     data = dict(video_name = f'{video_id}_{video_format}.mp4', chat_id = chat_id)
     r.rpush('send_video', json.dumps(data))
 
-    
-
     print('COMPLETE')
 
 

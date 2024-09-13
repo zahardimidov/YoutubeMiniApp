@@ -17,8 +17,11 @@ r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 async def periodic(): 
     task: bytes = r.lpop('send_video')
+    print(task)
     if task is not None:
         data = json.loads(task.decode())
+
+        print(data, '\n\n')
 
         await userbot.send_video(chat_id=data['chat_id'], video=BASE_DIR.joinpath('video').joinpath(data['video_name']))
             
