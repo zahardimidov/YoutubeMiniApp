@@ -32,10 +32,7 @@ async def periodic():
 
         print(data, video_path, '\n')
 
-        user = await userbot.get_entity('@ZaharDimidov')
-        print(user)
-
-        await userbot.send_message(user, file=video_path)
+        await userbot.send_message('me', file=video_path)
             
 
 @router.post('/search')
