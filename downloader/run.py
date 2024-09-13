@@ -64,9 +64,9 @@ def download_video(data: dict):
         print('Complete loading')
 
     data = dict(video_name = f'{video_id}_{video_format}.mp4', chat_id = chat_id)
+    r.rpush('send_video', json.dumps(data))
 
-    response = requests.post('https://yrugi.space/api/send_video', json = data, timeout=60*60)
-    print(response, response.status_code, response.content)
+    
 
     print('COMPLETE')
 

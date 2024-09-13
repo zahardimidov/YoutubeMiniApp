@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from api import router as api_router, userbot
+from api import router as api_router, userbot,  periodic
 from bot import process_update, run_bot
 from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
@@ -11,13 +11,16 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from payments import create_payment
-
+import asyncio
 
 async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
     await userbot.start()
+
+    loop = asyncio.get_event_loop()
+    loop.create_task(periodic())
 
     yield
 

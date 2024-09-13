@@ -1,8 +1,8 @@
-from typing import Annotated
-
-from config import BASE_DIR
+import json
+from config import BASE_DIR, REDIS_HOST
 from database.schemas import WebAppRequest, Video
-from fastapi import APIRouter, Form
+from fastapi import APIRouter
+import redis
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from pyrogram import Client
@@ -13,7 +13,16 @@ api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = APIRouter(prefix='', tags=['API сервиса'])
 userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
+r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
+async def periodic(): 
+    while True:
+        task: bytes = r.lpop('send_video')
+        if task is not None:
+            data = json.loads(task.decode())
+
+            await userbot.send_video(chat_id=data['chat_id'], video=BASE_DIR.joinpath('video').joinpath(data['video_name']))
+            
 
 @router.post('/search')
 async def search_(request: WebAppRequest):
@@ -55,10 +64,3 @@ async def video_(request: WebAppRequest):
 
     return JSONResponse(content=video)
 
-
-@router.post('/send_video')
-async def send_video(video: Video):
-    print(video.video_name, video.chat_id, BASE_DIR.joinpath('video').joinpath(video.video_name))
-    await userbot.send_video(chat_id=video.chat_id, video=BASE_DIR.joinpath('video').joinpath(video.video_name))
-
-    return Response(status_code=200)
