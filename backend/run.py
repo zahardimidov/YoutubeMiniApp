@@ -29,8 +29,6 @@ async def on_startup(app: FastAPI):
     await run_database()
     await run_bot()
     await userbot.connect()
-
-    print(await userbot.get_me())
     
     asyncio.create_task(runner.run_main())
 

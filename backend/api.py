@@ -21,16 +21,17 @@ r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 async def progress(current, total):
     print(f"{current * 100 / total:.1f}%")
 
-async def periodic(): 
+async def periodic():
     task: bytes = r.lpop('send_video')
     print(task)
+    print(await userbot.get_me())
     if task is not None:
         data = json.loads(task.decode())
         video_path = BASE_DIR.joinpath('video').joinpath(data['video_name'])
 
         print(data, video_path, '\n')
         
-        print(await userbot.get_me())
+        
         await userbot.send_message('me', file=video_path)
             
 
