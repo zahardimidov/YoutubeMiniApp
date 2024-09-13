@@ -80,6 +80,7 @@ services:
       context: ./downloader
     environment:
       - REDIS_HOST=redis
+      - PYTHONUNBUFFERED=1
     networks:
       - dev
     depends_on:
