@@ -20,7 +20,7 @@ async def on_startup(app: FastAPI):
     await userbot.start()
 
     loop = asyncio.get_event_loop()
-    loop.create_task(periodic())
+    await loop.create_task(periodic())
 
     yield
 
