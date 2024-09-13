@@ -9,7 +9,6 @@ import time
 import redis
 import yt_dlp
 from dotenv import load_dotenv
-import requests
 
 video_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('video')
 audio_folder = pathlib.Path(__file__).parent.parent.resolve().joinpath('audio')

@@ -7,14 +7,16 @@ from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse, Response
 from pyrogram import Client
 from youtube.api import get_channel_videos, get_video, search
+from telethon.client import TelegramClient
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = APIRouter(prefix='', tags=['API сервиса'])
-userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
-r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
+#userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
+userbot = TelegramClient('USERBOT', api_id=api_id, api_hash=api_hash)
 
+r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 async def progress(current, total):
     print(f"{current * 100 / total:.1f}%")
@@ -28,7 +30,7 @@ async def periodic():
 
         print(data, video_path, '\n')
 
-        await userbot.send_video(chat_id=data['chat_id'], video=video_path, progress = progress)
+        await userbot.send_message(chat_id=data['chat_id'], file=video_path)
             
 
 @router.post('/search')
