@@ -34,7 +34,7 @@ async def on_startup(app: FastAPI):
 
     yield
 
-    await userbot.stop()
+    await userbot.disconnect()
     
 
 app = FastAPI(lifespan=on_startup)
