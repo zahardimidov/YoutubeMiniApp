@@ -16,4 +16,4 @@ class WebAppRequest(Request):
 
 class Video(BaseModel):
     chat_id: str
-    video: str
+    video_path: str
