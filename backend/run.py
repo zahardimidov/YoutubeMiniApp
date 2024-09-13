@@ -85,4 +85,7 @@ async def payment(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
+    import uvloop
+
+    uvloop.install()
     uvicorn.run(app, host="0.0.0.0", port=4500, forwarded_allow_ips='*')

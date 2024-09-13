@@ -1,25 +1,3 @@
-api_id = '20985389'
-api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
-
-if __name__ == '__main__':
-    import asyncio
-
-    import uvloop
-    from pyrogram import Client
-
-
-    async def main():
-        client = Client("USERBOT", api_id, api_hash)
-
-        async with client:
-            print(await client.get_me())
-
-
-    uvloop.install()
-    asyncio.run(main())
-
-    exit()
-
 import json
 from datetime import datetime
 
