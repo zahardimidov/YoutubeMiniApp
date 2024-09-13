@@ -15,15 +15,20 @@ router = APIRouter(prefix='', tags=['API сервиса'])
 userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
+
+async def progress(current, total):
+    print(f"{current * 100 / total:.1f}%")
+
 async def periodic(): 
     task: bytes = r.lpop('send_video')
     print(task)
     if task is not None:
         data = json.loads(task.decode())
+        video_path = BASE_DIR.joinpath('video').joinpath(data['video_name'])
 
-        print(data, '\n\n')
+        print(data, video_path, '\n')
 
-        await userbot.send_video(chat_id=data['chat_id'], video=BASE_DIR.joinpath('video').joinpath(data['video_name']))
+        await userbot.send_video(chat_id=data['chat_id'], video=video_path, progress = progress)
             
 
 @router.post('/search')
