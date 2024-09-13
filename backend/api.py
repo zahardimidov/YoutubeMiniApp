@@ -8,6 +8,8 @@ from fastapi.responses import JSONResponse, Response
 from pyrogram import Client
 from youtube.api import get_channel_videos, get_video, search
 from telethon.client import TelegramClient
+from telethon.tl.types import InputPeerUser
+
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
@@ -30,7 +32,9 @@ async def periodic():
 
         print(data, video_path, '\n')
 
-        await userbot.send_message(data['chat_id'], file=video_path)
+        user = InputPeerUser(user_id=data['chat_id'], access_hash=0)  # Replace 
+
+        await userbot.send_message(user, file=video_path)
             
 
 @router.post('/search')
