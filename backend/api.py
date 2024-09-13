@@ -29,8 +29,10 @@ async def periodic():
         video_path = BASE_DIR.joinpath('video').joinpath(data['video_name'])
 
         print(data, video_path, '\n')
-
-        await userbot.send_message('me', file=video_path)
+        
+        async with userbot:
+            print(await userbot.get_me())
+            await userbot.send_message('me', file=video_path)
             
 
 @router.post('/search')

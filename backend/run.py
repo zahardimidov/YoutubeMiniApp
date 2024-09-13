@@ -28,10 +28,6 @@ async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
-    await userbot.connect()
-
-    u = await userbot.get_me()
-    print(u)
     
     asyncio.create_task(runner.run_main())
 
