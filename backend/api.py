@@ -33,6 +33,7 @@ async def periodic():
         print(data, video_path, '\n')
 
         user = InputPeerUser(user_id=data['chat_id'], access_hash=0)  # Replace 
+        print(user)
 
         await userbot.send_message(user, file=video_path)
             
