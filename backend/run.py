@@ -13,14 +13,24 @@ from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from payments import create_payment
 import asyncio
 
+
+class BackgroundRunner:
+    def __init__(self):
+        ...
+    async def run_main(self):
+        while True:
+            await asyncio.sleep(1)
+            await periodic()
+
+runner = BackgroundRunner()
+
 async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
     await userbot.start()
-
-    loop = asyncio.get_event_loop()
-    await loop.create_task(periodic())
+    
+    asyncio.create_task(runner.run_main())
 
     yield
 

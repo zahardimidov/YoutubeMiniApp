@@ -16,12 +16,11 @@ userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 async def periodic(): 
-    while True:
-        task: bytes = r.lpop('send_video')
-        if task is not None:
-            data = json.loads(task.decode())
+    task: bytes = r.lpop('send_video')
+    if task is not None:
+        data = json.loads(task.decode())
 
-            await userbot.send_video(chat_id=data['chat_id'], video=BASE_DIR.joinpath('video').joinpath(data['video_name']))
+        await userbot.send_video(chat_id=data['chat_id'], video=BASE_DIR.joinpath('video').joinpath(data['video_name']))
             
 
 @router.post('/search')
