@@ -30,7 +30,7 @@ async def periodic():
 
         print(data, video_path, '\n')
 
-        await userbot.send_message(chat_id=data['chat_id'], file=video_path)
+        await userbot.send_message(data['chat_id'], file=video_path)
             
 
 @router.post('/search')
