@@ -29,6 +29,10 @@ async def on_startup(app: FastAPI):
     await run_database()
     await run_bot()
     await userbot.connect()
+
+    async with userbot.conversation('me') as conv:
+       chat =  conv.get_chat()
+       print(chat)
     
     asyncio.create_task(runner.run_main())
 

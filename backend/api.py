@@ -25,8 +25,6 @@ async def periodic():
     task: bytes = r.lpop('send_video')
     print(task)
 
-    me = await userbot.get_me()
-    print(me)
     if task is not None:
         data = json.loads(task.decode())
         video_path = BASE_DIR.joinpath('video').joinpath(data['video_name'])
