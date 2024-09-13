@@ -4,34 +4,34 @@ from database.schemas import WebAppRequest, Video
 from fastapi import APIRouter
 import redis
 from fastapi.encoders import jsonable_encoder
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, Response
+from pyrogram import Client
 from youtube.api import get_channel_videos, get_video, search
 from telethon.client import TelegramClient
-
 
 api_id = '20985389'
 api_hash = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
 router = APIRouter(prefix='', tags=['API сервиса'])
-#userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
+userbot = Client('USERBOT', api_id=api_id, api_hash=api_hash)
+#userbot = TelegramClient('USERBOT', api_id=api_id, api_hash=api_hash)
 
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
+
 
 async def progress(current, total):
     print(f"{current * 100 / total:.1f}%")
 
-async def periodic():
+async def periodic(): 
     task: bytes = r.lpop('send_video')
     print(task)
-
     if task is not None:
         data = json.loads(task.decode())
         video_path = BASE_DIR.joinpath('video').joinpath(data['video_name'])
 
         print(data, video_path, '\n')
-        
-        async with TelegramClient('USERBOT', api_id=api_id, api_hash=api_hash) as userbot:
-            await userbot.send_message('me', file=video_path)
+
+        await userbot.send_video(chat_id=data['chat_id'], video=video_path, progress = progress)
             
 
 @router.post('/search')
