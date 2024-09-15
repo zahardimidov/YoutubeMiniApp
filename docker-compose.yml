@@ -42,7 +42,6 @@ services:
       - ./backend:/backend  # Монтируем директорию app с хоста в контейнер
       - ./video:/video  # Монтируем директорию videos с хоста в контейнер
       - ./audio:/audio  # Монтируем директорию audio с хоста в контейнер
-      - ./backend/USERBOT.session:/backend/USERBOT.session
 
     working_dir: /backend
 
@@ -69,12 +68,23 @@ services:
     networks:
       - dev
 
-  redis:
-    image: "redis:latest"
-    ports:
-    - "6379:6379"
+  userbot:
+    build:
+      context: ./userbot
+    environment:
+      - PYTHONUNBUFFERED=1
+      - REDIS_HOST=redis
     networks:
-    - dev
+      - dev
+    depends_on:
+      - redis
+    restart: always
+    volumes:
+      - ./userbot:/userbot  # Монтируем директорию app с хоста в контейнер
+      - ./video:/video  # Монтируем директорию video с хоста в контейнер
+      - ./audio:/audio  # Монтируем директорию audio с хоста в контейнер
+      - ./userbot/USERBOT.session:/userbot/USERBOT.session
+    working_dir: /userbot
 
   downloader:
     build:
@@ -93,5 +103,14 @@ services:
       - ./audio:/audio  # Монтируем директорию audio с хоста в контейнер
     working_dir: /downloader
 
+  redis:
+    image: "redis:latest"
+    ports:
+    - "6379:6379"
+    networks:
+    - dev
+
+
 volumes:
   youtube-data:
+

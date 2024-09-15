@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 
-from api import router as api_router,  periodic
+from api import router as api_router
 from bot import process_update, run_bot
 from config import BASE_DIR, WEBHOOK_PATH
 from database.admin import init_admin
@@ -11,25 +11,12 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse, RedirectResponse, Response
 from payments import create_payment
-import asyncio
 
-
-class BackgroundRunner:
-    def __init__(self):
-        ...
-    async def run_main(self):
-        while True:
-            await asyncio.sleep(1)
-            await periodic()
-
-runner = BackgroundRunner()
 
 async def on_startup(app: FastAPI):
     init_admin(app=app, engine=engine)
     await run_database()
     await run_bot()
-    
-    asyncio.create_task(runner.run_main())
 
     yield
     
@@ -82,7 +69,4 @@ async def payment(request: Request):
 
 if __name__ == "__main__":
     import uvicorn
-    import uvloop
-
-    uvloop.install()
     uvicorn.run(app, host="0.0.0.0", port=4500, forwarded_allow_ips='*')

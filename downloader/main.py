@@ -1,4 +1,3 @@
-import asyncio
 import json
 import os
 import pathlib
@@ -19,9 +18,6 @@ REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
-downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-
-
 def download_video(data: dict):
     video_id = data['video_id']
     video_format = data['video_format']
@@ -32,7 +28,6 @@ def download_video(data: dict):
     }
 
     chat_id = data.pop('chat_id')
-    message_id = data.pop('message_id')
 
     if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
         if not os.path.exists(f'{audio_folder}/{video_id}.webm'):
@@ -60,15 +55,15 @@ def download_video(data: dict):
 
         #os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
-        print('Complete loading')
+        print('Complete video loading')
 
-    data = dict(video_name = f'{video_id}_{video_format}.mp4', chat_id = chat_id)
-    r.rpush('send_video', json.dumps(data))
+    data = dict(filename = f'{video_id}_{video_format}.mp4', chat_id = chat_id)
+    r.rpush('send_file', json.dumps(data))
 
-    print('COMPLETE')
+    print('COMPLETE VIDEO')
 
 
-def download_audio(data):
+def download_audio(data: dict):
     video_id = data['video_id']
     format_id = data['audio_format']
 
@@ -81,9 +76,8 @@ def download_audio(data):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
-    if data.get('chat_id') and data.get('message_id'):
-        # title = ''.join([i for i in data['caption'] if i.isalpha()][:20])
-        ...
+    if data.get('chat_id'):
+        r.rpush('send_file', json.dumps(data))
 
 print('DOWNLOADER STARTED')
 
