@@ -14,7 +14,7 @@ REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 API_ID = '20985389'
 API_HASH = 'e29ea4c9df52d3f99fc0678c48a82da2'
 
-client = TelegramClient('USERBOT', API_ID, API_HASH)
+client = TelegramClient(BASE_DIR.joinpath('userbot').joinpath("USERBOT"), API_ID, API_HASH)
 redis = Redis(REDIS_HOST)
 
 
@@ -42,7 +42,7 @@ async def main():
     username = await client.get_entity('Download_Tubebot')
 
     while True:
-        task: bytes = redis.lpop('send_file')
+        task: bytes = None# redis.lpop('send_file')
 
         if task is not None:
             data: dict = json.loads(task.decode())
