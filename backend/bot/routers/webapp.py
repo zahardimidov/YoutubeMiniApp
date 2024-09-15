@@ -9,7 +9,6 @@ from bot.routers.base import get_plans_kb
 from config import REDIS_HOST
 from database.requests import (get_file, get_quota, get_todays_downloadings,
                                get_user)
-from pyrogram import Client
 from youtube.api import (check_audio, check_video, download_audio,
                          download_video, get_video)
 
