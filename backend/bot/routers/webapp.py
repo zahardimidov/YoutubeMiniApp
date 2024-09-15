@@ -3,14 +3,13 @@ from datetime import datetime
 
 import redis
 from aiogram import F, Router
-from aiogram.types import (CallbackQuery, ContentType,
-                           InlineKeyboardButton, InlineKeyboardMarkup, Message)
+from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
+                           InlineKeyboardMarkup, Message)
 from bot.routers.base import get_plans_kb
 from config import REDIS_HOST
 from database.requests import (get_file, get_quota, get_todays_downloadings,
                                get_user)
-from youtube.api import (check_audio, check_video, download_audio,
-                         download_video, get_video)
+from youtube.api import get_video
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
@@ -101,13 +100,13 @@ async def callback_download(callback_query: CallbackQuery):
     else:
         if video_format:
             file = await get_file(f'{video_id}_{video_format}.mp4')
-            
+
             if file:
                 return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.webm')
-            
+
             if file:
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
 
@@ -120,9 +119,21 @@ async def callback_download(callback_query: CallbackQuery):
             video_id=video_id,
             video_format=video_format,
             audio_format=audio_format,
-            caption = caption
+            caption=caption
         )
 
         print(data)
 
         r.rpush('download', json.dumps(data))
+
+
+@router.message(F.video, F.from_user.id == '')
+async def video(message: Message):
+    caption, user_id = message.caption.split('(user=')
+    print(caption, user_id, message.video)
+    caption = caption.strip()
+    user_id = ''.join([d for d in user_id if d.isdigit()])
+
+    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id)
+
+    

@@ -1,18 +1,26 @@
 import asyncio
 import json
-import os
 import random
-import subprocess
-import time
+
 import requests
 from aiohttp import ClientSession
-from config import BASE_DIR
-from .const import *
-from yt_dlp import YoutubeDL
 
-video_folder = BASE_DIR.joinpath('video')
-audio_folder = BASE_DIR.joinpath('audio')
+email = 'yapi4198@gmail.com'
+password = 'yapi3340@gmail.com'
+
+API_URL = "https://www.googleapis.com/youtube/v3/"
+
+API_KEYS = [
+    'AIzaSyAG78TY-KZFgN9Qc5UYlMsdPHGBUppGkSo'
+]
+
+CHROME = ('Mozilla/5.0 (Macintosh; Intel Mac OS X 12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36',
+          'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36')
+
+
 headers = requests.utils.default_headers()
+
 
 async def _make_request(method, maxResults=1, **kwargs):
     headers['User-Agent'] = random.choice(CHROME)
@@ -29,7 +37,8 @@ async def _make_request(method, maxResults=1, **kwargs):
         data: dict = await response.json()
 
         return data
-    
+
+
 def _get_formats(info_dict: dict) -> tuple[dict, list[dict]]:
     formats = info_dict.get('formats', [])
 
@@ -51,7 +60,7 @@ def _get_formats(info_dict: dict) -> tuple[dict, list[dict]]:
     video_formats.sort(key=lambda x: x['filesize'])
 
     return audio_format, video_formats
-    
+
 
 async def search(query, maxResults):
     data: dict = await _make_request('search', maxResults=maxResults, q=query, type='video,channel')
@@ -100,104 +109,11 @@ async def get_channel(channel_id):
     return YoutubeObject.from_data(results[0]) if results else None
 
 
-async def get_channel_videos(channel_id, count = 50):
+async def get_channel_videos(channel_id, count=50):
     data = await _make_request('search', maxResults=count, channelId=channel_id, order='date', type='video')
     results = data.get('items', [])
 
     return [YoutubeObject.from_data(el) for el in results]
-
-def check_audio(video_id):
-    path = f'{audio_folder}/{video_id}.webm'
-
-    if os.path.exists(path):
-        return path
-
-def check_video(video_id, video_format):
-    path = f'{video_folder}/{video_id}_{video_format}.mp4'
-
-    if os.path.exists(path):
-        return path
-
-def _download_video(data: dict):
-    video_id = data['video_id']
-    video_format = data['video_format']
-
-    ydl_opts = {
-        'format': video_format,
-        "outtmpl": f'{video_folder}/%(id)s_%(format_id)s_temp.%(ext)s',
-    }
-
-    audio_path = f'{audio_folder}/{video_id}.webm'
-
-    if not check_audio(video_id=video_id):
-        _download_audio(data)
-
-    if not check_video(video_id=video_id, video_format=video_format):
-        try:
-            print('DOWNLOAD VIDEO')
-            with YoutubeDL(ydl_opts) as ydl:
-                ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
-        except Exception as e:
-            print('VIDEO DOWNLOADING ERROR:', str(e))
-            return Exception('Ошибка при скачивании видео, попробуйте еще раз')
-
-        time.sleep(3)
-
-        command = [
-            'ffmpeg',
-            '-i', f'{video_folder}/{video_id}_{video_format}_temp.mp4',
-            '-i', audio_path,
-            '-c:v', 'copy',
-            '-c:a', 'aac',
-            '-strict', 'experimental',
-            '-f', 'mp4',
-            '-movflags', 'frag_keyframe+empty_moov',
-            f'{video_folder}/{video_id}_{video_format}.mp4'
-        ]
-
-        subprocess.run(command)
-
-        time.sleep(3)
-        
-        os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
-
-        print('Complete loading')
-        
-    return f'{video_folder}/{video_id}_{video_format}.mp4'
-
-
-def _download_audio(data):
-    video_id = data['video_id']
-    format_id = data['audio_format']
-
-    ydl_opts = {
-        'format': format_id,
-        'outtmpl': f'{audio_folder}/%(id)s.%(ext)s',
-    }
-
-    path = f'{audio_folder}/{video_id}.webm'
-
-    if not os.path.exists(path):
-        try:
-            print('DOWNLOAD AUDIO')
-            with YoutubeDL(ydl_opts) as ydl:
-                ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
-        except Exception as e:
-            print('AUDIO DOWNLOADING ERROR:', str(e))
-            return Exception('Ошибка при скачивании файла, попробуйте еще раз')
-
-    return path
-
-
-async def download_audio(data: dict):
-    res = await asyncio.to_thread(_download_audio, data)
-    return res
-
-async def download_video(data: dict):
-    video_path = await asyncio.to_thread(_download_video, data)
-    
-    return video_path
-    
 
 
 class YoutubeObject:
@@ -237,5 +153,3 @@ class YoutubeObject:
             except:
                 pass
             return details
-        
-
