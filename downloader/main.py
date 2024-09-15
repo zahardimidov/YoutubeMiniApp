@@ -41,11 +41,11 @@ def download_video(data: dict):
             'ffmpeg',
             '-i', video_folder.joinpath(f'{video_id}_{video_format}_temp.mp4'),
             '-i', audio_folder.joinpath(f'{video_id}.webm'),
-            '-c:v', 'copy',
+            '-c:v', 'libx264',
             '-c:a', 'aac',
             '-strict', 'experimental',
             '-f', 'mp4',
-            '-movflags', 'frag_keyframe+empty_moov',
+            '-movflags', 'faststart',
             f'{video_folder}/{video_id}_{video_format}.mp4'
         ]
 

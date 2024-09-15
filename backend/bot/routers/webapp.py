@@ -98,6 +98,10 @@ async def callback_download(callback_query: CallbackQuery):
         return await callback_query.message.answer('⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
 
     else:
+        try:
+            await callback_query.message.edit_caption(caption=callback_query.message.caption+'\n\n📥⌛ <b>Скачиваю из источника</b> ⌛📥', reply_markup=empty_markup)
+        except Exception as e:print(e)
+
         data = dict(
             chat_id=callback_query.message.chat.id,
             message_id=callback_query.message.message_id,
@@ -116,10 +120,6 @@ async def callback_download(callback_query: CallbackQuery):
             file = await get_file(f'{video_id}_{audio_format}.webm')
             if file:
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
-        
-        try:
-            await callback_query.message.edit_caption(caption=callback_query.message.caption+'\n\n📥⌛ Скачиваю из источника ⌛📥', reply_markup=empty_markup)
-        except Exception as e:print(e)
 
         r.rpush('download', json.dumps(data))
 
