@@ -141,7 +141,7 @@ async def video(message: Message):
     except:pass
 
 
-@router.message(F.audio, F.from_user.id == 6865748575)
+@router.message(F.content_type == ContentType.AUDIO, F.from_user.id == 6865748575)
 async def audio(message: Message):
     caption, data = message.caption.split('(data(')
     caption = caption.strip()
@@ -152,9 +152,11 @@ async def audio(message: Message):
 
     print(message.audio)
 
+    title = ''.join([i for i in caption if i.isdigit()])[:15]
+
     await set_file(filename=message.audio.file_name, file_id=message.audio.file_id)
     await add_downloading(user_id=user_id)
-    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id)
+    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id, title=title)
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
