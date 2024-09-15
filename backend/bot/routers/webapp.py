@@ -123,7 +123,7 @@ async def callback_download(callback_query: CallbackQuery):
         r.rpush('download', json.dumps(data))
 
 
-@router.message(F.video, F.from_user.id == '6865748575')
+@router.message(F.video, F.from_user.id == 6865748575)
 async def video(message: Message):
     caption, user_id = message.caption.split('(user=')
     print(caption, user_id, message.video)
