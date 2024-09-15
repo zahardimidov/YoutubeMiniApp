@@ -42,7 +42,7 @@ async def main():
     username = await client.get_entity('Download_Tubebot')
 
     while True:
-        task: bytes = None# redis.lpop('send_file')
+        task: bytes = redis.lpop('send_file')
 
         if task is not None:
             data: dict = json.loads(task.decode())
