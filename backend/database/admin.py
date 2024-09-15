@@ -72,7 +72,7 @@ class FileAdmin(ModelView, model=File):
     name_plural = 'Файлы'
 
     column_list = [File.file_id, File.filename]
-    can_delete = False
+    can_delete = True
 
 class ApiAdmin(ModelView, model=Api):
     name = 'Youtube API ключ'
