@@ -56,7 +56,7 @@ async def video_receive(message: Message):
                     text=f'🎧 Аудио / {pretty_size(audio_size)}', callback_data=callback)])
             else:
                 keyboard.append([InlineKeyboardButton(
-                    text=f'🎧 Аудио / {pretty_size(audio_size)} ⚡️ мгновенно', callback_data=callback)])
+                    text=f'🎧 Аудио / {pretty_size(audio_size)}', callback_data=callback)])
 
         for v in video['video_formats']:
             video_size = int(v['filesize']) + audio_size
@@ -66,10 +66,10 @@ async def video_receive(message: Message):
             file = await get_file(f'{video["id"]}_{v["format_id"]}.mp4')
             if file:
                 keyboard.append([InlineKeyboardButton(
-                    text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}', callback_data=callback)])
+                    text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)} ⚡️ мгновенно', callback_data=callback)])
             else:
                 keyboard.append([InlineKeyboardButton(
-                    text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)} ⚡️ мгновенно', callback_data=callback)])
+                    text=f'🎥 {v["resolution"]} / ~{pretty_size(video_size)}', callback_data=callback)])
 
         markup = InlineKeyboardMarkup(inline_keyboard=keyboard)
 
