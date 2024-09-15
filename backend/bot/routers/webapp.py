@@ -41,10 +41,11 @@ async def video_receive(message: Message):
     downloadings = await get_todays_downloadings(user_id=message.from_user.id)
 
     if (user.subscription_until == None or user.subscription_until < datetime.now().date()) and len(downloadings) >= quota:
-        msg += '⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку и продолжайте скачивать видео'
+        msg += '\n\n<b>⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку и продолжайте скачивать видео</b>'
         markup = await get_plans_kb(user_id=user.id)
     else:
         if video['audio_format']:
+            print(video["audio_format"]["format_id"])
             audio_size = int(video['audio_format']['filesize'])
             callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},' if audio_size / \
                 1024 / 1024 / 1024 < 2 else 'error'
