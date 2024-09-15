@@ -37,6 +37,7 @@ async def send_file(receiver, data):
 
 
 async def main():
+    await client.connect()
     username = await client.get_entity('Download_Tubebot')
 
     while True:

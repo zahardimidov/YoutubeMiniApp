@@ -13,8 +13,8 @@ client = TelegramClient('USERBOT', API_ID, API_HASH)
 
 
 async def main():
-    client.start()
-    
+    await client.start()
+    await client.connect()
     me = await client.get_me()
     print(me)
 
