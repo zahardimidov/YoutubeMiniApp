@@ -141,7 +141,7 @@ async def video(message: Message):
     except:pass
 
 
-@router.message(F.content_type == ContentType.AUDIO, F.from_user.id == 6865748575)
+@router.message(F.content_type == ContentType.DOCUMENT, F.from_user.id == 6865748575)
 async def audio(message: Message):
     caption, data = message.caption.split('(data(')
     caption = caption.strip()
@@ -150,7 +150,7 @@ async def audio(message: Message):
     user_id = int(''.join([d for d in user_id if d.isdigit()]))
     message_id = int(''.join([d for d in message_id if d.isdigit()]))
 
-    print(message.audio)
+    print(message)
 
     title = ''.join([i for i in caption if i.isdigit()])[:15]
 
