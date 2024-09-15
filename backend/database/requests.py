@@ -68,11 +68,9 @@ async def get_plans():
         plans = await session.scalars(select(Plan).order_by(Plan.price))
 
         return plans.all()
+    
 async def get_file(filename):
     async with async_session() as session:
         file = await session.scalar(select(File).where(File.filename == filename))
-
-        if file:
-            return await file.exists()
 
         return file

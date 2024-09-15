@@ -3,7 +3,7 @@ from datetime import datetime
 
 import redis
 from aiogram import F, Router
-from aiogram.types import (CallbackQuery, ContentType, FSInputFile,
+from aiogram.types import (CallbackQuery, ContentType,
                            InlineKeyboardButton, InlineKeyboardMarkup, Message)
 from bot.routers.base import get_plans_kb
 from config import REDIS_HOST
@@ -50,7 +50,7 @@ async def video_receive(message: Message):
             callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},' if audio_size / \
                 1024 / 1024 / 1024 < 2 else 'error'
 
-            file = await get_file(f'{video["id"]}_{video["audio_format"]["format_id"]}.mp3')
+            file = await get_file(f'{video["id"]}_{video["audio_format"]["format_id"]}.webm')
             if file:
                 keyboard.append([InlineKeyboardButton(
                     text=f'🎧 Аудио / {pretty_size(audio_size)}', callback_data=callback)])
@@ -99,6 +99,18 @@ async def callback_download(callback_query: CallbackQuery):
         return await callback_query.message.answer('⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
 
     else:
+        if video_format:
+            file = await get_file(f'{video_id}_{video_format}.mp4')
+            
+            if file:
+                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
+
+        elif audio_format:
+            file = await get_file(f'{video_id}_{audio_format}.webm')
+            
+            if file:
+                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
+
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
         caption = callback_query.message.caption
 
@@ -107,7 +119,8 @@ async def callback_download(callback_query: CallbackQuery):
             message_id=callback_query.message.message_id,
             video_id=video_id,
             video_format=video_format,
-            audio_format=audio_format
+            audio_format=audio_format,
+            caption = caption
         )
 
         print(data)
