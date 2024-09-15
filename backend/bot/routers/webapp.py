@@ -109,21 +109,13 @@ async def callback_download(callback_query: CallbackQuery):
 
         if video_format:
             file = await get_file(f'{video_id}_{video_format}.mp4')
-            exists  = await file.exists()
-
             if file:
                 return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
-            elif exists:
-                return r.rpush('send_file', json.dumps(data))
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.webm')
-            exists  = await file.exists()
-
             if file:
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
-            elif exists:
-                return r.rpush('send_file', json.dumps(data))
 
         downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
         print(data)
