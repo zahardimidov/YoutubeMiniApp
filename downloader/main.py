@@ -57,7 +57,7 @@ def download_video(data: dict):
 
         print('Complete video loading')
 
-    data = dict(filename = f'{video_id}_{video_format}.mp4', chat_id = chat_id, caption = data['caption'])
+    data = dict(filename = f'{video_id}_{video_format}.mp4', chat_id = chat_id, caption = data['caption'], message_id = data['message_id'])
     r.rpush('send_file', json.dumps(data))
 
     print('COMPLETE VIDEO')
@@ -77,6 +77,7 @@ def download_audio(data: dict):
             ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
 
     if data.get('chat_id'):
+        data = dict(filename = f'{audio_folder}/{video_id}.webm', chat_id = data['chat_id'], caption = data['caption'], message_id = data['message_id'])
         r.rpush('send_file', json.dumps(data))
 
 print('DOWNLOADER STARTED')
