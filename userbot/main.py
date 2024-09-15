@@ -37,6 +37,7 @@ async def send_file(receiver, data):
 
 
 async def main():
+    await client.start()
     await client.connect()
     username = await client.get_entity('Download_Tubebot')
 
@@ -49,5 +50,4 @@ async def main():
 
         await asyncio.sleep(1)
 
-client.start()
 asyncio.run(main())
