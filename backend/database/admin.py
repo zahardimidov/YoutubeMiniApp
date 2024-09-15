@@ -1,5 +1,5 @@
 from config import ADMIN_PASSWORD, ADMIN_USERNAME
-from database.models import User, Plan, Quota, Api
+from database.models import User, Plan, Quota, Api, File
 from fastapi import Request
 from sqladmin import Admin, ModelView
 from sqladmin.authentication import AuthenticationBackend
@@ -67,6 +67,13 @@ class QuotaAdmin(ModelView, model=Quota):
     can_edit = True
     can_delete = False
 
+class FileAdmin(ModelView, model=File): 
+    name = 'Файл'
+    name_plural = 'Файлы'
+
+    column_list = [File.file_id, File.filename]
+    can_delete = False
+
 class ApiAdmin(ModelView, model=Api):
     name = 'Youtube API ключ'
     name_plural = 'Youtube API ключ'
@@ -84,4 +91,5 @@ def init_admin(app, engine):
     admin.add_view(UserAdmin)
     admin.add_view(PlanAdmin)
     admin.add_view(QuotaAdmin)
+    admin.add_view(FileAdmin)
     #admin.add_view(ApiAdmin)
