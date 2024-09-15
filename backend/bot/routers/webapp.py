@@ -8,7 +8,7 @@ from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
 from bot.routers.base import get_plans_kb
 from config import REDIS_HOST
 from database.requests import (get_file, get_quota, get_todays_downloadings,
-                               get_user)
+                               get_user, add_downloading, set_file)
 from youtube.api import get_video
 
 router = Router()
@@ -116,20 +116,45 @@ async def callback_download(callback_query: CallbackQuery):
             file = await get_file(f'{video_id}_{audio_format}.webm')
             if file:
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
-
-        downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-        print(data)
+        
+        try:
+            callback_query.message.edit_caption(callback_query.message.caption+'\n\n📥⌛ Скачиваю из источника ⌛📥', reply_markup=empty_markup)
+        except:pass
 
         r.rpush('download', json.dumps(data))
 
 
 @router.message(F.video, F.from_user.id == 6865748575)
 async def video(message: Message):
-    caption, user_id = message.caption.split('(user=')
-    print(caption, user_id, message.video)
+    caption, data = message.caption.split('(data(')
     caption = caption.strip()
-    user_id = ''.join([d for d in user_id if d.isdigit()])
 
+    user_id, message_id = data.split(')(')
+    user_id = int(''.join([d for d in user_id if d.isdigit()]))
+    message_id = int(''.join([d for d in message_id if d.isdigit()]))
+
+    await set_file(filename=message.video.file_name, file_id=message.video.file_id)
+    await add_downloading(user_id=user_id)
     await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id)
+    try:
+        message.bot.delete_message(chat_id=user_id, message_id=message_id)
+    except:pass
+
+
+@router.message(F.audio, F.from_user.id == 6865748575)
+async def audio(message: Message):
+    caption, data = message.caption.split('(data(')
+    caption = caption.strip()
+
+    user_id, message_id = data.split(')(')
+    user_id = int(''.join([d for d in user_id if d.isdigit()]))
+    message_id = int(''.join([d for d in message_id if d.isdigit()]))
+
+    await set_file(filename=message.audio.file_name, file_id=message.audio.file_id)
+    await add_downloading(user_id=user_id)
+    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id)
+    try:
+        message.bot.delete_message(chat_id=user_id, message_id=message_id)
+    except:pass
 
     

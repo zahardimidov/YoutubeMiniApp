@@ -74,3 +74,17 @@ async def get_file(filename) -> File:
         file = await session.scalar(select(File).where(File.filename == filename))
 
         return file
+    
+
+async def set_file(filename, file_id) -> File:
+    async with async_session() as session:
+        file = await session.scalar(select(File).where(File.filename == filename))
+
+        if not file:
+            file = File(file_id=file_id, filename = filename)
+            session.add(file)
+
+            await session.commit()
+            await session.refresh(file)
+
+        return file

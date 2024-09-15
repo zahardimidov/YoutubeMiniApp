@@ -32,7 +32,8 @@ async def send_file(receiver, data):
         filepath = BASE_DIR.joinpath('audio').joinpath(filename)
 
     user = data['chat_id']
-    caption = data['caption'] + f'\n\n\n({user=})'
+    message_id = data['message_id']
+    caption = data['caption'] + f'\n\n\n(data({user=})({message_id=}))'
     await client.send_file(receiver, caption=caption, file=filepath, progress_callback=progress)
 
 

@@ -51,9 +51,9 @@ def download_video(data: dict):
 
         subprocess.run(command)
 
-        #time.sleep(3)
+        time.sleep(3)
 
-        #os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
+        os.remove(f'{video_folder}/{video_id}_{video_format}_temp.mp4')
 
         print('Complete video loading')
 
