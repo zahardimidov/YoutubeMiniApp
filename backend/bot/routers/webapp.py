@@ -150,13 +150,11 @@ async def audio(message: Message):
     user_id = int(''.join([d for d in user_id if d.isdigit()]))
     message_id = int(''.join([d for d in message_id if d.isdigit()]))
 
-    print(message)
-
     title = ''.join([i for i in caption if i.isdigit()])[:15]
 
-    await set_file(filename=message.audio.file_name, file_id=message.audio.file_id)
+    await set_file(filename=message.document.file_name, file_id=message.document.file_id)
     await add_downloading(user_id=user_id)
-    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id, title=title)
+    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.document.file_id, title=title)
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
