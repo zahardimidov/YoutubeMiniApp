@@ -150,6 +150,8 @@ async def audio(message: Message):
     user_id = int(''.join([d for d in user_id if d.isdigit()]))
     message_id = int(''.join([d for d in message_id if d.isdigit()]))
 
+    print(message.audio)
+
     await set_file(filename=message.audio.file_name, file_id=message.audio.file_id)
     await add_downloading(user_id=user_id)
     await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id)
