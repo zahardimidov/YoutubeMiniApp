@@ -98,30 +98,34 @@ async def callback_download(callback_query: CallbackQuery):
         return await callback_query.message.answer('⭐️ Лимит бесплатных скачиваний исчерпан, оплатите подписку', reply_markup=plans)
 
     else:
-        if video_format:
-            file = await get_file(f'{video_id}_{video_format}.mp4')
-
-            if file:
-                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
-
-        elif audio_format:
-            file = await get_file(f'{video_id}_{audio_format}.webm')
-
-            if file:
-                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
-
-        downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
-        caption = callback_query.message.caption
-
         data = dict(
             chat_id=callback_query.message.chat.id,
             message_id=callback_query.message.message_id,
             video_id=video_id,
             video_format=video_format,
             audio_format=audio_format,
-            caption=caption
+            caption=callback_query.message.caption
         )
 
+        if video_format:
+            file = await get_file(f'{video_id}_{video_format}.mp4')
+            exists  = await file.exists()
+
+            if file:
+                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
+            elif exists:
+                return r.rpush('send_file', json.dumps(data))
+
+        elif audio_format:
+            file = await get_file(f'{video_id}_{audio_format}.webm')
+            exists  = await file.exists()
+
+            if file:
+                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
+            elif exists:
+                return r.rpush('send_file', json.dumps(data))
+
+        downloading_text = '\n\n📥⌛ Скачиваю из источника ⌛📥'
         print(data)
 
         r.rpush('download', json.dumps(data))

@@ -69,7 +69,7 @@ async def get_plans():
 
         return plans.all()
     
-async def get_file(filename):
+async def get_file(filename) -> File:
     async with async_session() as session:
         file = await session.scalar(select(File).where(File.filename == filename))
 
