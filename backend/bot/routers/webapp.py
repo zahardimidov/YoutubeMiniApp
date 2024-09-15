@@ -118,8 +118,8 @@ async def callback_download(callback_query: CallbackQuery):
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
         
         try:
-            callback_query.message.edit_caption(callback_query.message.caption+'\n\n📥⌛ Скачиваю из источника ⌛📥', reply_markup=empty_markup)
-        except:pass
+            await callback_query.message.edit_caption(caption=callback_query.message.caption+'\n\n📥⌛ Скачиваю из источника ⌛📥', reply_markup=empty_markup)
+        except Exception as e:print(e)
 
         r.rpush('download', json.dumps(data))
 
@@ -137,7 +137,7 @@ async def video(message: Message):
     await add_downloading(user_id=user_id)
     await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id)
     try:
-        message.bot.delete_message(chat_id=user_id, message_id=message_id)
+        await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
 
 
@@ -154,7 +154,7 @@ async def audio(message: Message):
     await add_downloading(user_id=user_id)
     await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id)
     try:
-        message.bot.delete_message(chat_id=user_id, message_id=message_id)
+        await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
 
     
