@@ -5,6 +5,8 @@
     background-color: #ebecf0;
     border-radius: 20px;
     align-items: center;
+    padding-inline: 20px;
+    width: 85%;
 }
 
 .search-input {
@@ -17,7 +19,17 @@
 }
 
 .search-input-img {
-    padding-left: 16px;
-    padding-right: 4px;
-    padding-top: 2px;
+    background-color: #119fcd;
+    padding: 10px 20px;
+    border-radius: 18%;
+}
+
+.search-input-img svg {
+    color: white;
+}
+
+.s-input {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }

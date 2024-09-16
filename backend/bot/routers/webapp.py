@@ -37,7 +37,13 @@ async def video_url(message: Message):
     if match:
         video_id = match.group()
         video = await get_video(video_id)
+
+        msg = await message.answer('🔎 Ищу видео')
+        if video == 'error':
+            return await msg.reply('‼️ Не удалось найти видео')
         await process_video(message=message, video=video)
+        try: await msg.delete()
+        except:pass
 
 @router.message(F.content_type == ContentType.WEB_APP_DATA)
 async def video_receive(message: Message):

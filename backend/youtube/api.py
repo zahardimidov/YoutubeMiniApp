@@ -76,30 +76,32 @@ async def get_video(video_id):
         '--flat-playlist',
         f'https://www.youtube.com/watch?v={video_id}'
     ]
+    try:
+        process = await asyncio.create_subprocess_exec(
+            *command,
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE
+        )
 
-    process = await asyncio.create_subprocess_exec(
-        *command,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
-    )
+        stdout, stderr = await process.communicate()
 
-    stdout, stderr = await process.communicate()
+        # Parse the JSON output
+        info_dict: dict = json.loads(stdout)
 
-    # Parse the JSON output
-    info_dict: dict = json.loads(stdout)
+        title = info_dict['title']
+        channel = info_dict['channel']
+        photo = info_dict['thumbnail']
 
-    title = info_dict['title']
-    channel = info_dict['channel']
-    photo = info_dict['thumbnail']
+        print(photo)
 
-    print(photo)
+        audio_format, video_formats = _get_formats(info_dict=info_dict)
 
-    audio_format, video_formats = _get_formats(info_dict=info_dict)
+        publishDate = info_dict['upload_date'][-2:]+"." + \
+            info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
 
-    publishDate = info_dict['upload_date'][-2:]+"." + \
-        info_dict['upload_date'][4:6]+'.'+info_dict['upload_date'][:4]
-
-    return dict(id=video_id, title=title, publishDate=publishDate, channel=channel, duration=info_dict['duration_string'], photo=photo, audio_format=audio_format, video_formats=video_formats)
+        return dict(id=video_id, title=title, publishDate=publishDate, channel=channel, duration=info_dict['duration_string'], photo=photo, audio_format=audio_format, video_formats=video_formats)
+    except:
+        return 'error'
 
 
 async def get_channel(channel_id):

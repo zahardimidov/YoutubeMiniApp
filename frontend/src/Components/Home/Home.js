@@ -10,9 +10,10 @@ function Home() {
   const [searchText, setSearchText] = useState('');
   const [foundElements, setElements] = useState([])
 
-  function filterElements(e) {
-    if (e.key === 'Enter') {
-      setLoading(true);
+  const [value, setValue] = useState('');
+
+  function search(){
+    setLoading(true);
       const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -23,7 +24,13 @@ function Home() {
         .then(data => {
           setElements(data);
           setLoading(false);
+          setValue(searchText);
         });
+  }
+
+  function filterElements(e) {
+    if (e.key === 'Enter') {
+      search()
     }
   }
 
@@ -32,11 +39,12 @@ function Home() {
       <SearchInput
         value={searchText}
         onChange={e => setSearchText(e.target.value)}
+        onClick={e => search()}
         onKeyDown={e => filterElements(e)} />
       {loading && <Loading></Loading>}
       <List
         elements={foundElements}
-        emptyHeading={`Ничего не найдено по запросу “${searchText}”`} />
+        emptyHeading={`Ничего не найдено по запросу “${value}”`} />
     </Layout>
   );
 }

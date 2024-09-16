@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import playSVG from '../../Assets/image/play.svg';
 import './Element.css';
 
@@ -13,12 +13,16 @@ function Element({ data, children, ...props }) {
     }
 
     function clickChannel() {
-        navigate('/channel', {state: data});
+        navigate('/channel', { state: data });
     }
 
-    const posterStyle = {
-        backgroundImage: `url(${data.photo})`,
+    var posterStyle = {}
+    if (data.type === 'video') {
+        posterStyle = {
+            backgroundImage: `url(${data.photo})`,
+        }
     }
+
     const firstLetter = data.title[0];
 
     return (
