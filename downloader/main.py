@@ -28,7 +28,6 @@ def download_video(data: dict):
         'outtmpl': filepath,
         'final_ext': 'mp4',
         'merge_output_format': True,
-        'proxy': 'http://nMee0T:wfqXV3@186.179.61.101:9743',
         'postprocessors': [{
             'key': 'FFmpegVideoConvertor',
             'preferedformat': 'mp4',
