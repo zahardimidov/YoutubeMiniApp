@@ -115,11 +115,17 @@ async def callback_download(callback_query: CallbackQuery):
         if video_format:
             file = await get_file(f'{video_id}_{video_format}.mp4')
             if file:
+                try:
+                    await callback_query.message.delete()
+                except:pass
                 return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.mp3')
             if file:
+                try:
+                    await callback_query.message.delete()
+                except:pass
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
 
         r.rpush('download', json.dumps(data))
@@ -161,3 +167,16 @@ async def audio(message: Message):
     except:pass
 
     
+@router.message(F.text, F.from_user.id == 6865748575)
+async def error_text(message: Message):
+    text, data = message.text.split('(data(')
+    text = text.strip()
+
+    user_id, message_id = data.split(')(')
+    user_id = int(''.join([d for d in user_id if d.isdigit()]))
+    message_id = int(''.join([d for d in message_id if d.isdigit()]))
+
+    await message.bot.send_message(chat_id=user_id, text=text, reply_to_message_id=message_id)
+    try:
+        await message.bot.delete_message(chat_id=user_id, message_id=message_id)
+    except:pass

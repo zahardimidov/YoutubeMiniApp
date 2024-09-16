@@ -17,6 +17,19 @@ REDIS_HOST = os.environ.get('REDIS_HOST', 'localhost')
 r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 
 
+def download(video_id: str, options: dict, attempts: int = 3):
+    for i in range(attempts):
+        try:
+            raise Exception('hi')
+            with yt_dlp.YoutubeDL(options) as ydl:
+                ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
+            break
+        except Exception as e:
+            print(f'Attempt {i+1}: {str(e)}')
+    else:
+        return 'error'
+
+
 def download_video(data: dict):
     video_id = data['video_id']
     video_format = data['video_format']
@@ -35,16 +48,14 @@ def download_video(data: dict):
     }
 
     if not os.path.exists(f'{video_folder}/{video_id}_{video_format}.mp4'):
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
-
-        print('Complete video loading')
+        if download(video_id=video_id, options=ydl_opts) == 'error':
+            return r.rpush('downloading_error', json.dumps(dict(message_id=data['message_id'], chat_id=data['chat_id'])))
 
     data = dict(filename=f'{video_id}_{video_format}.mp4',
                 chat_id=data['chat_id'], caption=data['caption'], message_id=data['message_id'])
     r.rpush('send_file', json.dumps(data))
 
-    print('COMPLETE VIDEO')
+    print('VIDEO WAS DOWNLOADED')
 
 
 def download_audio(data: dict):
@@ -65,12 +76,14 @@ def download_audio(data: dict):
     }
 
     if not os.path.exists(filename):
-        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-            ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
+        if download(video_id=video_id, options=ydl_opts) == 'error':
+            return r.rpush('downloading_error', json.dumps(dict(message_id=data['message_id'], chat_id=data['chat_id'])))
 
     data = dict(filename=filename, chat_id=data['chat_id'],
                 caption=data['caption'], message_id=data['message_id'])
     r.rpush('send_file', json.dumps(data))
+
+    print('AUDIO WAS DOWNLOADED')
 
 
 print('DOWNLOADER STARTED')

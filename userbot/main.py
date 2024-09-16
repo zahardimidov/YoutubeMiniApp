@@ -49,6 +49,16 @@ async def main():
             data: dict = json.loads(task.decode())
             asyncio.create_task(send_file(receiver=username, data=data))
 
+        task: bytes = redis.lpop('downloading_error')
+        if task is not None:
+            data: dict = json.loads(task.decode())
+
+            user = data['chat_id']
+            message_id = data['message_id']
+            text =  f'‼️ Произошла ошибка при скачивании видео, попробуйте еще раз\n\n\n(data({user=})({message_id=}))'
+            await client.send_message(username, text)
+
         await asyncio.sleep(1)
+
 
 asyncio.run(main())
