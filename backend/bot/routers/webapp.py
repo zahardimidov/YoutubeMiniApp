@@ -35,10 +35,9 @@ async def video_url(message: Message):
     match = re.search(r'(?<=v=|\/)([a-zA-Z0-9_-]{11})', message.text)
 
     if match:
+        msg = await message.answer('🔎 Ищу видео')
         video_id = match.group()
         video = await get_video(video_id)
-
-        msg = await message.answer('🔎 Ищу видео')
         if video == 'error':
             return await msg.reply('‼️ Не удалось найти видео')
         await process_video(message=message, video=video)
