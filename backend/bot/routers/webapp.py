@@ -177,6 +177,3 @@ async def error_text(message: Message):
     message_id = int(''.join([d for d in message_id if d.isdigit()]))
 
     await message.bot.send_message(chat_id=user_id, text=text, reply_to_message_id=message_id)
-    try:
-        await message.bot.delete_message(chat_id=user_id, message_id=message_id)
-    except:pass
