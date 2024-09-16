@@ -10,6 +10,7 @@ from config import REDIS_HOST
 from database.requests import (get_file, get_quota, get_todays_downloadings,
                                get_user, add_downloading, set_file)
 from youtube.api import get_video
+import regex as re
 
 router = Router()
 empty_markup = InlineKeyboardMarkup(inline_keyboard=[[]])
@@ -24,12 +25,28 @@ def pretty_size(b: int):
     else:
         return f'{round(b, 2)} KB'
 
+#https://www.youtube.com/watch?v=SzwcDbWHzKc
+#https://youtu.be/SzwcDbWHzKc?si=BixahzbkmhuCBt-Y
+#https://www.youtube.com/shorts/3BOqvQfjM38
+#https://youtube.com/shorts/3BOqvQfjM38?si=rcBcPK0-JhudGIlb
+
+@router.message(F.text.startswith('https://'))
+async def video_url(message: Message):
+    match = re.search(r'(?<=v=|\/)([a-zA-Z0-9_-]{11})', message.text)
+
+    if match:
+        video_id = match.group()
+        video = await get_video(video_id)
+        await process_video(message=message, video=video)
 
 @router.message(F.content_type == ContentType.WEB_APP_DATA)
 async def video_receive(message: Message):
     data = json.loads(message.web_app_data.data)
     video = await get_video(data['id'])
+    await process_video(message=message, video=video)
 
+
+async def process_video(message: Message, video: dict):
     msg = f'\U0001F37F <b><a href="https://www.youtube.com/watch?v={video["id"]}">{video["title"]}</a></b>\n\n\U0001F5E3 Автор: #{video["channel"]}\n\U0001F4C5 Дата: {video["publishDate"]}\n \u23F1 Продолжительность: {video["duration"]}'
 
     keyboard = []

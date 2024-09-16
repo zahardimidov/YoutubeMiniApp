@@ -20,7 +20,6 @@ r = redis.Redis(host=REDIS_HOST, port=6379, db=0)
 def download(video_id: str, options: dict, attempts: int = 3):
     for i in range(attempts):
         try:
-            raise Exception('hi')
             with yt_dlp.YoutubeDL(options) as ydl:
                 ydl.download([f'https://www.youtube.com/watch?v={video_id}'])
             break
