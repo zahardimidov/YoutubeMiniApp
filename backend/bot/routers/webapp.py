@@ -50,7 +50,7 @@ async def video_receive(message: Message):
             callback = f'o_{video["id"]},{video["audio_format"]["format_id"]},' if audio_size / \
                 1024 / 1024 / 1024 < 2 else 'error'
 
-            file = await get_file(f'{video["id"]}_{video["audio_format"]["format_id"]}.webm')
+            file = await get_file(f'{video["id"]}_{video["audio_format"]["format_id"]}.mp3')
             if file:
                 keyboard.append([InlineKeyboardButton(
                     text=f'🎧 Аудио / {pretty_size(audio_size)}', callback_data=callback)])
@@ -118,7 +118,7 @@ async def callback_download(callback_query: CallbackQuery):
                 return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
 
         elif audio_format:
-            file = await get_file(f'{video_id}_{audio_format}.webm')
+            file = await get_file(f'{video_id}_{audio_format}.mp3')
             if file:
                 return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
 
@@ -142,7 +142,7 @@ async def video(message: Message):
     except:pass
 
 
-@router.message(F.content_type == ContentType.DOCUMENT, F.from_user.id == 6865748575)
+@router.message(F.content_type == ContentType.AUDIO, F.from_user.id == 6865748575)
 async def audio(message: Message):
     caption, data = message.caption.split('(data(')
     caption = caption.strip()
@@ -153,9 +153,9 @@ async def audio(message: Message):
 
     title = ''.join([i for i in caption if i.isdigit()])[:15]
 
-    await set_file(filename=message.document.file_name, file_id=message.document.file_id)
+    await set_file(filename=message.audio.file_name, file_id=message.audio.file_id)
     await add_downloading(user_id=user_id)
-    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.document.file_id, title=title)
+    await message.bot.send_audio(chat_id=user_id, caption=caption, audio=message.audio.file_id, title=title)
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
