@@ -57,6 +57,7 @@ class File(Base):
 
     file_id = mapped_column(String, primary_key=True)
     filename = mapped_column(String)
+    thumbnail = mapped_column(String, nullable=True, default=None)
 
     @property
     def filepath(self):

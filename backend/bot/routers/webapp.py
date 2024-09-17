@@ -140,7 +140,7 @@ async def callback_download(callback_query: CallbackQuery):
                 try:
                     await callback_query.message.delete()
                 except:pass
-                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
+                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption, thumbnail=file.thumbnail)
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.mp3')
@@ -148,7 +148,7 @@ async def callback_download(callback_query: CallbackQuery):
                 try:
                     await callback_query.message.delete()
                 except:pass
-                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
+                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption, thumbnail=file.thumbnail)
 
         r.rpush('download', json.dumps(data))
 
@@ -162,9 +162,16 @@ async def video(message: Message):
     user_id = int(''.join([d for d in user_id if d.isdigit()]))
     message_id = int(''.join([d for d in message_id if d.isdigit()]))
 
-    await set_file(filename=message.video.file_name, file_id=message.video.file_id)
+    match = re.search(r'(?<=v=|\/)([a-zA-Z0-9_-]{11})', message.video.file_name)
+
+    if match:
+        video_id = match.group()
+        video = await get_video(video_id=video_id)
+        thumbnail = video['photo']
+
+    await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
     await add_downloading(user_id=user_id)
-    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id, width=1920, height=1080)
+    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id)
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass

@@ -68,6 +68,7 @@ def download_audio(data: dict):
         'format': format_id,
         'outtmpl': filename,
         'final_ext': 'mp3',
+        'concurrent_fragment_downloads': 5,
         'postprocessors': [{
             'key': 'FFmpegExtractAudio',
             'preferredcodec': 'mp3',
