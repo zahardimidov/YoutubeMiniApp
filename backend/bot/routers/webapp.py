@@ -164,7 +164,7 @@ async def video(message: Message):
 
     await set_file(filename=message.video.file_name, file_id=message.video.file_id)
     await add_downloading(user_id=user_id)
-    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id)
+    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id, width=1920, height=1080)
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
