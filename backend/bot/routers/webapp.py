@@ -168,10 +168,9 @@ async def video(message: Message):
     while video_id[-1] != '_':
         video_id = video_id[:-1]
 
-    video = await get_video(video_id=video_id[:-1])
-    thumbnail = video.get('photo')
+    thumbnail = f'https://i.ytimg.com/vi/{video_id[-1]}/maxresdefault.jpg'
 
-    print(video_id, thumbnail)
+    print(thumbnail)
 
     await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
     await add_downloading(user_id=user_id)
