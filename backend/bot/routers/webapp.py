@@ -164,10 +164,13 @@ async def video(message: Message):
 
     match = re.search(r'(?<=v=|\/)([a-zA-Z0-9_-]{11})', message.video.file_name)
 
+    print(message.video.file_name, match)
+
     thumbnail = None
     if match:
         video_id = match.group()
         video = await get_video(video_id=video_id)
+        print(video)
         thumbnail = video['photo']
 
     await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
