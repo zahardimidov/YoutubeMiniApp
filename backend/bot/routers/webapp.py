@@ -162,16 +162,14 @@ async def video(message: Message):
     user_id = int(''.join([d for d in user_id if d.isdigit()]))
     message_id = int(''.join([d for d in message_id if d.isdigit()]))
 
-    match = re.search(r'(?<=v=|\/)([a-zA-Z0-9_-]{11})', message.video.file_name)
+    video_id = message.video.file_name
+    while video_id[-1] != '_':
+        video_id = video_id[:-1]
 
-    print(message.video.file_name, match)
+    video = await get_video(video_id=video_id[:-1])
+    thumbnail = video.get('photo')
 
-    thumbnail = None
-    if match:
-        video_id = match.group()
-        video = await get_video(video_id=video_id)
-        print(video)
-        thumbnail = video['photo']
+    print(video_id, video, thumbnail)
 
     await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
     await add_downloading(user_id=user_id)
