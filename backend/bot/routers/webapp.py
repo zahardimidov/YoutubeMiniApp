@@ -138,12 +138,11 @@ async def callback_download(callback_query: CallbackQuery):
             file = await get_file(f'{video_id}_{video_format}.mp4')
 
             if file:
-                thumbnail = f'https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg'
-                print(thumbnail)
+                #thumbnail = f'https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg'
                 try:
                     await callback_query.message.delete()
                 except:pass
-                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption, thumbnail=URLInputFile(url=thumbnail))
+                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption)
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.mp3')
@@ -169,13 +168,11 @@ async def video(message: Message):
     while video_id[-1] != '_':
         video_id = video_id[:-1]
 
-    thumbnail = f'https://i.ytimg.com/vi/{video_id[-1]}/maxresdefault.jpg'
+    #thumbnail = f'https://i.ytimg.com/vi/{video_id[-1]}/maxresdefault.jpg'
 
-    print(thumbnail)
-
-    await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
+    await set_file(filename=message.video.file_name, file_id=message.video.file_id)
     await add_downloading(user_id=user_id)
-    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id, thumbnail=URLInputFile(url=thumbnail))
+    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id)
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
