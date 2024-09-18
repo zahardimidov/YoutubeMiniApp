@@ -71,7 +71,7 @@ class FileAdmin(ModelView, model=File):
     name = 'Файл'
     name_plural = 'Файлы'
 
-    column_list = [File.file_id, File.filename]
+    column_list = [File.file_id, File.filename, File.thumbnail]
     can_delete = True
 
 class ApiAdmin(ModelView, model=Api):

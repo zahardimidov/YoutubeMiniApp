@@ -4,7 +4,7 @@ from datetime import datetime
 import redis
 from aiogram import F, Router
 from aiogram.types import (CallbackQuery, ContentType, InlineKeyboardButton,
-                           InlineKeyboardMarkup, Message)
+                           InlineKeyboardMarkup, Message, URLInputFile)
 from bot.routers.base import get_plans_kb
 from config import REDIS_HOST
 from database.requests import (get_file, get_quota, get_todays_downloadings,
@@ -136,11 +136,13 @@ async def callback_download(callback_query: CallbackQuery):
 
         if video_format:
             file = await get_file(f'{video_id}_{video_format}.mp4')
+
+            print(file.thumbnail)
             if file:
                 try:
                     await callback_query.message.delete()
                 except:pass
-                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption, thumbnail=file.thumbnail)
+                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption, thumbnail=URLInputFile(url=file.thumbnail))
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.mp3')
@@ -148,7 +150,7 @@ async def callback_download(callback_query: CallbackQuery):
                 try:
                     await callback_query.message.delete()
                 except:pass
-                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption, thumbnail=file.thumbnail)
+                return await callback_query.message.answer_audio(audio=file.file_id, caption=callback_query.message.caption)
 
         r.rpush('download', json.dumps(data))
 
@@ -169,7 +171,7 @@ async def video(message: Message):
     video = await get_video(video_id=video_id[:-1])
     thumbnail = video.get('photo')
 
-    print(video_id, video, thumbnail)
+    print(video_id, thumbnail)
 
     await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
     await add_downloading(user_id=user_id)
