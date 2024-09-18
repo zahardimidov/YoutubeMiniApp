@@ -137,8 +137,8 @@ async def callback_download(callback_query: CallbackQuery):
         if video_format:
             file = await get_file(f'{video_id}_{video_format}.mp4')
 
-            print(file.thumbnail)
             if file:
+                print(file.thumbnail)
                 try:
                     await callback_query.message.delete()
                 except:pass
