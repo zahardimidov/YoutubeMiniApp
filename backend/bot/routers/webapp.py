@@ -138,11 +138,12 @@ async def callback_download(callback_query: CallbackQuery):
             file = await get_file(f'{video_id}_{video_format}.mp4')
 
             if file:
-                print(file.thumbnail)
+                thumbnail = f'https://i.ytimg.com/vi/{video_id}/maxresdefault.jpg'
+                print(thumbnail)
                 try:
                     await callback_query.message.delete()
                 except:pass
-                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption, thumbnail=URLInputFile(url=file.thumbnail))
+                return await callback_query.message.answer_video(video=file.file_id, caption=callback_query.message.caption, thumbnail=URLInputFile(url=thumbnail))
 
         elif audio_format:
             file = await get_file(f'{video_id}_{audio_format}.mp3')
@@ -174,7 +175,7 @@ async def video(message: Message):
 
     await set_file(filename=message.video.file_name, file_id=message.video.file_id, thumbnail=thumbnail)
     await add_downloading(user_id=user_id)
-    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id, thumbnail=URLInputFile(thumbnail))
+    await message.bot.send_video(chat_id=user_id, caption=caption, video=message.video.file_id, thumbnail=URLInputFile(url=thumbnail))
     try:
         await message.bot.delete_message(chat_id=user_id, message_id=message_id)
     except:pass
